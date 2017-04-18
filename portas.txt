@@ -1,0 +1,27 @@
+l040101-ws##.ua.pt
+
+22460
+   69
+
+
+login:
+sd04##
+qwerty
+/passwd
+
+
+Nó   Port
+ws1  22400	GeneralRepository
+ws2  22401	Museum
+
+
+
+1 opção - execução por meio de -jar nas maquinas
+2 opção - atraves de ficheiros fonte?
+
+usar sleeps por causa dos atrasos da transmissão entre as máquinas
+
+
+fazer um timeoutexception no catch dos ServerCom
+
+
