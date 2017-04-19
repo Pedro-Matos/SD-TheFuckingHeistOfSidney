@@ -139,6 +139,10 @@ public class GrupoAssaltoInterface {
                         outMessage = new AssaultPartyMessage(AssaultPartyMessage.RESPCHECKGRUPONULL, false);
                     }
                     break;
+                case AssaultPartyMessage.WAITMYTURN:
+                    resp = grupo[inMessage.getIdGrupo()].waitMinhaVez(id, id_grupo);
+                    outMessage = new AssaultPartyMessage(AssaultPartyMessage.ACK);
+                    break;
             }
 
             return outMessage;

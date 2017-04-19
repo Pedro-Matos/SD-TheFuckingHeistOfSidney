@@ -207,7 +207,7 @@ public class ConcentrationSiteMessage implements Serializable {
         return arg1;
     }
 
-    public boolean isArg_b1() {
+    public boolean getArg_b1() {
         return arg_b1;
     }
 }

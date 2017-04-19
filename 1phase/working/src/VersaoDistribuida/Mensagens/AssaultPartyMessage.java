@@ -115,6 +115,8 @@ public class AssaultPartyMessage implements Serializable {
      * @serialField RESPCHECKGRUPONULL
      */
     public static final int RESPCHECKGRUPONULL = 22;
+
+    public static final int WAITMYTURN = 23;
     /**
      * Resposta de confirmação
      *
@@ -134,6 +136,7 @@ public class AssaultPartyMessage implements Serializable {
     private int arg1 = -1;
     private int arg2 = -1;
     private int arg3 = -1;
+    private int arg4 = -1;
     private boolean arg_b1 = false;
 
 
@@ -177,6 +180,13 @@ public class AssaultPartyMessage implements Serializable {
         this.arg2 = arg2;
         this.arg3 = arg3;
     }
+    public AssaultPartyMessage(int msgType, int arg1, int arg2, int arg3, int arg4) {
+        this.msgType = msgType;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
+        this.arg3 = arg3;
+        this.arg4 = arg4;
+    }
 
 
     /**
@@ -217,7 +227,11 @@ public class AssaultPartyMessage implements Serializable {
         return arg3;
     }
 
-    public boolean isArg_b1() {
+    public int getArg4() {
+        return arg4;
+    }
+
+    public boolean getArg_b1() {
         return arg_b1;
     }
 
