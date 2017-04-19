@@ -1,8 +1,8 @@
 package VersaoDistribuida.Regioes.base;
 
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
-import VersaoConcorrente.Apoio.MemFIFO;
-import VersaoConcorrente.ParametrosDoProblema.GeneralRepository;
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
+import VersaoDistribuida.Apoio.MemFIFO;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 
 /**
  * Monitor Concentration Site.
@@ -46,7 +46,7 @@ public class ConcentrationSite {
     /**
      * @param generalRepository General Repository
      */
-    public ConcentrationSite(GeneralRepository generalRepository) {
+    public ConcentrationSite(String generalRepository) {
 
         this.nrLadroes = 0;
 

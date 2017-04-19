@@ -3,7 +3,7 @@ package VersaoDistribuida.Regioes.museu;
 import VersaoDistribuida.ComInfo.ServerCom;
 import VersaoDistribuida.Mensagens.MuseuMessage;
 import VersaoDistribuida.Mensagens.MuseumMessageException;
-import genclass.GenericIO;;
+import genclass.GenericIO;
 
 /**
  * Created by pmatos9 on 17/04/17.

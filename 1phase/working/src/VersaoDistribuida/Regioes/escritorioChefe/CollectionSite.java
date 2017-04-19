@@ -1,10 +1,15 @@
 package VersaoDistribuida.Regioes.escritorioChefe;
 
-import VersaoConcorrente.ParametrosDoProblema.GeneralRepository;
-import VersaoConcorrente.Regioes.base.ConcentrationSite;
-import VersaoConcorrente.Regioes.gruposAssalto.GestorGruposAssalto;
-import VersaoConcorrente.Regioes.museu.Museum;
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
+import VersaoDistribuida.Mensagens.AssaultPartyMessage;
+import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
+import VersaoDistribuida.Mensagens.MuseuMessage;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
+import VersaoDistribuida.Regioes.base.ConcentrationSite;
+import VersaoDistribuida.Regioes.gruposAssalto.GestorGruposAssalto;
+import VersaoDistribuida.Regioes.museu.Museum;
+import VersaoDistribuida.ComInfo.ClientCom;
+
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 
 /**
  * Monitor Collection Site
@@ -15,15 +20,19 @@ public class CollectionSite {
     /**
      * ConcentrationSite
      */
-    private final ConcentrationSite concentrationSite;
+    private final ClientCom concentrationSite;
     /**
      * Museum
      */
-    private final Museum museum;
+    private final ClientCom museum;
     /**
      * Assault partys manager
      */
-    private final GestorGruposAssalto gestorGrupos;
+    private final ClientCom grupoAssaulto;
+    /**
+     * General Repository
+     */
+    private ClientCom general;
     /**
      * Master Thief state
      */
@@ -54,10 +63,6 @@ public class CollectionSite {
      */
     private boolean grupoOcup[] = new boolean[2];
 
-    /**
-     * General Repository
-     */
-    private GeneralRepository general;
 
     /**
      * Number of groups
@@ -67,13 +72,14 @@ public class CollectionSite {
     /**
      *  @param museum Museum
      * @param concentrationSite ConcentrationSite
-     * @param gestorGrupos Manager of assault partys
+     * @param grupoAssaulto Manager of assault partys
      * @param generalRepository General Repository
      */
-    public CollectionSite(Museum museum, ConcentrationSite concentrationSite, GestorGruposAssalto gestorGrupos, GeneralRepository generalRepository) {
-        this.concentrationSite = concentrationSite;
-        this.museum = museum;
-        this.gestorGrupos = gestorGrupos;
+    public CollectionSite(String museum, String concentrationSite, String grupoAssaulto, String generalRepository) {
+        this.general = new ClientCom(generalRepository,22460);
+        this.museum = new ClientCom(museum,22461);
+        this.concentrationSite = new ClientCom(concentrationSite,22462);
+        this.grupoAssaulto = new ClientCom(grupoAssaulto,22463);
 
         // Estado inicial do chefe
         estadoChefe = PLANNING_THE_HEIST;
@@ -85,7 +91,7 @@ public class CollectionSite {
         grupoOcup[0] = false;
         grupoOcup[1] = false;
 
-        this.general = generalRepository;
+
 
         for (int i = 0; i < NUM_GROUP; i++) {
             grupos[0][i] = -1;
@@ -138,7 +144,24 @@ public class CollectionSite {
                     this.nrElemGrupo[grupo]++;
                     this.grupos[grupo][i] = ladraoID;
                     //break;
-                    this.gestorGrupos.entrar(ladraoID,grupo,i);
+
+
+
+                    AssaultPartyMessage inMessage, outMessage;
+
+
+                    while(!grupoAssaulto.open()){
+                        try{
+                            Thread.sleep((long)(1000));
+                        }
+                        catch (InterruptedException e){
+                        }
+                    }
+                    outMessage = new AssaultPartyMessage(AssaultPartyMessage.ENTRAR, ladraoID,grupo,i);
+                    grupoAssaulto.writeObject(outMessage);
+                    inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
+                    grupoAssaulto.close();
+
                     return i;
                 }
             }
@@ -208,10 +231,27 @@ public class CollectionSite {
         if(idGrupo == 1) general.setAssaultParty2_room(j);
 
 
-        boolean aux = gestorGrupos.formarGrupo(idGrupo, j);
+        AssaultPartyMessage inMessage, outMessage;
 
 
-        return aux;
+        while(!grupoAssaulto.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new AssaultPartyMessage(AssaultPartyMessage.FORMARGRUPO,idGrupo,j);
+        grupoAssaulto.writeObject(outMessage);
+        inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
+        grupoAssaulto.close();
+
+        int tmp = inMessage.getArg1();
+
+        if (tmp == -1){
+            return false;
+        }
+        return true;
     }
 
 
@@ -221,8 +261,24 @@ public class CollectionSite {
     public synchronized void takeARest(){
 
 
+        ConcentrationSiteMessage inMessage, outMessage;
 
-        int nrLadroes = concentrationSite.getNrLadroes();
+
+        while(!concentrationSite.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.GETNRLADROES);
+        concentrationSite.writeObject(outMessage);
+        inMessage = (ConcentrationSiteMessage) concentrationSite.readObject();
+        concentrationSite.close();
+
+
+
+        int nrLadroes = inMessage.getArg1();
 
         int checkGrupos = this.checkGrupos();
 
@@ -273,7 +329,22 @@ public class CollectionSite {
         this.grupos[grupo][pos] = -1;
         if (--this.nrElemGrupo[grupo] == 0) {
             this.salaAssalto[sala] = -1;
-            this.gestorGrupos.desfazerGrupo(grupo);
+
+
+            AssaultPartyMessage inMessage, outMessage;
+            while(!grupoAssaulto.open()){
+                try{
+                    Thread.sleep((long)(1000));
+                }
+                catch (InterruptedException e){
+                }
+            }
+            outMessage = new AssaultPartyMessage(AssaultPartyMessage.DESFAZERGRUPO, grupo);
+            grupoAssaulto.writeObject(outMessage);
+            inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
+            grupoAssaulto.close();
+
+
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
@@ -305,7 +376,21 @@ public class CollectionSite {
         this.grupos[grupo][pos] = -1;
         if (--this.nrElemGrupo[grupo] == 0) {
             this.salaAssalto[sala] = -1;
-            this.gestorGrupos.desfazerGrupo(grupo);
+
+            AssaultPartyMessage inMessage, outMessage;
+            while(!grupoAssaulto.open()){
+                try{
+                    Thread.sleep((long)(1000));
+                }
+                catch (InterruptedException e){
+                }
+            }
+            outMessage = new AssaultPartyMessage(AssaultPartyMessage.DESFAZERGRUPO, grupo);
+            grupoAssaulto.writeObject(outMessage);
+            inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
+            grupoAssaulto.close();
+
+
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
@@ -395,15 +480,6 @@ public class CollectionSite {
             }
         }
         return -1;
-    }
-
-    /**
-     * Get the number of paitings in the room
-     * @param sala room id
-     * @return number of paitings
-     */
-    public int get_paitings(int sala){
-       return museum.getNumeroQuadros(sala);
     }
 
 }

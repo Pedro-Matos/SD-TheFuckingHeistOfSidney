@@ -82,13 +82,13 @@ public class AssaultPartyManagementMessage implements Serializable {
     /**
      * Rastejar em direçao á sala do museu
      *
-     * @serialField RASTEJARIN
+     * @serialField CRAWLIN
      */
     public static final int RASTEJARIN = 12;
     /**
      * Rastejar em direção ao terreiro
      *
-     * @serialField RASTEJAROUT
+     * @serialField CRAWLOUT
      */
     public static final int RASTEJAROUT = 13;
     /**

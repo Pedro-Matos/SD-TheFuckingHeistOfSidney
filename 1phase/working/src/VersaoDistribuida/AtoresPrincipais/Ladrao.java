@@ -1,9 +1,12 @@
 package VersaoDistribuida.AtoresPrincipais;
 
-import VersaoConcorrente.ParametrosDoProblema.GeneralRepository;
-import VersaoConcorrente.Regioes.base.ConcentrationSite;
-import VersaoConcorrente.Regioes.escritorioChefe.CollectionSite;
-import VersaoConcorrente.Regioes.gruposAssalto.GestorGruposAssalto;
+import VersaoDistribuida.ComInfo.ClientCom;
+import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
+import VersaoDistribuida.Mensagens.MuseuMessage;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
+import VersaoDistribuida.Regioes.base.ConcentrationSite;
+import VersaoDistribuida.Regioes.escritorioChefe.CollectionSite;
+import VersaoDistribuida.Regioes.gruposAssalto.GrupoAssalto;
 
 
 import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
@@ -18,19 +21,19 @@ public class Ladrao extends Thread {
     /**
      * General Repository
      */
-    private GeneralRepository generalRepository;
+    private ClientCom generalRepository;
     /**
      * Assault Party's manager
      */
-    private GestorGruposAssalto grupo;
+    private ClientCom grupo;
     /**
      * Concentration Site
      */
-    private CollectionSite escritorio;
+    private ClientCom escritorio;
     /**
      * ConcentrationSite
      */
-    private ConcentrationSite concentrationSite;
+    private ClientCom concentrationSite;
     /**
      * Thief ID
      */
@@ -53,6 +56,13 @@ public class Ladrao extends Thread {
     private int pos_grupo;
 
 
+    private int portCollectionSite = 22464;
+    private int portConcentrationSite = 22462;
+    private int portGroup = 22463;
+    private int portRepository =22460;
+
+
+
     /**
      * @param id Thief ID
      * @param name Thief name
@@ -61,25 +71,46 @@ public class Ladrao extends Thread {
      * @param escritorio Concentration Site
      * @param concentrationSite ConcentrationSite
      */
-    public Ladrao(int id, String name, GeneralRepository generalRepository, GestorGruposAssalto grupo, CollectionSite escritorio, ConcentrationSite concentrationSite) {
+    public Ladrao(int id, String name, String generalRepository, String grupo, String escritorio, String concentrationSite) {
 
         super(name);
         this.name = name;
         this.id = id;
 
-        this.generalRepository = generalRepository;
-        this.escritorio = escritorio;
-        this.grupo = grupo;
-        this.concentrationSite = concentrationSite;
+        this.generalRepository = new ClientCom(generalRepository, portRepository);
+        this.escritorio = new ClientCom(escritorio, portCollectionSite);
+        this.grupo = new ClientCom(grupo, portGroup);
+        this.concentrationSite = new ClientCom(concentrationSite, portConcentrationSite);
 
-        this.agilidade = concentrationSite.getAgilidade(id);
+        this.agilidade = getAgility();
+
         this.meuGrupo = -1;
         this.generalRepository.setThiefDisplacement(this.id, this.agilidade);
         this.pos_grupo = -1;
     }
 
+    public int getAgility(){
+        ConcentrationSiteMessage inMessage, outMessage;
+
+        while(!concentrationSite.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.GETAGILIDADE, this.id);
+        concentrationSite.writeObject(outMessage);
+        inMessage = (ConcentrationSiteMessage) concentrationSite.readObject();
+        concentrationSite.close();
+
+        return inMessage.getArg1();
+    }
+
+
     @Override
     public void run() {
+
         int posicao = 0;
 
         concentrationSite.estouPronto(this.id);

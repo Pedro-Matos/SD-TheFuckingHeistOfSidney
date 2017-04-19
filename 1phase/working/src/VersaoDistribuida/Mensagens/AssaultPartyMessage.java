@@ -44,30 +44,6 @@ public class AssaultPartyMessage implements Serializable {
      */
     public static final int RESPGETINDICE = 5;
     /**
-     * Pedido do id do ladrao
-     *
-     * @serialField  GETMEMBRO
-     */
-    public static final int GETMEMBRO = 6;
-    /**
-     * Resposta ao pedido de id do ladrao
-     *
-     * @serialField RESPGETMEMBRO
-     */
-    public static final int RESPGETMEMBRO = 7;
-    /**
-     * Pedido de nr de elementos no grupo
-     *
-     * @serialField GETNRELEMENTOS
-     */
-    public static final int GETNRELEMENTOS = 8;
-    /**
-     * Resposta do pedido de numero de elementos no grupo
-     *
-     * @serialField RESPGETNRELEMENTOS
-     */
-    public static final int RESPGETNRELEMENTOS = 9;
-    /**
      * Pedido da posiçao do ladrao
      *
      * @serialField GETPOS
@@ -82,128 +58,86 @@ public class AssaultPartyMessage implements Serializable {
     /**
      * Rastejar em direçao á sala do museu
      *
-     * @serialField RASTEJARIN
+     * @serialField CRAWLIN
      */
-    public static final int RASTEJARIN = 12;
+    public static final int CRAWLIN = 12;
+
+    public static final int RESPCRAWLIN = 13;
+
     /**
      * Rastejar em direção ao terreiro
      *
-     * @serialField RASTEJAROUT
+     * @serialField CRAWLOUT
      */
-    public static final int RASTEJAROUT = 13;
+    public static final int CRAWLOUT = 14;
+
+    public static final int RESPCRAWLOUT = 15;
+
     /**
      * Roubar um quadro de uma sala do museu
      *
      * @serialField ROUBARQUADRO
      */
-    public static final int ROUBARQUADRO = 14;
+    public static final int ROUBARQUADRO = 16;
     /**
      * Resposta a roubar quadro
      *
      * @serialField RESPROUBARQUADRO
      */
-    public static final int RESPROUBARQUADRO = 15;
+    public static final int RESPROUBARQUADRO = 17;
     /**
      * Formar um novo grupo de assalto
      *
-     * @serialField FORMARGRUPO
+     * @serialField PREPAREASSAULTPARTY
      */
-    public static final int FORMARGRUPO = 16;
+    public static final int FORMARGRUPO = 18;
     /**
      * Confirmaçao de novo grupo formado
      *
-     * @serialField RESPFORMARGRUPO
+     * @serialField RESPPREPAREASSAULTPARTY
      */
-    public static final int RESPFORMARGRUPO = 17;
+    public static final int RESPFORMARGRUPO = 19;
     /**
      * Desfazer um grupo de assalto
      *
      * @serialField DESFAZERGRUPO
      */
-    public static final int DESFAZERGRUPO = 18;
-    /**
-     * Resposta a rastejar
-     *
-     * @serialField RESPRASTEJAR
-     */
-    public static final int RESPRASTEJAR = 19;
+    public static final int DESFAZERGRUPO = 20;
     /**
      * Verificar se o grupo está formado
      *
      * @serialField CHECKGRUPONULL
      */
-    public static final int CHECKGRUPONULL = 20;
+    public static final int CHECKGRUPONULL = 21;
     /**
      * Resposta a verificar se o grupo está formado
      *
      * @serialField RESPCHECKGRUPONULL
      */
-    public static final int RESPCHECKGRUPONULL = 21;
+    public static final int RESPCHECKGRUPONULL = 22;
     /**
      * Resposta de confirmação
      *
      * @serialField ACK
      */
     public static final int ACK = 0;
-    private int msgType = -1;
+/*    private int msgType = -1;
     private int idGrupo = -1;
     private int info = -1;
     private int agilidade = -1;
     private boolean quadro = false;
     private boolean grupoNull = false;
+    private int ThiefId = -1;
+    private int PosGrupo = -1;*/
 
-    /**
-     * Getter grupoNull
-     * @return true se o grupo estiver a null, false se o grupo existir
-     */
-    public boolean grupoNull() {
-        return this.grupoNull;
-    }
+    private int msgType = -1;
+    private int arg1 = -1;
+    private int arg2 = -1;
+    private int arg3 = -1;
+    private boolean arg_b1 = false;
 
-    /**
-     * Getter do idGrupo
-     * @return id do grupo de assalto
-     */
-    public int getIdGrupo() {
-        return idGrupo;
-    }
 
-    /**
-     * Getter do quadro
-     * @return true se tiver um quadro, false se vazio
-     */
-    public boolean isQuadro() {
-        return quadro;
-    }
 
-    /**
-     * Getter da agilidade do ladrao
-     * @return agilidade do ladrão
-     */
-    public int getAgilidade() {
-        return agilidade;
-    }
-
-    /**
-     * Getter do tipo de mensagem
-     * @return tipo de mensagem
-     */
-    public int getType() {
-        return msgType;
-    }
-
-    /**
-     * Getter do valor inteiro
-     * @return valor int
-     */
-    public int getInfo() {
-        return info;
-    }
-
-    /**
-     * Instanciação de uma mensagem (tipo 1)
-     * @param msgType tipo de mensagem
-     */
     public AssaultPartyMessage(int msgType) {
         this.msgType = msgType;
     }
@@ -211,38 +145,39 @@ public class AssaultPartyMessage implements Serializable {
     /**
      *Instanciação de uma mensagem (tipo 2)
      * @param msgType tipo de mensagem
-     * @param info
+     * @param arg1
      */
-    public AssaultPartyMessage(int msgType, int info) {
+    public AssaultPartyMessage(int msgType, int arg1) {
         this.msgType = msgType;
-        this.info = info;
+        this.arg1 = arg1;
     }
 
     /**
      *Instanciação de uma mensagem (tipo 3)
      * @param msgType tipo de mensagem
-     * @param idGrupo id do grupo
-     * @param id id do ladrao
+     * @param arg1 id do grupo
+     * @param arg2 id do ladrao
      */
-    public AssaultPartyMessage(int msgType, int idGrupo, int id) {
+    public AssaultPartyMessage(int msgType, int arg1, int arg2) {
         this.msgType = msgType;
-        this.info = id;
-        this.idGrupo = idGrupo;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
     }
 
     /**
      *Instanciação de uma mensagem (tipo 4)
      * @param msgType tipo de mensagem
-     * @param idGrupo id do grupo
-     * @param id id do ladrão
-     * @param agilidade agilidade do ladrao
+     * @param arg1 id do grupo
+     * @param arg2 id do ladrão
+     * @param arg3 agilidade do ladrao
      */
-    public AssaultPartyMessage(int msgType, int idGrupo, int id, int agilidade) {
+    public AssaultPartyMessage(int msgType, int arg1, int arg2, int arg3) {
         this.msgType = msgType;
-        this.agilidade = agilidade;
-        this.info = id;
-        this.idGrupo = idGrupo;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
+        this.arg3 = arg3;
     }
+
 
     /**
      *Instanciação de uma mensagem (tipo 5)
@@ -255,24 +190,46 @@ public class AssaultPartyMessage implements Serializable {
 
         switch (this.msgType) {
             case AssaultPartyMessage.RESPROUBARQUADRO:
-                this.quadro = info;
+                this.arg_b1 = info;
                 break;
             case AssaultPartyMessage.CHECKGRUPONULL:
-                this.grupoNull = info;
+                this.arg_b1 = info;
                 break;
             case AssaultPartyMessage.RESPCHECKGRUPONULL:
-                this.grupoNull = info;
+                this.arg_b1 = info;
                 break;
         }
     }
 
-    /**
-     *
-     * @return Mensagem Grupo de Assalto
-     */
+    public int getMsgType() {
+        return msgType;
+    }
+
+    public int getArg1() {
+        return arg1;
+    }
+
+    public int getArg2() {
+        return arg2;
+    }
+
+    public int getArg3() {
+        return arg3;
+    }
+
+    public boolean isArg_b1() {
+        return arg_b1;
+    }
+
     @Override
     public String toString() {
-        return ("Type " + msgType + "\n idGrupo " + idGrupo + "\n info " + info + "\n agilidade " + agilidade + "\n quadro " + quadro);
+        return "AssaultPartyMessage{" +
+                "msgType=" + msgType +
+                ", arg1=" + arg1 +
+                ", arg2=" + arg2 +
+                ", arg3=" + arg3 +
+                ", arg_b1=" + arg_b1 +
+                '}';
     }
 }
 

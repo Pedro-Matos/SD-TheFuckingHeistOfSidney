@@ -75,7 +75,6 @@ public class ConcentrationSiteMessage implements Serializable {
      *
      * @serial GETLADROESBASE
      */
-    public static final int GETLADROESBASE = 10;
     /**
      * Resposta do servidor
      *
@@ -115,7 +114,7 @@ public class ConcentrationSiteMessage implements Serializable {
     /**
      * Mudar estado do ladrao para iniciar assalto
      *
-     * @serialField INICIARASSALTO
+     * @serialField STARTOPERATIONS
      */
     public static final int PREPAREEXCURSION = 17;
     /**
@@ -137,8 +136,9 @@ public class ConcentrationSiteMessage implements Serializable {
      */
     public static final int ESPERALADROESFIM = 20;
 
-
     public static final int GETAGILIDADE = 21;
+
+    public static final int RESPGETAGILITY = 22;
 
 
 
@@ -149,9 +149,12 @@ public class ConcentrationSiteMessage implements Serializable {
      */
     public static final int ACK = 0;
     private int msgType = -1;
-    private int id = -1;
+    /*private int id = -1;
     private boolean check = false;
-    private int state;
+    private int state;*/
+
+    private int arg1 = -1;
+    private boolean arg_b1 = false;
 
     /**
      * Construtor mensagem
@@ -178,7 +181,7 @@ public class ConcentrationSiteMessage implements Serializable {
      */
     public ConcentrationSiteMessage(int msgType, boolean check) {
         this.msgType = msgType;
-        this.check = check;
+        this.arg_b1 = check;
     }
 
     /**
@@ -188,7 +191,7 @@ public class ConcentrationSiteMessage implements Serializable {
      */
     public ConcentrationSiteMessage(int msgType, int state) {
         this.msgType = msgType;
-        this.state = state;
+        this.arg1 = state;
 
     }
 
@@ -200,37 +203,11 @@ public class ConcentrationSiteMessage implements Serializable {
         return this.msgType;
     }
 
-    /**
-     * Getter do valor inteiro
-     * @return valor int
-     */
-    public int getId() {
-        return id;
+    public int getArg1() {
+        return arg1;
     }
 
-    /**
-     * Getter do valor Boolean
-     * @return valor boolean
-     */
-    public boolean isCheck() {
-        return check;
-    }
-
-    /**
-     * Getter do estado do ladrao
-     * @return estado do ladrão
-     */
-    public int getState() {
-        return state;
-    }
-
-
-    /**
-     *
-     * @return Mensagem Base
-     */
-    @Override
-    public String toString() {
-        return ("Type " + msgType + "\n id " + id + "\n check  " + check + "\n estado " + state);
+    public boolean isArg_b1() {
+        return arg_b1;
     }
 }

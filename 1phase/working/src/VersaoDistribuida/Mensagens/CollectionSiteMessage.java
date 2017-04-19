@@ -48,38 +48,30 @@ public class CollectionSiteMessage implements Serializable {
     /**
      * Mensagem que inicia o Assalto
      */
-    public static final int INICIARASSALTO = 8;
+    public static final int STARTOPERATIONS = 8;
     /**
      * Resposta
      */
-    public static final int RESPINICIARASSALTO = 9;
+    public static final int RESPSTARTOPERATIONS = 9;
 
     /**
      * Mensagem que forma o grupo
      */
-    public static final int FORMARGRUPO = 10;
+    public static final int PREPAREASSAULTPARTY = 10;
     /**
      * Resposta
      */
-    public static final int RESPFORMARGRUPO = 11;
+    public static final int RESPPREPAREASSAULTPARTY = 11;
 
-    /**
-     * Mensagem que planeia o assalto
-     */
-    public static final int PLANEARASSALTO = 12;
-    /**
-     * Resposta
-     */
-    public static final int RESPPLANEARASSALTO = 13;
 
     /**
      * mensagem que descansa o chefe
      */
-    public static final int DESCANSAR = 14;
+    public static final int TAKEAREST = 14;
     /**
      * Resposta
      */
-    public static final int RESPDESCANSAR = 15;
+    public static final int RESPTAKEAREST = 15;
 
     /**
      * Mensagem que retorna o nr de elementos por grupo
@@ -90,23 +82,15 @@ public class CollectionSiteMessage implements Serializable {
      */
     public static final int RESPGETNRELEMENTOSGRUPO = 17;
 
-    /**
-     * Mensagem que retorna o grupo do ladrao
-     */
-    public static final int GETMEUGRUPO = 18;
-    /**
-     * Resposta
-     */
-    public static final int RESPGETMEUGRUPO = 19;
 
     /**
      * Mensagem que entrega o quadro
      */
-    public static final int ENTREGARQUADRO = 20;
+    public static final int HANDACANVAS = 20;
     /**
      * Resposta
      */
-    public static final int RESPENTREGARQUADRO = 21;
+    public static final int RESPHANDACANVAS = 21;
 
     /**
      * Mensagem que indica a sala vazia
@@ -138,11 +122,11 @@ public class CollectionSiteMessage implements Serializable {
     /**
      * Mensagem que termina o assalto
      */
-    public static final int TERMINARASSALTO = 28;
+    public static final int SUMUPRESULTS = 28;
     /**
      * Resposta
      */
-    public static final int RESPTERMINARASSALTO = 29;
+    public static final int RESPSUMUPRESULTS = 29;
 
     /**
      * Mensagem que retorna o nr de quadros roubados
@@ -163,15 +147,6 @@ public class CollectionSiteMessage implements Serializable {
     public static final int RESPCHECKSALASVAZIAS = 33;
 
     /**
-     * Mensagem que conta o numero de groupos
-     */
-    public static final int GETCOUNTGRUPOS = 34;
-    /**
-     * Resposta
-     */
-    public static final int RESPGETCOUNTGRUPOS = 35;
-
-    /**
      * Mensagem que retorna a sala de assalto de um grupo
      */
     public static final int GETSALAASSALTO = 36;
@@ -180,14 +155,6 @@ public class CollectionSiteMessage implements Serializable {
      */
     public static final int RESPGETSALAASSALTO = 37;
 
-    /**
-     * Mensagem que retorna a sala vazia
-     */
-    public static final int GETSALAVAZIA = 38;
-    /**
-     * Resposta
-     */
-    public static final int RESPGETSALAVAZIA = 39;
 
 
     private int info = -1;
@@ -196,6 +163,8 @@ public class CollectionSiteMessage implements Serializable {
     private int ladraoID = -1;
     private int grupoID = -1;
     private int stat;
+    private int pos = -1;
+    private int sala = -1;
 
     @Override
     public String toString() {
@@ -284,6 +253,25 @@ public class CollectionSiteMessage implements Serializable {
         this.ladraoID = ladraoID;
         this.grupoID = grupoID;
     }
+
+    public CollectionSiteMessage(int type, int ladraoID, int grupoID, int sala, int pos){
+        this.msgType = type;
+        this.ladraoID = ladraoID;
+        this.grupoID = grupoID;
+        this.sala = sala;
+        this.pos = pos;
+    }
+
+    public int getSala(){
+        return this.sala;
+    }
+
+    public int getPos(){
+        return this.pos;
+    }
+
+
+
 
     /**
      * Retorna o Tipo de Mensagem

@@ -10,10 +10,17 @@ qwerty
 /passwd
 
 
-Nó   Port
-ws1  22400	GeneralRepository
-ws2  22401	Museum
-
+Nó   			Port
+ws1-grupoassaulto  	22460		GeneralRepository
+ws1-grupoassaulto  	22461		Museum
+ws2-CollectionSite	22460		GeneralRepository
+ws2-CollectionSite	22461		Museum
+ws2-CollectionSite	22462		ConcentrationSite
+ws2-CollectionSite	22463		GrupoAssaulto
+ws3-OrdinaryThief	22460		GeneralRepository
+ws3-OrdinaryThief	22462		ConcentrationSite
+ws3-OrdinaryThief	22463		GrupoAssaulto
+ws3-OrdinaryThief	22464		CollectionSite
 
 
 1 opção - execução por meio de -jar nas maquinas

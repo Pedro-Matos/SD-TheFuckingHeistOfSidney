@@ -1,7 +1,9 @@
 package VersaoDistribuida.Regioes.museu;
 
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
-import VersaoConcorrente.ParametrosDoProblema.GeneralRepository;
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
+import VersaoDistribuida.ComInfo.ClientCom;
+
 import java.util.Random;
 
 /**
@@ -18,12 +20,12 @@ public class Museum {
     /**
      * General Repository
      */
-    GeneralRepository generalRepository;
+    ClientCom generalRepository;
 
     /**
      * @param generalRepository General Repository
      */
-    public Museum(GeneralRepository generalRepository){
+    public Museum(String generalRepository){
 
         this.generalRepository = generalRepository;
 

@@ -1,6 +1,6 @@
 package VersaoDistribuida.Regioes.museu;
 
-import VersaoConcorrente.ParametrosDoProblema.GeneralRepository;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 import VersaoDistribuida.ComInfo.ServerCom;
 import genclass.GenericIO;
 

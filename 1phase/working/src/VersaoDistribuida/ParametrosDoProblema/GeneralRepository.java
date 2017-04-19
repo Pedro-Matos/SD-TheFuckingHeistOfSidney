@@ -1,6 +1,6 @@
 package VersaoDistribuida.ParametrosDoProblema;
 
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 import genclass.GenericIO;
 import genclass.TextFile;
 

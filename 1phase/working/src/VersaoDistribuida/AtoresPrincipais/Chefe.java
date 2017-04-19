@@ -1,10 +1,10 @@
 package VersaoDistribuida.AtoresPrincipais;
 
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 
-import VersaoConcorrente.ParametrosDoProblema.GeneralRepository;
-import VersaoConcorrente.Regioes.base.ConcentrationSite;
-import VersaoConcorrente.Regioes.escritorioChefe.CollectionSite;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
+import VersaoDistribuida.Regioes.base.ConcentrationSite;
+import VersaoDistribuida.Regioes.escritorioChefe.CollectionSite;
 
 
 /**

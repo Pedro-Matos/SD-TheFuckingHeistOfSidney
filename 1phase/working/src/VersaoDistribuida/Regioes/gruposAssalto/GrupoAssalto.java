@@ -1,9 +1,11 @@
 package VersaoDistribuida.Regioes.gruposAssalto;
 
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.DIST_THIEVES;
-import VersaoConcorrente.ParametrosDoProblema.GeneralRepository;
-import VersaoConcorrente.Regioes.museu.Museum;
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.DIST_THIEVES;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
+import VersaoDistribuida.Regioes.museu.Museum;
+import VersaoDistribuida.ComInfo.ClientCom;
+import VersaoDistribuida.Mensagens.MuseuMessage;
 
 import java.util.Arrays;
 
@@ -16,12 +18,12 @@ public class GrupoAssalto {
     /**
      * Museum
      */
-    Museum museum;
+    ClientCom museum;
 
     /**
      * General Repository
      */
-    GeneralRepository gen;
+    ClientCom gen;
     /**
      * Thief's positions
      */
@@ -71,10 +73,10 @@ public class GrupoAssalto {
      * @param id thief id
      * @param general General Repository
      */
-    public GrupoAssalto(Museum museum, int nrSala, int id, GeneralRepository general) {
+    public GrupoAssalto(String museum, int nrSala, int id, String general) {
 
-        this.gen = general;
-        this.museum = museum;
+        this.gen = new ClientCom(general,22460);
+        this.museum = new ClientCom(museum, 22461);
         this.id = id;
         this.nrElementos = 0;
         this.naSala = 0;
@@ -95,6 +97,7 @@ public class GrupoAssalto {
      * @param ladraoID thief id
      */
     public synchronized void entrar(int ladraoID, int pos_grupo) {
+
         this.posicao[1][nrElementos] = ladraoID;
         int realID = ladraoID+1;
         if (nrElementos == NUM_GROUP - 1) {
@@ -359,7 +362,22 @@ public class GrupoAssalto {
     public int getDistanciaSala(){
 
         if (distanciaSala == -1) {
-            distanciaSala = museum.getDistancia(nrSala);
+            MuseuMessage inMessage, outMessage;
+
+
+            while(!museum.open()){
+                try{
+                    Thread.sleep((long)(1000));
+                }
+                catch (InterruptedException e){
+                }
+            }
+            outMessage = new MuseuMessage(MuseuMessage.GETDISTANCIA, naSala);
+            museum.writeObject(outMessage);
+            inMessage = (MuseuMessage) museum.readObject();
+            museum.close();
+
+            distanciaSala = inMessage.getDistanciaSala();
         }
         return distanciaSala;
     }
@@ -370,9 +388,22 @@ public class GrupoAssalto {
      * @return true if success
      */
     public synchronized boolean roubarQuadro(){
+        MuseuMessage inMessage, outMessage;
+
+        while(!museum.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new MuseuMessage(MuseuMessage.ROUBARQUADRO, naSala);
+        museum.writeObject(outMessage);
+        inMessage = (MuseuMessage) museum.readObject();
+        museum.close();
 
 
-        return museum.roubarQuadro(nrSala);
+        return inMessage.getQuadroRoubado();
 
     }
 

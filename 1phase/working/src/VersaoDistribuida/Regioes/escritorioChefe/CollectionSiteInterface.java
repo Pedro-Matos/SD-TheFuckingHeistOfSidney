@@ -42,33 +42,25 @@ public class CollectionSiteInterface {
                     bResp = escritorio.checkSalasLivres();
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPCHECKSALASVAZIAS,bResp);
                     break;
-                case CollectionSiteMessage.DESCANSAR:
+                case CollectionSiteMessage.TAKEAREST:
                     escritorio.takeARest();
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPDESCANSAR);
+                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPTAKEAREST);
                     break;
                 case CollectionSiteMessage.ENTRARGRUPO:
                     escritorio.entrarGrupo(inMessage.getLadraoID(),inMessage.getGrupoID());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPENTRARGRUPO);
                     break;
-                case CollectionSiteMessage.FORMARGRUPO:
-                    resp = escritorio.formarGrupo(inMessage.getInfo());
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPFORMARGRUPO,resp);
+                case CollectionSiteMessage.PREPAREASSAULTPARTY:
+                    bResp = escritorio.prepareAssaultParty(inMessage.getGrupoID());
+                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPPREPAREASSAULTPARTY,bResp);
                     break;
-                case CollectionSiteMessage.GETCOUNTGRUPOS:
-                    resp = escritorio.getCountGrupos();
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETCOUNTGRUPOS,resp);
-                    break;
-                case CollectionSiteMessage.ENTREGARQUADRO:
-                    escritorio.handACanvas(inMessage.getGrupoID(), inMessage.getLadraoID());
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPENTREGARQUADRO);
+                case CollectionSiteMessage.HANDACANVAS:
+                    escritorio.handACanvas(inMessage.getLadraoID(),inMessage.getGrupoID(), inMessage.getSala(), inMessage.getPos());
+                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPHANDACANVAS);
                     break;
                 case CollectionSiteMessage.GETESTADOCHEFE:
                     stat = escritorio.getEstadoChefe();
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETESTADOCHEFE,stat);
-                    break;
-                case CollectionSiteMessage.GETMEUGRUPO:
-                    resp = escritorio.getMeuGrupo(inMessage.getInfo());
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETMEUGRUPO,resp);
                     break;
                 case CollectionSiteMessage.GETNRELEMENTOSGRUPO:
                     resp = escritorio.getNrElemGrupo(inMessage.getInfo());
@@ -86,29 +78,21 @@ public class CollectionSiteInterface {
                     resp = escritorio.getSalaAssalto(inMessage.getInfo());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETSALAASSALTO,resp);
                     break;
-                case CollectionSiteMessage.GETSALAVAZIA:
-                    bResp = escritorio.getSalaVazia(inMessage.getInfo());
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETSALAVAZIA,bResp);
-                    break;
                 case CollectionSiteMessage.GRUPOCHEIO:
                     bResp = escritorio.grupoCheio(inMessage.getInfo());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGRUPOCHEIO,bResp);
                     break;
                 case CollectionSiteMessage.INDICARSALAVAZIA:
-                    escritorio.indicarSalaVazia(inMessage.getGrupoID(), inMessage.getLadraoID());
+                    escritorio.indicarSalaVazia(inMessage.getSala(), inMessage.getGrupoID(), inMessage.getPos());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPINDICARSALAVAZIA);
                     break;
-                case CollectionSiteMessage.INICIARASSALTO:
-                    escritorio.iniciarAssalto();
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPINICIARASSALTO);
+                case CollectionSiteMessage.STARTOPERATIONS:
+                    escritorio.startOperations();
+                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPSTARTOPERATIONS);
                     break;
-                case CollectionSiteMessage.PLANEARASSALTO:
-                    escritorio.planearAssalto();
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPPLANEARASSALTO);
-                    break;
-                case CollectionSiteMessage.TERMINARASSALTO:
+                case CollectionSiteMessage.SUMUPRESULTS:
                     escritorio.sumUpResults();
-                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPTERMINARASSALTO);
+                    outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPSUMUPRESULTS);
                     break;
                 default:
                     break;
