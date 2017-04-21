@@ -21,6 +21,11 @@ ws3-OrdinaryThief	22460		GeneralRepository
 ws3-OrdinaryThief	22462		ConcentrationSite
 ws3-OrdinaryThief	22463		GrupoAssaulto
 ws3-OrdinaryThief	22464		CollectionSite
+ws4-Master		22460		GeneralRepository
+ws4-Master		22462		ConcentrationSite
+ws4-Master		22464		CollectionSite
+
+
 
 
 1 opção - execução por meio de -jar nas maquinas

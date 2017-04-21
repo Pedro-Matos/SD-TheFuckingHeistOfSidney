@@ -160,25 +160,27 @@ public class CollectionSiteMessage implements Serializable {
     private int info = -1;
     private boolean bInfo = false;
     private int msgType = -1;
-    private int ladraoID = -1;
-    private int grupoID = -1;
-    private int stat;
-    private int pos = -1;
-    private int sala = -1;
 
-    @Override
-    public String toString() {
-        return ("Type "+msgType+"\n idGrupo "+grupoID+"\n info "+info+"\n ladraoId "+ ladraoID+"\n binfo "+bInfo+"\n estado chefe "+stat);
+
+    private int arg1 = -1;
+    private int arg2 = -1;
+    private int arg3 = -1;
+    private int arg4 = -1;
+
+    public int getArg1() {
+        return arg1;
     }
 
+    public int getArg2() {
+        return arg2;
+    }
 
+    public int getArg3() {
+        return arg3;
+    }
 
-    /**
-     * Retorna estado do chefe
-     * @return
-     */
-    public int getStat(){
-        return this.stat;
+    public int getArg4() {
+        return arg4;
     }
 
     /**
@@ -197,30 +199,15 @@ public class CollectionSiteMessage implements Serializable {
         return this.bInfo;
     }
 
-    /**
-     * Retorna o id do Ladrao
-     * @return
-     */
-    public int getLadraoID(){
-        return this.ladraoID;
-    }
-
-    /**
-     * Retorna o ID do grupo
-     * @return
-     */
-    public int getGrupoID(){
-        return this.grupoID;
-    }
 
     /**
      * Mensagem tipo 2
      * @param type
-     * @param stat
+     * @param arg1
      */
-    public CollectionSiteMessage(int type, int stat){
+    public CollectionSiteMessage(int type, int arg1){
         this.msgType = type;
-        this.stat = stat;
+        this.arg1 = arg1;
 
     }
 
@@ -245,32 +232,26 @@ public class CollectionSiteMessage implements Serializable {
     /**
      * Mensagem tipo 5
      * @param type
-     * @param ladraoID
-     * @param grupoID
+     * @param arg1
+     * @param arg2
      */
-    public CollectionSiteMessage(int type, int ladraoID, int grupoID){
+    public CollectionSiteMessage(int type, int arg1, int arg2){
         this.msgType = type;
-        this.ladraoID = ladraoID;
-        this.grupoID = grupoID;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
     }
 
-    public CollectionSiteMessage(int type, int ladraoID, int grupoID, int sala, int pos){
+    public CollectionSiteMessage(int type, int arg1, int arg2, int arg3, int arg4){
         this.msgType = type;
-        this.ladraoID = ladraoID;
-        this.grupoID = grupoID;
-        this.sala = sala;
-        this.pos = pos;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
+        this.arg3 = arg3;
+        this.arg4 = arg4;
     }
 
-    public int getSala(){
-        return this.sala;
+    public boolean getBool(){
+        return bInfo;
     }
-
-    public int getPos(){
-        return this.pos;
-    }
-
-
 
 
     /**
