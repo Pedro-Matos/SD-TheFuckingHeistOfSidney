@@ -35,7 +35,7 @@ public class ConcentrationSiteInterface {
 
         switch (inMessage.getType()) {
             case ConcentrationSiteMessage.CHAMALADRAO:
-                if (inMessage.getId() > 1 || inMessage.getId() < 0) {
+                if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
                     throw new ConcentrationSiteMessageException("Grupo inválido!", inMessage);
                 }
                 break;
@@ -52,7 +52,7 @@ public class ConcentrationSiteInterface {
             case ConcentrationSiteMessage.PREPAREEXCURSION:
             case ConcentrationSiteMessage.NASALA:
             case ConcentrationSiteMessage.REVERSEDIRECTION:
-                if (inMessage.getId() >= NUM_THIEVES || inMessage.getId() < 0) {
+                if (inMessage.getArg1() >= NUM_THIEVES || inMessage.getArg1() < 0) {
                     throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
                 }
                 break;
@@ -70,7 +70,7 @@ public class ConcentrationSiteInterface {
 
         switch (inMessage.getType()) {
             case ConcentrationSiteMessage.CHAMALADRAO:
-                resp = base.chamaLadrao(inMessage.getId());
+                resp = base.chamaLadrao(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPCHAMALADRAO, resp);
                 break;
             case ConcentrationSiteMessage.ESPERALADROES:
@@ -82,19 +82,19 @@ public class ConcentrationSiteInterface {
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.AMINEEDED:
-                base.amINeeded(inMessage.getId());
+                base.amINeeded(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.ESTOUPRONTO:
-                base.estouPronto(inMessage.getId());
+                base.estouPronto(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.GETBUSYLADRAO:
-                check = base.getBusyLadrao(inMessage.getId());
+                check = base.getBusyLadrao(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETBUSYLADRAO, check);
                 break;
             case ConcentrationSiteMessage.GETGRUPOLADRAO:
-                resp = base.getGrupoLadrao(inMessage.getId());
+                resp = base.getGrupoLadrao(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETGRUPOLADRAO, resp);
                 break;
             case ConcentrationSiteMessage.GETNRLADROES:
@@ -102,27 +102,27 @@ public class ConcentrationSiteInterface {
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETNRLADROES, resp);
                 break;
             case ConcentrationSiteMessage.GETSTATELADRAO:
-                state = base.getStateLadrao(inMessage.getId());
+                state = base.getStateLadrao(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETSTATELADRAO, state);
                 break;
             case ConcentrationSiteMessage.INDICARCHEGADA:
-                base.indicarChegada(inMessage.getId());
+                base.indicarChegada(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.PREPAREEXCURSION:
-                base.prepareExcursion(inMessage.getId());
+                base.prepareExcursion(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.NASALA:
-                base.naSala(inMessage.getId());
+                base.naSala(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.REVERSEDIRECTION:
-                base.reverseDirection(inMessage.getId());
+                base.reverseDirection(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.GETAGILIDADE:
-                resp = base.getAgilidade(inMessage.getId());
+                resp = base.getAgilidade(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETAGILITY,resp);
                 break;
 

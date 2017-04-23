@@ -373,12 +373,12 @@ public class Ladrao extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETPOSGRUPO, meuGrupo);
+        outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETPOSGRUPO,id, meuGrupo);
         grupo.writeObject(outMessage);
         inMessage = (CollectionSiteMessage) grupo.readObject();
         grupo.close();
 
-        return inMessage
+        return inMessage.getArg1();
     }
 
     public void handACanvas(int id, int tmp_salaassalto, int meuGrupo, int tmp_getPosGrupo){
@@ -409,7 +409,7 @@ public class Ladrao extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new CollectionSiteMessage(CollectionSiteMessage.INDICARSALAVAZIA, id,tmp_salaassalto,meuGrupo,tmp_getPosGrupo);
+        outMessage = new CollectionSiteMessage(CollectionSiteMessage.INDICARSALAVAZIA,tmp_salaassalto,meuGrupo,tmp_getPosGrupo);
         grupo.writeObject(outMessage);
         inMessage = (CollectionSiteMessage) grupo.readObject();
         grupo.close();

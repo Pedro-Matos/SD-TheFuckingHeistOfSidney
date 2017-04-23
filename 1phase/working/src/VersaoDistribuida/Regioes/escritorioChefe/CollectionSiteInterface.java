@@ -47,15 +47,15 @@ public class CollectionSiteInterface {
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPTAKEAREST);
                     break;
                 case CollectionSiteMessage.ENTRARGRUPO:
-                    escritorio.entrarGrupo(inMessage.getLadraoID(),inMessage.getGrupoID());
+                    escritorio.entrarGrupo(inMessage.getArg1(),inMessage.getArg2());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPENTRARGRUPO);
                     break;
                 case CollectionSiteMessage.PREPAREASSAULTPARTY:
-                    bResp = escritorio.prepareAssaultParty(inMessage.getGrupoID());
+                    bResp = escritorio.prepareAssaultParty(inMessage.getArg1());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPPREPAREASSAULTPARTY,bResp);
                     break;
                 case CollectionSiteMessage.HANDACANVAS:
-                    escritorio.handACanvas(inMessage.getLadraoID(),inMessage.getGrupoID(), inMessage.getSala(), inMessage.getPos());
+                    escritorio.handACanvas(inMessage.getArg1(),inMessage.getArg3(), inMessage.getArg2(), inMessage.getArg4());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPHANDACANVAS);
                     break;
                 case CollectionSiteMessage.GETESTADOCHEFE:
@@ -67,7 +67,7 @@ public class CollectionSiteInterface {
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETNRELEMENTOSGRUPO,resp);
                     break;
                 case CollectionSiteMessage.GETPOSGRUPO:
-                    resp = escritorio.getPosGrupo(inMessage.getLadraoID(),inMessage.getGrupoID());
+                    resp = escritorio.getPosGrupo(inMessage.getArg1(),inMessage.getArg2());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETPOSGRUPO,resp);
                     break;
                 case CollectionSiteMessage.GETQUADROSROUBADOS:
@@ -83,7 +83,7 @@ public class CollectionSiteInterface {
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGRUPOCHEIO,bResp);
                     break;
                 case CollectionSiteMessage.INDICARSALAVAZIA:
-                    escritorio.indicarSalaVazia(inMessage.getSala(), inMessage.getGrupoID(), inMessage.getPos());
+                    escritorio.indicarSalaVazia(inMessage.getArg1(), inMessage.getArg2(), inMessage.getArg3());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPINDICARSALAVAZIA);
                     break;
                 case CollectionSiteMessage.STARTOPERATIONS:
