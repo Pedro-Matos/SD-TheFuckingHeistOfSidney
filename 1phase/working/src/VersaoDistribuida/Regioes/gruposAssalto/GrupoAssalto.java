@@ -2,6 +2,8 @@ package VersaoDistribuida.Regioes.gruposAssalto;
 
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.DIST_THIEVES;
+
+import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 import VersaoDistribuida.Regioes.museu.Museum;
 import VersaoDistribuida.ComInfo.ClientCom;
@@ -105,13 +107,43 @@ public class GrupoAssalto {
         }
 
         if (id == 0) {
-            gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, 0, false);
+            setAP1_pos_id_canvas(pos_grupo, ladraoID, 0, false);
 
         } else if (id == 1) {
-            gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, 0, false);
+            setAP2_pos_id_canvas(pos_grupo, ladraoID, 0, false);
         }
 
         this.nrElementos++;
+    }
+
+    private void setAP1_pos_id_canvas(int pos_grupo, int ladraoID, int pos, boolean cv) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!gen.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1POSIDCANVAS, pos_grupo, ladraoID, pos, cv);
+        gen.writeObject(outMessage);
+        gen.close();
+    }
+
+    private void setAP2_pos_id_canvas(int pos_grupo, int ladraoID, int pos, boolean cv) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!gen.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2POSIDCANVAS, pos_grupo, ladraoID, pos, cv);
+        gen.writeObject(outMessage);
+        gen.close();
     }
 
     public synchronized int getPos(int ladraoID){
@@ -123,6 +155,51 @@ public class GrupoAssalto {
             }
         }
         return -1;
+    }
+
+    private void setThiefState(int ladraoID, int state){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!gen.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFSTATE, ladraoID, state);
+        gen.writeObject(outMessage);
+        gen.close();
+    }
+
+    private void setAP1_pos(int pos_grupo, int distanciaSala) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!gen.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1POS, pos_grupo, distanciaSala);
+        gen.writeObject(outMessage);
+        gen.close();
+    }
+
+    private void setAP2_pos(int pos_grupo, int distanciaSala) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!gen.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2POS, pos_grupo, distanciaSala);
+        gen.writeObject(outMessage);
+        gen.close();
     }
 
     /**
@@ -145,7 +222,7 @@ public class GrupoAssalto {
 
             if (this.minhaVez[indiceNoGrupo]) {
 
-                gen.setThiefState(ladraoID,CRAWLING_INWARDS);
+                setThiefState(ladraoID,CRAWLING_INWARDS);
 
                 boolean repetir = true;
                 int[] partnersPos = new int[NUM_GROUP - 1];
@@ -188,20 +265,20 @@ public class GrupoAssalto {
                                 cheguei[indiceNoGrupo] = true;
                                 repetir = false;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,getDistanciaSala);
-                                    gen.setThiefState(ladraoID,AT_A_ROOM );
+                                    setAP1_pos(posgrupo,getDistanciaSala);
+                                    setThiefState(ladraoID,AT_A_ROOM );
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,getDistanciaSala);
-                                    gen.setThiefState(ladraoID,AT_A_ROOM );
+                                    setAP2_pos(posgrupo,getDistanciaSala);
+                                    setThiefState(ladraoID,AT_A_ROOM );
                                 }
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition + i;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,myPosition + i);
+                                    setAP1_pos(posgrupo,myPosition + i);
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,myPosition + i);
+                                    setAP2_pos(posgrupo,myPosition + i);
                                 }
                             }
 
@@ -268,7 +345,7 @@ public class GrupoAssalto {
 
                     }
 
-                    if(myPosition == getDistanciaSala) gen.setThiefState(ladraoID,CRAWLING_OUTWARDS );
+                    if(myPosition == getDistanciaSala) setThiefState(ladraoID,CRAWLING_OUTWARDS );
 
                     Arrays.sort(partnersPos);
                     for (i = agilidade; i > 0; i--) {
@@ -295,19 +372,19 @@ public class GrupoAssalto {
                                 voltei[indiceNoGrupo] = true;
                                 repetir = false;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,0);
+                                    setAP1_pos(posgrupo,0);
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,0);
+                                    setAP2_pos(posgrupo,0);
                                 }
-                                gen.setThiefState(ladraoID, OUTSIDE);
+                                setThiefState(ladraoID, OUTSIDE);
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition - i;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,myPosition - i);
+                                    setAP1_pos(posgrupo,myPosition - i);
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,myPosition - i);
+                                    setAP2_pos(posgrupo,myPosition - i);
                                 }
                             }
                             break;

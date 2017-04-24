@@ -4,6 +4,7 @@ import VersaoDistribuida.ComInfo.ClientCom;
 import VersaoDistribuida.Mensagens.AssaultPartyMessage;
 import VersaoDistribuida.Mensagens.CollectionSiteMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
+import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 
 
 import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
@@ -82,8 +83,23 @@ public class Ladrao extends Thread {
         this.agilidade = getAgility();
 
         this.meuGrupo = -1;
-        this.generalRepository.setThiefDisplacement(this.id, this.agilidade);
+        setThiefDisplacement(this.id, this.agilidade);
         this.pos_grupo = -1;
+    }
+
+    private void setThiefDisplacement(int id, int agilidade) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFDISPLACEMENT, id, agilidade);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
     }
 
     public int getAgility(){
@@ -325,7 +341,7 @@ public class Ladrao extends Thread {
         inMessage = (CollectionSiteMessage) grupo.readObject();
         grupo.close();
 
-        return inMessage
+        return inMessage.getArg1();
 
     }
 
@@ -396,7 +412,6 @@ public class Ladrao extends Thread {
         inMessage = (CollectionSiteMessage) grupo.readObject();
         grupo.close();
 
-        return inMessage
     }
 
     public void indicarSalaVazia(int tmp_salaassalto, int meuGrupo, int tmp_getPosGrupo){
@@ -414,7 +429,6 @@ public class Ladrao extends Thread {
         inMessage = (CollectionSiteMessage) grupo.readObject();
         grupo.close();
 
-        return inMessage
     }
 
     public void indicarChegada(int id){
@@ -433,7 +447,110 @@ public class Ladrao extends Thread {
         concentrationSite.close();
     }
 
+    private void setThiefState(int id, int stat) {
+        GeneralRepositoryMessage inMessage, outMessage;
 
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFSTATE, id, stat);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
+    }
+
+    private void setAP1_canvas(int pos_grupo, boolean quadro, int room) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1CANVAS, pos_grupo, quadro, room);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
+    }
+
+    private void setAP2_canvas(int pos_grupo, boolean quadro, int room) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2CANVAS, pos_grupo, quadro, room);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
+    }
+
+    private void setAP1_pos(int pos_grupo, int posicao) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1POS, pos_grupo, posicao);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
+    }
+
+    private void setAP2_pos(int pos_grupo, int posicao) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2POS, pos_grupo, posicao);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
+    }
+
+    private void setAP1_reset(int pos_grupo, int id) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1RESET, pos_grupo, id);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
+    }
+
+    private void setAP2_reset(int pos_grupo, int id) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2RESET, pos_grupo, id);
+        generalRepository.writeObject(outMessage);
+        generalRepository.close();
+    }
 
     @Override
     public void run() {
@@ -451,7 +568,7 @@ public class Ladrao extends Thread {
             switch (stat) {
 
                 case OUTSIDE:
-                    generalRepository.setThiefState(this.id, stat);
+                    setThiefState(this.id, stat);
 
                     boolean getBusyLadrao = getBusyLadrao(id);
 
@@ -488,9 +605,9 @@ public class Ladrao extends Thread {
                     int room = getSalaAssalto(this.meuGrupo);
 
                     if (this.meuGrupo == 0) {
-                        generalRepository.setAP1_canvas(this.pos_grupo, quadro, room);
+                        setAP1_canvas(this.pos_grupo, quadro, room);
                     } else if (this.meuGrupo == 1) {
-                        generalRepository.setAP2_canvas(this.pos_grupo, quadro, room);
+                        setAP2_canvas(this.pos_grupo, quadro, room);
                     }
                     reverseDirection(id);
                     break;
@@ -503,9 +620,9 @@ public class Ladrao extends Thread {
                     }
 
                     if (this.meuGrupo == 0) {
-                        generalRepository.setAP1_pos(this.pos_grupo, posicao);
+                        setAP1_pos(this.pos_grupo, posicao);
                     } else if (this.meuGrupo == 1) {
-                        generalRepository.setAP2_pos(this.pos_grupo, posicao);
+                        setAP2_pos(this.pos_grupo, posicao);
                     }
 
                     if (posicao == 0) {
@@ -522,8 +639,8 @@ public class Ladrao extends Thread {
                             indicarSalaVazia(tmp_salaassalto, this.meuGrupo, tmp_getPosGrupo);
                         }
 
-                        if (this.meuGrupo == 0) generalRepository.setAP1_reset(this.pos_grupo, this.id);
-                        else if (this.meuGrupo == 1) generalRepository.setAP2_reset(this.pos_grupo, this.id);
+                        if (this.meuGrupo == 0) setAP1_reset(this.pos_grupo, this.id);
+                        else if (this.meuGrupo == 1) setAP2_reset(this.pos_grupo, this.id);
 
                         this.meuGrupo = -1;
                         indicarChegada(id);

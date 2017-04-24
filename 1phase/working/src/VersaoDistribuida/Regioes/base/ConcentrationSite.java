@@ -2,6 +2,8 @@ package VersaoDistribuida.Regioes.base;
 
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 import VersaoDistribuida.Apoio.MemFIFO;
+import VersaoDistribuida.ComInfo.ClientCom;
+import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 
 /**
@@ -37,11 +39,13 @@ public class ConcentrationSite {
     /**
      * General Repository
      */
-    private GeneralRepository general;
+    private ClientCom general;
     /**
      * Thief's situation
      */
     private int situacaoLadrao[] = new int[NUM_THIEVES];
+
+    private int portRepository = 22460;
 
     /**
      * @param generalRepository General Repository
@@ -60,7 +64,7 @@ public class ConcentrationSite {
 
         fifo = new MemFIFO(NUM_THIEVES);
 
-        this.general = generalRepository;
+        this.general = new ClientCom(generalRepository, portRepository);
     }
 
     /**
@@ -145,6 +149,41 @@ public class ConcentrationSite {
 
     }
 
+    private void setMasterThiefState(int state){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETMASTERTHIEFSTATE, state);
+        general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
+    }
+
+    private void setThiefSituation(int id, int state){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFSITUATION, id, state);
+        general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
+    }
+
+
     /**
      *  Calls a thief from the FIFO and adds to the group
      * @param grupo group id
@@ -160,8 +199,8 @@ public class ConcentrationSite {
             this.nrLadroes--;
             this.busyLadrao[id] = true;
             this.grupoLadrao[id] = grupo;
-            general.setMasterThiefState(ASSEMBLING_A_GROUP);
-            general.setThiefSituation(id,IN_PARTY);
+            setMasterThiefState(ASSEMBLING_A_GROUP);
+            setThiefSituation(id,IN_PARTY);
             notifyAll();
         }
 
@@ -202,22 +241,38 @@ public class ConcentrationSite {
         this.estadoLadrao[ladraoID] = AT_A_ROOM;
     }
 
+
+    private void setThiefState(int ladraoID, int estado){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFSTATE,ladraoID,estado);
+        general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
+
+    }
+
+
     /**
      * Thief arrives at the base
      * @param ladraoID thief id
      */
     public synchronized void indicarChegada(int ladraoID) {
 
-
         this.busyLadrao[ladraoID] = false;
         this.grupoLadrao[ladraoID] = -1;
         this.estadoLadrao[ladraoID] = OUTSIDE;
-        general.setThiefState(ladraoID,this.estadoLadrao[ladraoID] );
-        general.setThiefSituation(ladraoID,WAITING);
+        setThiefState(ladraoID,this.estadoLadrao[ladraoID]);
+        setThiefSituation(ladraoID,WAITING);
         this.estouPronto(ladraoID);
-
-
-
     }
 
     /**

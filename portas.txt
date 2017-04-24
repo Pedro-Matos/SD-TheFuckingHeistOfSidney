@@ -24,6 +24,7 @@ ws3-OrdinaryThief	22464		CollectionSite
 ws4-Master		22460		GeneralRepository
 ws4-Master		22462		ConcentrationSite
 ws4-Master		22464		CollectionSite
+ws5-ConcentrationS	22460		GeneralRepository
 
 
 

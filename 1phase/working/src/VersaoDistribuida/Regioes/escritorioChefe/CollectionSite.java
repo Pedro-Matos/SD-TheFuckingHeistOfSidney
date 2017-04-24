@@ -2,10 +2,10 @@ package VersaoDistribuida.Regioes.escritorioChefe;
 
 import VersaoDistribuida.Mensagens.AssaultPartyMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
+import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 import VersaoDistribuida.Mensagens.MuseuMessage;
 import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 import VersaoDistribuida.Regioes.base.ConcentrationSite;
-import VersaoDistribuida.Regioes.gruposAssalto.GestorGruposAssalto;
 import VersaoDistribuida.Regioes.museu.Museum;
 import VersaoDistribuida.ComInfo.ClientCom;
 
@@ -202,7 +202,22 @@ public class CollectionSite {
     public synchronized void startOperations() {
 
         this.estadoChefe = DECIDING_WHAT_TO_DO;
-        general.setMasterThiefState(this.estadoChefe);
+        setMasterThiefState(this.estadoChefe);
+    }
+
+    private void setMasterThiefState(int state){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETMASTERTHIEFSTATE, state);
+        general.writeObject(outMessage);
+        general.close();
     }
 
     /**
@@ -227,8 +242,8 @@ public class CollectionSite {
             }
         }
 
-        if(idGrupo == 0) general.setAssaultParty1_room(j);
-        if(idGrupo == 1) general.setAssaultParty2_room(j);
+        if(idGrupo == 0) setAssaultParty1_room(j);
+        if(idGrupo == 1) setAssaultParty2_room(j);
 
 
         AssaultPartyMessage inMessage, outMessage;
@@ -252,6 +267,36 @@ public class CollectionSite {
             return false;
         }
         return true;
+    }
+
+    private void setAssaultParty1_room(int j){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETASSAULTPARTY1ROOM, j);
+        general.writeObject(outMessage);
+        general.close();
+    }
+
+    private void setAssaultParty2_room(int j){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETASSAULTPARTY2ROOM, j);
+        general.writeObject(outMessage);
+        general.close();
     }
 
 
@@ -285,11 +330,11 @@ public class CollectionSite {
         if (checkGrupos == -1 || nrLadroes < NUM_GROUP) {
             if (this.estadoChefe == ASSEMBLING_A_GROUP) {
                 this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-                general.setMasterThiefState(this.estadoChefe);
+                setMasterThiefState(this.estadoChefe);
                 return;
             }
             this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-            general.setMasterThiefState(this.estadoChefe);
+            setMasterThiefState(this.estadoChefe);
 
             try {
                 wait();
@@ -298,7 +343,7 @@ public class CollectionSite {
             }
         } else {
             this.estadoChefe = DECIDING_WHAT_TO_DO;
-            general.setMasterThiefState(this.estadoChefe);
+            setMasterThiefState(this.estadoChefe);
 
         }
     }
@@ -348,18 +393,48 @@ public class CollectionSite {
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                general.setMasterThiefState(this.estadoChefe);
+                setMasterThiefState(this.estadoChefe);
             }
             notifyAll();
         }
 
         if(grupo == 0){
-            general.setAP1_reset(pos,ladraoID);
+            setAP1_reset(pos,ladraoID);
         }
         else if (grupo == 1){
-            general.setAP2_reset(pos,ladraoID);
+            setAP2_reset(pos,ladraoID);
         }
 
+    }
+
+    private void setAP1_reset(int pos_grupo, int id) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1RESET, pos_grupo, id);
+        general.writeObject(outMessage);
+        general.close();
+    }
+
+    private void setAP2_reset(int pos_grupo, int id) {
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!general.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2RESET, pos_grupo, id);
+        general.writeObject(outMessage);
+        general.close();
     }
 
     /**
@@ -394,7 +469,7 @@ public class CollectionSite {
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                general.setMasterThiefState(this.estadoChefe);
+                setMasterThiefState(this.estadoChefe);
             }
             notifyAll();
         }
@@ -436,7 +511,7 @@ public class CollectionSite {
      */
     public void sumUpResults() {
         this.estadoChefe = PRESENTING_THE_REPORT;
-        general.setMasterThiefState(this.estadoChefe);
+        setMasterThiefState(this.estadoChefe);
     }
 
     /**

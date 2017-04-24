@@ -5,6 +5,7 @@ import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 import VersaoDistribuida.ComInfo.ClientCom;
 import VersaoDistribuida.Mensagens.CollectionSiteMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
+import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 import VersaoDistribuida.Regioes.base.ConcentrationSite;
 import VersaoDistribuida.Regioes.escritorioChefe.CollectionSite;
@@ -313,7 +314,57 @@ public class Chefe extends Thread {
         collectionSite.close();
         return inMessage.getArg1();
     }
-    
+
+    private void iniciarLog(){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.INICIARLOG);
+        generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
+    }
+
+    private void setMasterThiefState(int stat){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETMASTERTHIEFSTATE, stat);
+        generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
+    }
+
+    private void finalizarRelatorio(int quadros){
+        GeneralRepositoryMessage inMessage, outMessage;
+
+        while(!generalRepository.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.FINALIZARELATORIO, quadros);
+        generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
+    }
 
 
     @Override
@@ -329,8 +380,8 @@ public class Chefe extends Thread {
                 switch (stat) {
                     case PLANNING_THE_HEIST:
 
-                        generalRepository.iniciarLog();
-                        generalRepository.setMasterThiefState(stat);
+                        iniciarLog();
+                        setMasterThiefState(stat);
 
                         if (getNrLadroes() == NUM_THIEVES) {
                             startOperations();
@@ -391,7 +442,7 @@ public class Chefe extends Thread {
                         esperaLadroesFim();
 
                         int nrQuadrosRoubados = getQuadrosRoubados();
-                        generalRepository.finalizarRelatorio(nrQuadrosRoubados);
+                        finalizarRelatorio(nrQuadrosRoubados);
                         heistOver = true;
                         break;
                 }
