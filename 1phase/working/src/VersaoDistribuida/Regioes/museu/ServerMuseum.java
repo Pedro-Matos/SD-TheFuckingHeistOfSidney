@@ -4,12 +4,13 @@ import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 import VersaoDistribuida.ComInfo.ServerCom;
 import genclass.GenericIO;
 
+import static VersaoDistribuida.ParametrosDoProblema.ComPorts.portMuseum;
+
 /**
  * Created by pmatos9 on 17/04/17.
  */
 public class ServerMuseum {
 
-    private static final int portNumb = ;
 
     public static void main(String[] args) {
 
@@ -18,9 +19,12 @@ public class ServerMuseum {
         ServerCom scon, sconi;
         ClientProxy cliProxy;
 
-        scon = new ServerCom(portNumb);
+        GenericIO.writeString("\nNome do sistema computacional onde está o servidor General Repository? ");
+        String generalRepository = GenericIO.readlnString();
+
+        scon = new ServerCom(portMuseum);
         scon.start();
-        museu = new Museum();
+        museu = new Museum(generalRepository);
         museuInter = new MuseumInterface(museu);
         GenericIO.writelnString("O serviço museu foi estabelecido!");
         GenericIO.writelnString("O servidor esta em escuta.");

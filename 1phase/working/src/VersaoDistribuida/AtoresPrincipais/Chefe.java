@@ -91,7 +91,7 @@ public class Chefe extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new ConcentrationSiteMessage(CollectionSiteMessage.GETNRLADROES);
+        outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.GETNRLADROES);
         concentrationSite.writeObject(outMessage);
         inMessage = (ConcentrationSiteMessage) concentrationSite.readObject();
         concentrationSite.close();
@@ -313,6 +313,7 @@ public class Chefe extends Thread {
         collectionSite.close();
         return inMessage.getArg1();
     }
+    
 
 
     @Override

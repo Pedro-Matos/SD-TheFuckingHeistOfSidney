@@ -3,12 +3,12 @@ package VersaoDistribuida.Regioes.gruposAssalto;
 import VersaoDistribuida.ComInfo.ServerCom;
 import genclass.GenericIO;
 
+import static VersaoDistribuida.ParametrosDoProblema.ComPorts.portAssaultGroup;
+
 /**
  * Created by pmatos9 on 18/04/17.
  */
 public class ServerAssaultParty {
-
-    private static final int portNumb = ;
 
     /**
      * Programa Principal servidor Grupo de Assalto
@@ -23,17 +23,20 @@ public class ServerAssaultParty {
         GenericIO.writeString("\nNome do sistema computacional onde está o servidor museu? ");
         String museu = GenericIO.readlnString();
 
+        GenericIO.writeString("\nNome do sistema computacional onde está o servidor General Repository? ");
+        String generalRepository = GenericIO.readlnString();
+
         GrupoAssaltoInterface grupoAssaltoInter;
         ServerCom scon, sconi;
 
         ClientProxy cliProxy;
 
-        scon = new ServerCom(portNumb);
+        scon = new ServerCom(portAssaultGroup);
         scon.start();
         GrupoAssalto[] grupo = new GrupoAssalto[2];
         grupo[0] = null;
         grupo[1] = null;
-        grupoAssaltoInter = new GrupoAssaltoInterface(grupo, museu);
+        grupoAssaltoInter = new GrupoAssaltoInterface(grupo, museu, generalRepository);
         GenericIO.writelnString("O serviço grupo de assalto foi estabelecido!");
         GenericIO.writelnString("O servidor esta em escuta.");
 
