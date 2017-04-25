@@ -30,38 +30,6 @@ public class ConcentrationSiteInterface {
 
 
         /*
-         * validação da mensagem recebida
-         */
-
-        switch (inMessage.getType()) {
-            case ConcentrationSiteMessage.CHAMALADRAO:
-                if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Grupo inválido!", inMessage);
-                }
-                break;
-            case ConcentrationSiteMessage.ESPERALADROES:
-            case ConcentrationSiteMessage.ESPERALADROESFIM:
-            case ConcentrationSiteMessage.GETNRLADROES:
-                break;
-            case ConcentrationSiteMessage.AMINEEDED:
-            case ConcentrationSiteMessage.ESTOUPRONTO:
-            case ConcentrationSiteMessage.GETBUSYLADRAO:
-            case ConcentrationSiteMessage.GETGRUPOLADRAO:
-            case ConcentrationSiteMessage.GETSTATELADRAO:
-            case ConcentrationSiteMessage.INDICARCHEGADA:
-            case ConcentrationSiteMessage.PREPAREEXCURSION:
-            case ConcentrationSiteMessage.NASALA:
-            case ConcentrationSiteMessage.REVERSEDIRECTION:
-                if (inMessage.getArg1() >= NUM_THIEVES || inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
-                }
-                break;
-            case ConcentrationSiteMessage.GETAGILIDADE:
-            default:
-                throw new ConcentrationSiteMessageException("Tipo inválido!", inMessage);
-        }
-
-        /*
          * processamento das mensagens recebidas
          */
         boolean check;
@@ -125,6 +93,8 @@ public class ConcentrationSiteInterface {
                 resp = base.getAgilidade(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETAGILITY,resp);
                 break;
+            default:
+                throw new ConcentrationSiteMessageException("Tipo inválido!", inMessage);
 
         }
         return outMessage;

@@ -7,7 +7,7 @@ import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
 import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 
 
-import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 import static VersaoDistribuida.ComInfo.ComPorts.*;
 
 /**

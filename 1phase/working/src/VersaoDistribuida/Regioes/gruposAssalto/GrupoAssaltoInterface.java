@@ -27,64 +27,9 @@ public class GrupoAssaltoInterface {
          * validação da mensagem recebida
          */
 
-            switch (inMessage.getMsgType()) {
-                case AssaultPartyMessage.FORMARGRUPO:
-                    if (inMessage.getArg1() < 0 || inMessage.getArg1() > 1) {
-                        throw new AssaultPartyMessageException("Grupo invalido", inMessage);
-                    }
-                    if (inMessage.getArg2() < 0 || inMessage.getArg2() >= NUM_ROOMS) {
-                        throw new AssaultPartyMessageException("Sala invalida", inMessage);
-                    }
-                    break;
-                case AssaultPartyMessage.ENTRAR:
-                    if (inMessage.getArg2() < 0 || inMessage.getArg2() > 1) {
-                        throw new AssaultPartyMessageException("Grupo invalido", inMessage);
-                    }
-                    if (inMessage.getArg1() < 0 || inMessage.getArg1() >= NUM_THIEVES) {
-                        throw new AssaultPartyMessageException("id Ladrao invalido", inMessage);
-                    }
-                    break;
-                case AssaultPartyMessage.GETDISTANCIASALA:
-                    break;
-                /*case AssaultPartyMessage.GETINDICE:
-                    if (inMessage.getIdGrupo() < 0 || inMessage.getIdGrupo() > 1) {
-                        throw new AssaultPartyMessageException("Grupo invalido", inMessage);
-                    }
-                    if (inMessage.getInfo() < 0 || inMessage.getInfo() >= NUM_THIEVES) {
-                        throw new AssaultPartyMessageException("id Ladrao invalido", inMessage);
-                    }
-                    break;*/
-                case AssaultPartyMessage.GETPOS:
-                    if (inMessage.getArg2() < 0 || inMessage.getArg2() > 1) {
-                        throw new AssaultPartyMessageException("Grupo invalido5", inMessage);
-                    }
-                    if (inMessage.getArg1() < 0 || inMessage.getArg1() >= NUM_GROUP) {
-                        throw new AssaultPartyMessageException("indice elemento do grupo invalido", inMessage);
-                    }
-                    break;
-                case AssaultPartyMessage.DESFAZERGRUPO:
-                case AssaultPartyMessage.ROUBARQUADRO:
-                    if (inMessage.getArg1() < 0 || inMessage.getArg1() > 1) {
-                        throw new AssaultPartyMessageException("Grupo invalido", inMessage);
-                    }
-                    break;
-                case AssaultPartyMessage.CHECKGRUPONULL:
-                    break;
-                case AssaultPartyMessage.CRAWLIN:
-                case AssaultPartyMessage.CRAWLOUT:
-                    if (inMessage.getArg1() >= NUM_THIEVES || inMessage.getArg1() < 0) {
-                        throw new AssaultPartyMessageException("Ladrao invalido", inMessage);
-                    }
-                    if (inMessage.getArg2() < MIN_AGIL || inMessage.getArg2() > MAX_AGIL) {
-                        throw new AssaultPartyMessageException("Agilidade invalida", inMessage);
-                    }
-                    if (inMessage.getArg3() < 0 || inMessage.getArg3() > 1) {
-                        throw new AssaultPartyMessageException("Grupo invalido", inMessage);
-                    }
-                    break;
-                default:
-                    throw new AssaultPartyMessageException("Tipo inválido!", inMessage);
-            }
+
+
+
             int resp;
         /*
          * processamento das mensagens recebidas
@@ -143,6 +88,8 @@ public class GrupoAssaltoInterface {
                     grupo[inMessage.getArg2()].waitMinhaVez(inMessage.getArg1());
                     outMessage = new AssaultPartyMessage(AssaultPartyMessage.ACK);
                     break;
+                default:
+                    throw new AssaultPartyMessageException("Tipo inválido!", inMessage);
             }
 
             return outMessage;

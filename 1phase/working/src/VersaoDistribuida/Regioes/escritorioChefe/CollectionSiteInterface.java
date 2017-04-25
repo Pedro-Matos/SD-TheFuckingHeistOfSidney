@@ -2,6 +2,7 @@ package VersaoDistribuida.Regioes.escritorioChefe;
 
 import VersaoDistribuida.Mensagens.CollectionSiteMessage;
 import VersaoDistribuida.Mensagens.CollectionSiteMessageException;
+import VersaoDistribuida.Mensagens.ConcentrationSiteMessageException;
 
 /**
  * Created by pmatos9 on 18/04/17.
@@ -95,7 +96,7 @@ public class CollectionSiteInterface {
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPSUMUPRESULTS);
                     break;
                 default:
-                    break;
+                    throw new CollectionSiteMessageException("Tipo inválido!", inMessage);
             }
 
             return outMessage;

@@ -21,30 +21,6 @@ public class MuseumInterface  {
         MuseuMessage outMessage = null;
 
         /*
-         * validação da mensagem recebida
-         */
-
-        switch (inMessage.getType()) {
-            case MuseuMessage.ROUBARQUADRO:
-                if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
-                    throw new MuseumMessageException("Sala inválida!", inMessage);
-                }
-                break;
-            case MuseuMessage.GETNUMEROQUADROS:
-                if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
-                    throw new MuseumMessageException("Sala inválida!", inMessage);
-                }
-                break;
-            case MuseuMessage.GETDISTANCIA:
-                if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
-                    throw new MuseumMessageException("Sala inválida!", inMessage);
-                }
-                break;
-            default:
-                throw new MuseumMessageException("Tipo inválido!", inMessage);
-        }
-
-        /*
          * processamento das mensagens recebidas
          */
 
@@ -61,6 +37,8 @@ public class MuseumInterface  {
                 int dist = museu.getDistancia(inMessage.getNrSala());
                 outMessage = new MuseuMessage(MuseuMessage.SENDDISTANCIA, dist);
                 break;
+            default:
+                throw new MuseumMessageException("Tipo inválido!", inMessage);
         }
 
 
