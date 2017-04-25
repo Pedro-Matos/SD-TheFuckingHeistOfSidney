@@ -3,7 +3,7 @@ package VersaoDistribuida.Regioes.base;
 import VersaoDistribuida.ComInfo.ServerCom;
 import genclass.GenericIO;
 
-import static VersaoDistribuida.ParametrosDoProblema.ComPorts.portConcentrationSite;
+import static VersaoDistribuida.ComInfo.ComPorts.portConcentrationSite;
 
 /**
  * Created by pmatos9 on 18/04/17.

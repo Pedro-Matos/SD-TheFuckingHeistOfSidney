@@ -1,10 +1,9 @@
 package VersaoDistribuida.Regioes.museu;
 
-import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 import VersaoDistribuida.ComInfo.ServerCom;
 import genclass.GenericIO;
 
-import static VersaoDistribuida.ParametrosDoProblema.ComPorts.portMuseum;
+import static VersaoDistribuida.ComInfo.ComPorts.portMuseum;
 
 /**
  * Created by pmatos9 on 17/04/17.

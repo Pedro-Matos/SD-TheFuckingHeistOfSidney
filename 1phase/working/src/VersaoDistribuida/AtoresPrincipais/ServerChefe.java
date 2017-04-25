@@ -1,7 +1,8 @@
 package VersaoDistribuida.AtoresPrincipais;
 
-import VersaoConcorrente.AtoresPrincipais.Chefe;
+import VersaoDistribuida.AtoresPrincipais.Chefe;
 import genclass.GenericIO;
+import VersaoDistribuida.ComInfo.ComStrings.*;
 
 /**
  * Created by tiagoalexbastos on 24-04-2017.
@@ -13,7 +14,6 @@ public class ServerChefe {
         Chefe chefe;
         String concentrationSite = null;
         String collectionSite = null;
-        String grupoAssalto = null;
         String generalRepo = null;
 
                 /* Obtenção dos parâmetros do problema */
@@ -21,12 +21,10 @@ public class ServerChefe {
         concentrationSite = GenericIO.readlnString ();
         GenericIO.writeString ("\nNome do sistema computacional onde está o servidor escritorio? ");
         collectionSite = GenericIO.readlnString ();
-        GenericIO.writeString ("\nNome do sistema computacional onde está o servidor grupos de assalto? ");
-        grupoAssalto = GenericIO.readlnString ();
         GenericIO.writeString ("\nNome do sistema computacional onde está o servidor log? ");
         generalRepo = GenericIO.readlnString ();
 
-        chefe = new Chefe("Chefao", generalRepo, collectionSite, concentrationSite, grupoAssalto);
+        chefe = new Chefe("Chefao", generalRepo, collectionSite, concentrationSite);
         chefe.start();
 
         try {

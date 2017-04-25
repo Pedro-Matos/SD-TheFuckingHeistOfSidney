@@ -1,5 +1,6 @@
 package VersaoDistribuida.Regioes.base;
 
+import static VersaoDistribuida.ComInfo.ComPorts.portGeneralRepo;
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 import VersaoDistribuida.Apoio.MemFIFO;
 import VersaoDistribuida.ComInfo.ClientCom;
@@ -45,7 +46,6 @@ public class ConcentrationSite {
      */
     private int situacaoLadrao[] = new int[NUM_THIEVES];
 
-    private int portRepository = 22460;
 
     /**
      * @param generalRepository General Repository
@@ -64,7 +64,7 @@ public class ConcentrationSite {
 
         fifo = new MemFIFO(NUM_THIEVES);
 
-        this.general = new ClientCom(generalRepository, portRepository);
+        this.general = new ClientCom(generalRepository, portGeneralRepo);
     }
 
     /**

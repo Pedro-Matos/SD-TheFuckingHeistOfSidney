@@ -8,6 +8,7 @@ import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 
 
 import static VersaoConcorrente.ParametrosDoProblema.Constantes.*;
+import static VersaoDistribuida.ComInfo.ComPorts.*;
 
 /**
  * Ordinary Thief
@@ -54,10 +55,7 @@ public class Ladrao extends Thread {
     private int pos_grupo;
 
 
-    private int portCollectionSite = 22464;
-    private int portConcentrationSite = 22462;
-    private int portGroup = 22463;
-    private int portRepository =22460;
+
 
 
 
@@ -75,9 +73,9 @@ public class Ladrao extends Thread {
         this.name = name;
         this.id = id;
 
-        this.generalRepository = new ClientCom(generalRepository, portRepository);
+        this.generalRepository = new ClientCom(generalRepository, portGeneralRepo);
         this.collectionSite = new ClientCom(collectionSite, portCollectionSite);
-        this.grupo = new ClientCom(grupo, portGroup);
+        this.grupo = new ClientCom(grupo, portAssaultGroup);
         this.concentrationSite = new ClientCom(concentrationSite, portConcentrationSite);
 
         this.agilidade = getAgility();

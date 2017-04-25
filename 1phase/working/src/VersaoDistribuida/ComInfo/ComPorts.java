@@ -1,4 +1,4 @@
-package VersaoDistribuida.ParametrosDoProblema;
+package VersaoDistribuida.ComInfo;
 
 /**
  * Created by tiagoalexbastos on 24-04-2017.
@@ -18,6 +18,5 @@ public class ComPorts {
 
 
     public static final int portCollectionSite = 22464;
-
 
 }

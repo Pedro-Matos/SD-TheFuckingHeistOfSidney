@@ -1,16 +1,12 @@
 package VersaoDistribuida.AtoresPrincipais;
 
+import static VersaoDistribuida.ComInfo.ComPorts.*;
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 
 import VersaoDistribuida.ComInfo.ClientCom;
 import VersaoDistribuida.Mensagens.CollectionSiteMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
 import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
-import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
-import VersaoDistribuida.Regioes.base.ConcentrationSite;
-import VersaoDistribuida.Regioes.escritorioChefe.CollectionSite;
-import VersaoDistribuida.Regioes.escritorioChefe.CollectionSiteInterface;
-import com.sun.tools.javac.util.ClientCodeException;
 
 
 /**
@@ -41,9 +37,7 @@ public class Chefe extends Thread {
      */
     private String name;
 
-    private int portCollectionSite = 22464;
-    private int portConcentrationSite = 22462;
-    private int portRepository =22460;
+
 
     /**
      *
@@ -58,7 +52,7 @@ public class Chefe extends Thread {
         this.name = name;
         this.id = NUM_THIEVES;
 
-        this.generalRepository = new ClientCom(generalRepository, portRepository);
+        this.generalRepository = new ClientCom(generalRepository, portGeneralRepo);
         this.concentrationSite = new ClientCom(concentrationSite, portConcentrationSite);
         this.collectionSite = new ClientCom(collectionSite, portCollectionSite);
     }

@@ -1,10 +1,9 @@
 package VersaoDistribuida.Regioes.escritorioChefe;
 
-import VersaoDistribuida.ComInfo.ClientCom;
 import VersaoDistribuida.ComInfo.ServerCom;
 import genclass.GenericIO;
 
-import static VersaoDistribuida.ParametrosDoProblema.ComPorts.portCollectionSite;
+import static VersaoDistribuida.ComInfo.ComPorts.portCollectionSite;
 
 /**
  * Created by pmatos9 on 18/04/17.

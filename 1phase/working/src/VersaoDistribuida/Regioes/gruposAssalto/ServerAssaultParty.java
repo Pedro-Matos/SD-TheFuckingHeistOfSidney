@@ -3,7 +3,7 @@ package VersaoDistribuida.Regioes.gruposAssalto;
 import VersaoDistribuida.ComInfo.ServerCom;
 import genclass.GenericIO;
 
-import static VersaoDistribuida.ParametrosDoProblema.ComPorts.portAssaultGroup;
+import static VersaoDistribuida.ComInfo.ComPorts.portAssaultGroup;
 
 /**
  * Created by pmatos9 on 18/04/17.

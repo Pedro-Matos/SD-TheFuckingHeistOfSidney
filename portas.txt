@@ -27,6 +27,12 @@ ws4-Master		22464		CollectionSite
 ws5-ConcentrationS	22460		GeneralRepository
 
 
+—————————————————————————————————————————————————————————————————————————————————
+
+Nosso PC (tudo em portas diferentes):
+
+
+
 
 
 1 opção - execução por meio de -jar nas maquinas

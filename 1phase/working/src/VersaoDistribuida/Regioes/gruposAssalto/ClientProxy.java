@@ -1,6 +1,9 @@
 package VersaoDistribuida.Regioes.gruposAssalto;
 
 import VersaoDistribuida.ComInfo.ServerCom;
+import VersaoDistribuida.Mensagens.AssaultPartyMessage;
+import VersaoDistribuida.Mensagens.AssaultPartyMessageException;
+import genclass.GenericIO;
 
 /**
  * Created by pmatos9 on 18/04/17.
@@ -44,13 +47,13 @@ public class ClientProxy extends Thread {
      */
     @Override
     public void run() {
-        GrupoAssaltoMessage inMessage = null, // mensagem de entrada
+        AssaultPartyMessage inMessage = null, // mensagem de entrada
                 outMessage = null;                      // mensagem de saída
 
-        inMessage = (GrupoAssaltoMessage) sconi.readObject();                     // ler pedido do cliente
+        inMessage = (AssaultPartyMessage) sconi.readObject();                     // ler pedido do cliente
         try {
             outMessage = grupoInter.processAndReply(inMessage);         // processá-lo
-        } catch (GrupoAssaltoMessageException e) {
+        } catch (AssaultPartyMessageException e) {
             GenericIO.writelnString("Thread " + getName() + ": " + e.getMessage() + "!");
             GenericIO.writelnString(e.getMessageVal().toString());
             System.exit(1);
@@ -65,12 +68,12 @@ public class ClientProxy extends Thread {
      * @return identificador da instanciação
      */
     private static int getProxyId() {
-        Class<assaltomuseu.monitores.grupoAssalto.ClientProxy> cl = null;             // representação do tipo de dados ClientProxy na máquina
+        Class<VersaoDistribuida.Regioes.gruposAssalto.ClientProxy> cl = null;             // representação do tipo de dados ClientProxy na máquina
         //   virtual de Java
         int proxyId;                                         // identificador da instanciação
 
         try {
-            cl = (Class<assaltomuseu.monitores.grupoAssalto.ClientProxy>) Class.forName("assaltomuseu.monitores.grupoAssalto.ClientProxy");
+            cl = (Class<VersaoDistribuida.Regioes.gruposAssalto.ClientProxy>) Class.forName("VersaoDistribuida.Regioes.gruposAssalto.ClientProxy");
         } catch (ClassNotFoundException e) {
             GenericIO.writelnString("O tipo de dados ClientProxy não foi encontrado!");
             e.printStackTrace();
