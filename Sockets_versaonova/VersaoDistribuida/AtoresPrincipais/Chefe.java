@@ -174,6 +174,8 @@ public class Chefe extends Thread {
         outMessage = new CollectionSiteMessage(CollectionSiteMessage.PREPAREASSAULTPARTY, numero_grupos);
         collectionSite.writeObject(outMessage);
         inMessage = (CollectionSiteMessage) collectionSite.readObject();
+        generalRepository.close();
+
     }
 
     private void sumUpResults(){

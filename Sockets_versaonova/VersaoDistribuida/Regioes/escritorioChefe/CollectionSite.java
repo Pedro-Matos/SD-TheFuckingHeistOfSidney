@@ -217,6 +217,8 @@ public class CollectionSite {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETMASTERTHIEFSTATE, state);
         general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
     }
 
     /**
@@ -280,6 +282,8 @@ public class CollectionSite {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETASSAULTPARTY1ROOM, j);
         general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
     }
 
     private void setAssaultParty2_room(int j){
@@ -294,6 +298,8 @@ public class CollectionSite {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETASSAULTPARTY2ROOM, j);
         general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
     }
 
 
@@ -416,6 +422,8 @@ public class CollectionSite {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1RESET, pos_grupo, id);
         general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
     }
 
     private void setAP2_reset(int pos_grupo, int id) {
@@ -430,6 +438,8 @@ public class CollectionSite {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2RESET, pos_grupo, id);
         general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
     }
 
     /**

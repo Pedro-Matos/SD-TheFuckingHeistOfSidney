@@ -5,6 +5,7 @@ import VersaoDistribuida.Mensagens.AssaultPartyMessage;
 import VersaoDistribuida.Mensagens.CollectionSiteMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
 import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 
 
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
@@ -97,6 +98,8 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFDISPLACEMENT, id, agilidade);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
     }
 
     public int getAgility(){
@@ -456,6 +459,9 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFSTATE, id, stat);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
+
     }
 
     private void setAP1_canvas(int pos_grupo, boolean quadro, int room) {
@@ -470,6 +476,8 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1CANVAS, pos_grupo, quadro, room);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
     }
 
     private void setAP2_canvas(int pos_grupo, boolean quadro, int room) {
@@ -484,6 +492,8 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2CANVAS, pos_grupo, quadro, room);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
     }
 
     private void setAP1_pos(int pos_grupo, int posicao) {
@@ -498,6 +508,8 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1POS, pos_grupo, posicao);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
     }
 
     private void setAP2_pos(int pos_grupo, int posicao) {
@@ -512,6 +524,8 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2POS, pos_grupo, posicao);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
     }
 
     private void setAP1_reset(int pos_grupo, int id) {
@@ -526,6 +540,8 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1RESET, pos_grupo, id);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
     }
 
     private void setAP2_reset(int pos_grupo, int id) {
@@ -540,6 +556,8 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2RESET, pos_grupo, id);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
+        generalRepository.close();
     }
 
     @Override

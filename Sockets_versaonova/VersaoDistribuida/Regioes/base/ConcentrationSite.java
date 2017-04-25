@@ -162,6 +162,8 @@ public class ConcentrationSite {
 
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETMASTERTHIEFSTATE, state);
         general.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) general.readObject();
+        general.close();
     }
 
     private void setThiefSituation(int id, int state){
