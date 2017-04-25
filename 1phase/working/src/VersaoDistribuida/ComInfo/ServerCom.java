@@ -2,15 +2,16 @@ package VersaoDistribuida.ComInfo;
 
 import genclass.GenericIO;
 import java.io.*;
-import java.net.BindException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
 
 /**
- * Created by pmatos9 on 17/04/17.
+ *   Este tipo de dados implementa o canal de comunicação, lado do servidor, para uma comunicação baseada em passagem de
+ *   mensagens sobre sockets usando o protocolo TCP.
+ *   A transferência de dados é baseada em objectos, um objecto de cada vez.
  */
-public class ServerCom{
+
+public class ServerCom
+{
     /**
      *  Socket de escuta
      *    @serialField listeningSocket
@@ -273,4 +274,3 @@ public class ServerCom{
         }
     }
 }
-

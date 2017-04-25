@@ -50,6 +50,7 @@ public class ClientProxy extends Thread {
         AssaultPartyMessage inMessage = null, // mensagem de entrada
                 outMessage = null;                      // mensagem de saída
 
+//        sconi.readObject().toString();
         inMessage = (AssaultPartyMessage) sconi.readObject();                     // ler pedido do cliente
         try {
             outMessage = grupoInter.processAndReply(inMessage);         // processá-lo

@@ -20,6 +20,28 @@ public class MuseumInterface  {
 
         MuseuMessage outMessage = null;
 
+
+        switch (inMessage.getType()) {
+            case MuseuMessage.ROUBARQUADRO:
+                if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
+                    throw new MuseumMessageException("Sala inválida!", inMessage);
+                }
+                break;
+            case MuseuMessage.GETNUMEROQUADROS:
+                if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
+                    throw new MuseumMessageException("Sala inválida!", inMessage);
+                }
+                break;
+            case MuseuMessage.GETDISTANCIA:
+                if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
+                    throw new MuseumMessageException("Sala inválida!", inMessage);
+                }
+                break;
+            default:
+                throw new MuseumMessageException("Tipo inválido!", inMessage);
+        }
+
+
         /*
          * processamento das mensagens recebidas
          */

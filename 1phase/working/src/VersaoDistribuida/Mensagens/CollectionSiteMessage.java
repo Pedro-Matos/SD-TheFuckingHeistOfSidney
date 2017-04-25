@@ -269,6 +269,17 @@ public class CollectionSiteMessage implements Serializable {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "CollectionSiteMessage{" +
+                "info=" + info +
+                ", bInfo=" + bInfo +
+                ", msgType=" + msgType +
+                ", arg1=" + arg1 +
+                ", arg2=" + arg2 +
+                ", arg3=" + arg3 +
+                ", arg4=" + arg4 +
+                '}';
+    }
 }
 

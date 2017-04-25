@@ -5,9 +5,13 @@ import java.io.*;
 import java.net.*;
 
 /**
- * Created by pmatos9 on 17/04/17.
+ *   Este tipo de dados implementa o canal de comunicação, lado do cliente, para uma comunicação baseada em passagem de
+ *   mensagens sobre sockets usando o protocolo TCP.
+ *   A transferência de dados é baseada em objectos, um objecto de cada vez.
  */
-public class ClientCom {
+
+public class ClientCom
+{
     /**
      *  Socket de comunicação
      *    @serialField commSocket
@@ -68,7 +72,7 @@ public class ClientCom {
     public boolean open ()
     {
         boolean success = true;
-        SocketAddress serverAddress = new InetSocketAddress(serverHostName, serverPortNumb);
+        SocketAddress serverAddress = new InetSocketAddress (serverHostName, serverPortNumb);
 
         try
         { commSocket = new Socket();
@@ -242,4 +246,3 @@ public class ClientCom {
         }
     }
 }
-

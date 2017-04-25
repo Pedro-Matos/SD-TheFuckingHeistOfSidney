@@ -3,6 +3,7 @@ package VersaoDistribuida.Regioes.gruposAssalto;
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.DIST_THIEVES;
 
+import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
 import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
 import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 import VersaoDistribuida.Regioes.museu.Museum;
@@ -128,6 +129,7 @@ public class GrupoAssalto {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1POSIDCANVAS, pos_grupo, ladraoID, pos, cv);
         gen.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) gen.readObject();
         gen.close();
     }
 
@@ -143,6 +145,7 @@ public class GrupoAssalto {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2POSIDCANVAS, pos_grupo, ladraoID, pos, cv);
         gen.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) gen.readObject();
         gen.close();
     }
 
@@ -169,6 +172,7 @@ public class GrupoAssalto {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFSTATE, ladraoID, state);
         gen.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) gen.readObject();
         gen.close();
     }
 
@@ -184,6 +188,7 @@ public class GrupoAssalto {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1POS, pos_grupo, distanciaSala);
         gen.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) gen.readObject();
         gen.close();
     }
 
@@ -199,6 +204,7 @@ public class GrupoAssalto {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2POS, pos_grupo, distanciaSala);
         gen.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) gen.readObject();
         gen.close();
     }
 

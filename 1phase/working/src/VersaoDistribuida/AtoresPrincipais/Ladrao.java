@@ -5,6 +5,7 @@ import VersaoDistribuida.Mensagens.AssaultPartyMessage;
 import VersaoDistribuida.Mensagens.CollectionSiteMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
 import VersaoDistribuida.Mensagens.GeneralRepositoryMessage;
+import VersaoDistribuida.ParametrosDoProblema.GeneralRepository;
 
 
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
@@ -97,6 +98,7 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFDISPLACEMENT, id, agilidade);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 
@@ -327,7 +329,7 @@ public class Ladrao extends Thread {
     public int getSalaAssalto(int meuGrupo){
         CollectionSiteMessage inMessage, outMessage;
 
-        while(!this.grupo.open()){
+        while(!this.collectionSite.open()){
             try{
                 Thread.sleep((long)(1000));
             }
@@ -335,9 +337,9 @@ public class Ladrao extends Thread {
             }
         }
         outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETSALAASSALTO, meuGrupo);
-        grupo.writeObject(outMessage);
-        inMessage = (CollectionSiteMessage) grupo.readObject();
-        grupo.close();
+        collectionSite.writeObject(outMessage);
+        inMessage = (CollectionSiteMessage) collectionSite.readObject();
+        collectionSite.close();
 
         return inMessage.getArg1();
 
@@ -380,7 +382,7 @@ public class Ladrao extends Thread {
     public int getPosGrupo(int id, int meuGrupo){
         CollectionSiteMessage inMessage, outMessage;
 
-        while(!this.grupo.open()){
+        while(!this.collectionSite.open()){
             try{
                 Thread.sleep((long)(1000));
             }
@@ -388,9 +390,9 @@ public class Ladrao extends Thread {
             }
         }
         outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETPOSGRUPO,id, meuGrupo);
-        grupo.writeObject(outMessage);
-        inMessage = (CollectionSiteMessage) grupo.readObject();
-        grupo.close();
+        collectionSite.writeObject(outMessage);
+        inMessage = (CollectionSiteMessage) collectionSite.readObject();
+        collectionSite.close();
 
         return inMessage.getArg1();
     }
@@ -398,7 +400,7 @@ public class Ladrao extends Thread {
     public void handACanvas(int id, int tmp_salaassalto, int meuGrupo, int tmp_getPosGrupo){
         CollectionSiteMessage inMessage, outMessage;
 
-        while(!this.grupo.open()){
+        while(!this.collectionSite.open()){
             try{
                 Thread.sleep((long)(1000));
             }
@@ -406,16 +408,16 @@ public class Ladrao extends Thread {
             }
         }
         outMessage = new CollectionSiteMessage(CollectionSiteMessage.HANDACANVAS, id,tmp_salaassalto,meuGrupo,tmp_getPosGrupo);
-        grupo.writeObject(outMessage);
-        inMessage = (CollectionSiteMessage) grupo.readObject();
-        grupo.close();
+        collectionSite.writeObject(outMessage);
+        inMessage = (CollectionSiteMessage) collectionSite.readObject();
+        collectionSite.close();
 
     }
 
     public void indicarSalaVazia(int tmp_salaassalto, int meuGrupo, int tmp_getPosGrupo){
         CollectionSiteMessage inMessage, outMessage;
 
-        while(!this.grupo.open()){
+        while(!this.collectionSite.open()){
             try{
                 Thread.sleep((long)(1000));
             }
@@ -423,9 +425,9 @@ public class Ladrao extends Thread {
             }
         }
         outMessage = new CollectionSiteMessage(CollectionSiteMessage.INDICARSALAVAZIA,tmp_salaassalto,meuGrupo,tmp_getPosGrupo);
-        grupo.writeObject(outMessage);
-        inMessage = (CollectionSiteMessage) grupo.readObject();
-        grupo.close();
+        collectionSite.writeObject(outMessage);
+        inMessage = (CollectionSiteMessage) collectionSite.readObject();
+        collectionSite.close();
 
     }
 
@@ -457,7 +459,9 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETTHIEFSTATE, id, stat);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
+
     }
 
     private void setAP1_canvas(int pos_grupo, boolean quadro, int room) {
@@ -472,6 +476,7 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1CANVAS, pos_grupo, quadro, room);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 
@@ -487,6 +492,7 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2CANVAS, pos_grupo, quadro, room);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 
@@ -502,6 +508,7 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1POS, pos_grupo, posicao);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 
@@ -517,6 +524,7 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2POS, pos_grupo, posicao);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 
@@ -532,6 +540,7 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP1RESET, pos_grupo, id);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 
@@ -547,6 +556,7 @@ public class Ladrao extends Thread {
         }
         outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETAP2RESET, pos_grupo, id);
         generalRepository.writeObject(outMessage);
+        inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 

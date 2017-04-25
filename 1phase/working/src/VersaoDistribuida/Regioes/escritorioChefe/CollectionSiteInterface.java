@@ -19,6 +19,90 @@ public class CollectionSiteInterface {
             CollectionSiteMessage outMessage = null;
 
 
+
+            switch (inMessage.getMsgType()) {
+                case CollectionSiteMessage.CHECKEMPTYMUSEU:
+                    break;
+                case CollectionSiteMessage.CHECKGRUPOS:
+                    break;
+                case CollectionSiteMessage.CHECKSALASVAZIAS:
+                    break;
+                case CollectionSiteMessage.TAKEAREST:
+                    break;
+                case CollectionSiteMessage.ENTRARGRUPO:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    else if (inMessage.getArg2() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.PREPAREASSAULTPARTY:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.HANDACANVAS:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    else if (inMessage.getArg2() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    else if (inMessage.getArg3() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    else if (inMessage.getArg4() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.GETESTADOCHEFE:
+                    break;
+                case CollectionSiteMessage.GETNRELEMENTOSGRUPO:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.GETPOSGRUPO:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    else if (inMessage.getArg2() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.GETQUADROSROUBADOS:
+                    break;
+                case CollectionSiteMessage.GETSALAASSALTO:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.GRUPOCHEIO:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.INDICARSALAVAZIA:
+                    if (inMessage.getArg1() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    else if (inMessage.getArg2() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    else if (inMessage.getArg3() < 0) {
+                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    }
+                    break;
+                case CollectionSiteMessage.STARTOPERATIONS:
+                    break;
+                case CollectionSiteMessage.SUMUPRESULTS:
+                    break;
+                default:
+                    break;
+            }
+
+
         /*
          * processamento das mensagens
          */
@@ -64,7 +148,7 @@ public class CollectionSiteInterface {
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETESTADOCHEFE,stat);
                     break;
                 case CollectionSiteMessage.GETNRELEMENTOSGRUPO:
-                    resp = escritorio.getNrElemGrupo(inMessage.getInfo());
+                    resp = escritorio.getNrElemGrupo(inMessage.getArg1());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETNRELEMENTOSGRUPO,resp);
                     break;
                 case CollectionSiteMessage.GETPOSGRUPO:
@@ -76,11 +160,11 @@ public class CollectionSiteInterface {
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETQUADROSROUBADOS,resp);
                     break;
                 case CollectionSiteMessage.GETSALAASSALTO:
-                    resp = escritorio.getSalaAssalto(inMessage.getInfo());
+                    resp = escritorio.getSalaAssalto(inMessage.getArg1());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGETSALAASSALTO,resp);
                     break;
                 case CollectionSiteMessage.GRUPOCHEIO:
-                    bResp = escritorio.grupoCheio(inMessage.getInfo());
+                    bResp = escritorio.grupoCheio(inMessage.getArg1());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPGRUPOCHEIO,bResp);
                     break;
                 case CollectionSiteMessage.INDICARSALAVAZIA:

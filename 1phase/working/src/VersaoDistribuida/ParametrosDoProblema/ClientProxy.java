@@ -59,6 +59,8 @@ public class ClientProxy extends Thread {
             GenericIO.writelnString(e.getMessageVal().toString());
             System.exit(1);
         }
+
+
         sconi.writeObject(outMessage);                                // enviar resposta ao cliente
         sconi.close();                                                // fechar canal de comunicação
     }

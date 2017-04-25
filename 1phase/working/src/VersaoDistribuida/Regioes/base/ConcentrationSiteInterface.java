@@ -4,6 +4,7 @@ import VersaoDistribuida.Mensagens.CollectionSiteMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessage;
 import VersaoDistribuida.Mensagens.ConcentrationSiteMessageException;
 
+import static VersaoDistribuida.ParametrosDoProblema.Constantes.MAX_AGIL;
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.NUM_THIEVES;
 
 /**
@@ -27,7 +28,71 @@ public class ConcentrationSiteInterface {
 
         ConcentrationSiteMessage outMessage = null;
 
-
+        switch (inMessage.getType()) {
+            case ConcentrationSiteMessage.CHAMALADRAO:
+                if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Grupo inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.ESPERALADROES:
+                break;
+            case ConcentrationSiteMessage.ESPERALADROESFIM:
+                break;
+            case ConcentrationSiteMessage.GETNRLADROES:
+                break;
+            case ConcentrationSiteMessage.AMINEEDED:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.ESTOUPRONTO:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.GETBUSYLADRAO:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.GETGRUPOLADRAO:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.GETSTATELADRAO:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.INDICARCHEGADA:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.PREPAREEXCURSION:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.NASALA:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.REVERSEDIRECTION:
+                if (inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                }
+                break;
+            case ConcentrationSiteMessage.GETAGILIDADE:
+                if (inMessage.getArg1() > MAX_AGIL || inMessage.getArg1() < 0) {
+                    throw new ConcentrationSiteMessageException("Agilidade inválida!", inMessage);
+                }
+                break;
+            default:
+                throw new ConcentrationSiteMessageException("Tipo inválido!", inMessage);
+        }
 
         /*
          * processamento das mensagens recebidas

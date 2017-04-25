@@ -2,6 +2,7 @@ package VersaoDistribuida.Regioes.gruposAssalto;
 
 import VersaoDistribuida.Mensagens.AssaultPartyMessage;
 import VersaoDistribuida.Mensagens.AssaultPartyMessageException;
+import VersaoDistribuida.Mensagens.ConcentrationSiteMessageException;
 import VersaoDistribuida.Regioes.museu.Museum;
 import static VersaoDistribuida.ParametrosDoProblema.Constantes.*;
 
@@ -26,7 +27,85 @@ public class GrupoAssaltoInterface {
         /*
          * validação da mensagem recebida
          */
+            switch (inMessage.getMsgType()) {
+                case AssaultPartyMessage.ENTRAR:
+                    if (inMessage.getArg2() > 1 || inMessage.getArg2() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    if( inMessage.getArg1() < 0) {
+                        throw  new AssaultPartyMessageException("Id do ladrao invalido!", inMessage);
+                    }
+                    break;
+                case AssaultPartyMessage.DESFAZERGRUPO:
+                    if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    break;
+                case AssaultPartyMessage.FORMARGRUPO:
+                    if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    if (inMessage.getArg2() < 0) {
+                        throw new AssaultPartyMessageException("Id da sala inválido!", inMessage);
+                    }
+                    break;
+                case AssaultPartyMessage.GETDISTANCIASALA:
+                    if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    break;
+                case AssaultPartyMessage.GETPOS:
+                    if (inMessage.getArg2() > 1 || inMessage.getArg2() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    if (inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    }
 
+                    break;
+                case AssaultPartyMessage.CRAWLIN:
+                    if (inMessage.getArg3() > 1 || inMessage.getArg3() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    if (inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    }
+                    if (inMessage.getArg2() < 0) {
+                        throw new AssaultPartyMessageException("IAgilidade", inMessage);
+                    }
+                    if (inMessage.getArg4() < 0) {
+                        throw new AssaultPartyMessageException("posicao", inMessage);
+                    }
+                    break;
+                case AssaultPartyMessage.CRAWLOUT:
+                    if (inMessage.getArg3() > 1 || inMessage.getArg3() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    if (inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    }
+                    if (inMessage.getArg2() < 0) {
+                        throw new AssaultPartyMessageException("IAgilidade", inMessage);
+                    }
+                    if (inMessage.getArg4() < 0) {
+                        throw new AssaultPartyMessageException("posicao", inMessage);
+                    }                    break;
+                case AssaultPartyMessage.ROUBARQUADRO:
+                    if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    break;
+                case AssaultPartyMessage.WAITMYTURN:
+                    if (inMessage.getArg2() > 1 || inMessage.getArg2() < 0) {
+                        throw new AssaultPartyMessageException("Id do grupo inválido!", inMessage);
+                    }
+                    if (inMessage.getArg1() < 0) {
+                        throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    }
+                    break;
+                default:
+                    throw new AssaultPartyMessageException("Tipo inválido!", inMessage);
+            }
 
 
 
@@ -52,10 +131,6 @@ public class GrupoAssaltoInterface {
                     resp = grupo[inMessage.getArg1()].getDistanciaSala();
                     outMessage = new AssaultPartyMessage(AssaultPartyMessage.RESPGETDISTANCIASALA, resp);
                     break;
-                /*case AssaultPartyMessage.GETINDICE:
-                    resp = grupo[inMessage.getIdGrupo()].getPosicao(inMessage.getInfo());
-                    outMessage = new AssaultPartyMessage(AssaultPartyMessage.RESPGETINDICE, resp);
-                    break; */
                 case AssaultPartyMessage.GETPOS:
                     if (grupo[inMessage.getArg2()] != null) {
                         resp = grupo[inMessage.getArg2()].getPos(inMessage.getArg1());
@@ -77,13 +152,6 @@ public class GrupoAssaltoInterface {
                     System.out.println(quadro);
                     outMessage = new AssaultPartyMessage(AssaultPartyMessage.RESPROUBARQUADRO, quadro);
                     break;
-                /*case AssaultPartyMessage.CHECKGRUPONULL:
-                    if (grupo[inMessage.getInfo()] == null) {
-                        outMessage = new AssaultPartyMessage(AssaultPartyMessage.RESPCHECKGRUPONULL, true);
-                    } else {
-                        outMessage = new AssaultPartyMessage(AssaultPartyMessage.RESPCHECKGRUPONULL, false);
-                    }
-                    break;*/
                 case AssaultPartyMessage.WAITMYTURN:
                     grupo[inMessage.getArg2()].waitMinhaVez(inMessage.getArg1());
                     outMessage = new AssaultPartyMessage(AssaultPartyMessage.ACK);
