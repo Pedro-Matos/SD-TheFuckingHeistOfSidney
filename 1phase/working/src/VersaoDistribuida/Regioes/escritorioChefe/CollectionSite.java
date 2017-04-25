@@ -374,6 +374,15 @@ public class CollectionSite {
 
 
         this.quadrosRoubados++;
+        for(int i = 0; i < 2;i++){
+            for(int z = 0; z <3; z++){
+                System.out.print("-> "+grupos[i][z]);
+            }
+            System.out.println();
+        }
+        System.out.println("-------------------------------------------------");
+        System.out.println("Grupo: "+grupo);
+        System.out.println("Pos: "+pos);
         this.grupos[grupo][pos] = -1;
         if (--this.nrElemGrupo[grupo] == 0) {
             this.salaAssalto[sala] = -1;

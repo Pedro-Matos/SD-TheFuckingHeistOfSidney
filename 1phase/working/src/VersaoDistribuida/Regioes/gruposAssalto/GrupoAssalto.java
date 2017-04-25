@@ -455,7 +455,7 @@ public class GrupoAssalto {
                 catch (InterruptedException e){
                 }
             }
-            outMessage = new MuseuMessage(MuseuMessage.GETDISTANCIA, naSala);
+            outMessage = new MuseuMessage(MuseuMessage.GETDISTANCIA, nrSala);
             museum.writeObject(outMessage);
             inMessage = (MuseuMessage) museum.readObject();
             museum.close();
@@ -480,7 +480,7 @@ public class GrupoAssalto {
             catch (InterruptedException e){
             }
         }
-        outMessage = new MuseuMessage(MuseuMessage.ROUBARQUADRO, naSala);
+        outMessage = new MuseuMessage(MuseuMessage.ROUBARQUADRO, nrSala);
         museum.writeObject(outMessage);
         inMessage = (MuseuMessage) museum.readObject();
         museum.close();

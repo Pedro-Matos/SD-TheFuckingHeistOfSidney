@@ -31,29 +31,26 @@ public class CollectionSiteInterface {
                     break;
                 case CollectionSiteMessage.ENTRARGRUPO:
                     if (inMessage.getArg1() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Id Ladrao inválido!", inMessage);
                     }
                     else if (inMessage.getArg2() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Id grupo inválido!", inMessage);
                     }
                     break;
                 case CollectionSiteMessage.PREPAREASSAULTPARTY:
-                    if (inMessage.getArg1() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
-                    }
                     break;
                 case CollectionSiteMessage.HANDACANVAS:
                     if (inMessage.getArg1() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Id Ladrao inválido!", inMessage);
                     }
                     else if (inMessage.getArg2() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Sala assalto inválida!", inMessage);
                     }
                     else if (inMessage.getArg3() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Id grupo inválido!", inMessage);
                     }
                     else if (inMessage.getArg4() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Id Pos Grupo inválido!", inMessage);
                     }
                     break;
                 case CollectionSiteMessage.GETESTADOCHEFE:
@@ -85,13 +82,10 @@ public class CollectionSiteInterface {
                     break;
                 case CollectionSiteMessage.INDICARSALAVAZIA:
                     if (inMessage.getArg1() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
-                    }
-                    else if (inMessage.getArg2() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Sala inválido!", inMessage);
                     }
                     else if (inMessage.getArg3() < 0) {
-                        throw new CollectionSiteMessageException(" inválido!", inMessage);
+                        throw new CollectionSiteMessageException(" Posicao inválido!", inMessage);
                     }
                     break;
                 case CollectionSiteMessage.STARTOPERATIONS:
@@ -140,7 +134,7 @@ public class CollectionSiteInterface {
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPPREPAREASSAULTPARTY,bResp);
                     break;
                 case CollectionSiteMessage.HANDACANVAS:
-                    escritorio.handACanvas(inMessage.getArg1(),inMessage.getArg3(), inMessage.getArg2(), inMessage.getArg4());
+                    escritorio.handACanvas(inMessage.getArg1(),inMessage.getArg2(), inMessage.getArg3(), inMessage.getArg4());
                     outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPHANDACANVAS);
                     break;
                 case CollectionSiteMessage.GETESTADOCHEFE:

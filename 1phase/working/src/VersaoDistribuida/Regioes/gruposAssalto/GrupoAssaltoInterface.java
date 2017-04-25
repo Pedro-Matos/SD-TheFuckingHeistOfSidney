@@ -165,6 +165,7 @@ public class GrupoAssaltoInterface {
 
         public int formarGrupo(int id, int nrSala) {
             if (grupo[id] == null) {
+                System.out.println("Id: " + id + "; + NrSala: "+nrSala);
                 grupo[id] = new GrupoAssalto(museu, nrSala, id,repo);
                 return id;
             } else {

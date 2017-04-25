@@ -43,6 +43,10 @@ public class Museum {
             setDistanciaSala(i, salas[i][1]);
         }
 
+        for(int i =0; i < salas.length; i++){
+            System.out.println(salas[i][1]);
+        }
+
     }
 
 
