@@ -5,7 +5,7 @@ import genclass.GenericIO;
 
 import java.net.SocketTimeoutException;
 
-import static DistributedVersion.ComInfo.ComPorts.portMuseum;
+import static DistributedVersion.ComInfo.ComPorts.*;
 
 /**
  * Created by pmatos9 on 17/04/17.
@@ -20,8 +20,8 @@ public class ServerMuseum {
         ServerCom scon, sconi;
         ClientProxy cliProxy;
 
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor General Repository? ");
-        String generalRepository = GenericIO.readlnString();
+
+        String generalRepository = machine_log;
 
         scon = new ServerCom(portMuseum);
         scon.start();

@@ -5,7 +5,7 @@ import genclass.GenericIO;
 
 import java.net.SocketTimeoutException;
 
-import static DistributedVersion.ComInfo.ComPorts.portAssaultGroup;
+import static DistributedVersion.ComInfo.ComPorts.*;
 
 /**
  * Created by pmatos9 on 18/04/17.
@@ -22,11 +22,11 @@ public class ServerAssaultParty {
         /*
          * Obtenção dos parâmetros do problema
          */
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor Museum? ");
-        String museu = GenericIO.readlnString();
 
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor General Repository? ");
-        String generalRepository = GenericIO.readlnString();
+        String museu = machine_museum;
+
+
+        String generalRepository = machine_log;
 
         AssaultPartyInterface grupoAssaltoInter;
         ServerCom scon, sconi;

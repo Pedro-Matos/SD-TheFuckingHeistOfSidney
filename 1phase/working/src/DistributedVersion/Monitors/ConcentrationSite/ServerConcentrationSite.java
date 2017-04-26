@@ -5,7 +5,7 @@ import genclass.GenericIO;
 
 import java.net.SocketTimeoutException;
 
-import static DistributedVersion.ComInfo.ComPorts.portConcentrationSite;
+import static DistributedVersion.ComInfo.ComPorts.*;
 
 /**
  * Created by pmatos9 on 18/04/17.
@@ -24,8 +24,8 @@ public class ServerConcentrationSite {
         ServerCom scon, sconi;
         ClientProxy cliProxy;
 
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor General Repository? ");
-        String generalRepository = GenericIO.readlnString();
+
+        String generalRepository = machine_log;
 
         scon = new ServerCom(portConcentrationSite);
         scon.start();

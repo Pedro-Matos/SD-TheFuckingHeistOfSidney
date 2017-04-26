@@ -5,7 +5,7 @@ import genclass.GenericIO;
 
 import java.net.SocketTimeoutException;
 
-import static DistributedVersion.ComInfo.ComPorts.portCollectionSite;
+import static DistributedVersion.ComInfo.ComPorts.*;
 
 /**
  * Created by pmatos9 on 18/04/17.
@@ -19,17 +19,11 @@ public class ServerCollectionSite {
             ServerCom scon, sconi;
             ClientProxy cliProxy;
 
-            GenericIO.writeString("\nWhich machine is Museum on? ");
-            String museu = GenericIO.readlnString();
 
-            GenericIO.writeString("\nWhich machine is ConcentrationSite on? ");
-            String concentrationSite = GenericIO.readlnString();
-
-            GenericIO.writeString("\nWhich machine is AssaultParty on? ");
-            String assaultGroup = GenericIO.readlnString();
-
-            GenericIO.writeString("\nWhich machine is General Repository on? ");
-            String generalRepository = GenericIO.readlnString();
+            String museu = machine_museum;
+            String concentrationSite = machine_concentration;
+            String assaultGroup =machine_party;
+            String generalRepository =machine_log;
 
             scon = new ServerCom(portCollectionSite);
             scon.start();

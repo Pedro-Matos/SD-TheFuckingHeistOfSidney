@@ -3,6 +3,8 @@ package DistributedVersion.Actors;
 import DistributedVersion.Messages.Constants;
 import genclass.GenericIO;
 
+import static DistributedVersion.ComInfo.ComPorts.*;
+
 /**
  * Created by tiagoalexbastos on 24-04-2017.
  */
@@ -10,23 +12,11 @@ public class ServerThief {
 
     public static void main(String[] args) {
         Thief[] thief = new Thief[Constants.NUM_THIEVES];
-        String concentrationSite = null;
-        String collectionSite = null;
-        String grupoAssalto = null;
-        String generalRepo = null;
+        String concentrationSite = machine_concentration;
+        String collectionSite = machine_collection;
+        String grupoAssalto = machine_party;
+        String generalRepo = machine_log;
 
-
-                /*
-         * Obtenção dos parâmetros do problema
-         */
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor ConcentrationSite? ");
-        concentrationSite = GenericIO.readlnString();
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor escritorio? ");
-        collectionSite = GenericIO.readlnString();
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor grupos de assalto? ");
-        grupoAssalto = GenericIO.readlnString();
-        GenericIO.writeString("\nNome do sistema computacional onde está o servidor log? ");
-        generalRepo = GenericIO.readlnString();
 
 
         for (int i = 0; i < Constants.NUM_THIEVES; i++) {
