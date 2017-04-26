@@ -1,7 +1,7 @@
 package DistributedVersion.Monitors.Museum;
 
 import static DistributedVersion.ComInfo.ComPorts.portGeneralRepo;
-import static DistributedVersion.ProblemInformation.Constants.*;
+import static DistributedVersion.Messages.Constants.*;
 
 import DistributedVersion.Messages.GeneralRepositoryMessage;
 import DistributedVersion.ComInfo.ClientCom;
@@ -41,7 +41,7 @@ public class Museum {
             rooms[i][1] = r2.nextInt((MAX_DIST+1)-MIN_DIST) + MIN_DIST;
             setRoomDistance(i, rooms[i][1]);
         }
-        
+
     }
 
 

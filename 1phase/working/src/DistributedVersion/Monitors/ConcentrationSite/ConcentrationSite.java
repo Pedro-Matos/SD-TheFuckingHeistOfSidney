@@ -1,7 +1,7 @@
 package DistributedVersion.Monitors.ConcentrationSite;
 
 import static DistributedVersion.ComInfo.ComPorts.portGeneralRepo;
-import static DistributedVersion.ProblemInformation.Constants.*;
+import static DistributedVersion.Messages.Constants.*;
 import DistributedVersion.Support.MemFIFO;
 import DistributedVersion.ComInfo.ClientCom;
 import DistributedVersion.Messages.GeneralRepositoryMessage;

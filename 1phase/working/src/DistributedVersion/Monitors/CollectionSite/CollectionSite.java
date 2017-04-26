@@ -6,7 +6,7 @@ import DistributedVersion.Messages.GeneralRepositoryMessage;
 import DistributedVersion.ComInfo.ClientCom;
 import DistributedVersion.Messages.MuseumMessage;
 
-import static DistributedVersion.ProblemInformation.Constants.*;
+import static DistributedVersion.Messages.Constants.*;
 
 /**
  * Monitor Collection Site

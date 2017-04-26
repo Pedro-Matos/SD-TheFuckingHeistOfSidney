@@ -7,7 +7,7 @@ import DistributedVersion.Messages.ConcentrationSiteMessage;
 import DistributedVersion.Messages.GeneralRepositoryMessage;
 
 
-import static DistributedVersion.ProblemInformation.Constants.*;
+import static DistributedVersion.Messages.Constants.*;
 import static DistributedVersion.ComInfo.ComPorts.*;
 
 /**

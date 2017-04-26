@@ -3,7 +3,7 @@ package DistributedVersion.Monitors.Museum;
 import DistributedVersion.Messages.MuseumMessage;
 import DistributedVersion.Messages.MuseumMessageException;
 
-import static DistributedVersion.ProblemInformation.Constants.*;
+import static DistributedVersion.Messages.Constants.*;
 
 /**
  * Created by pmatos9 on 17/04/17.

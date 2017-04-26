@@ -1,7 +1,7 @@
 package DistributedVersion.Monitors.AssaultParty;
 
-import static DistributedVersion.ProblemInformation.Constants.*;
-import static DistributedVersion.ProblemInformation.Constants.DIST_THIEVES;
+import static DistributedVersion.Messages.Constants.*;
+import static DistributedVersion.Messages.Constants.DIST_THIEVES;
 
 import DistributedVersion.Messages.GeneralRepositoryMessage;
 import DistributedVersion.ComInfo.ClientCom;

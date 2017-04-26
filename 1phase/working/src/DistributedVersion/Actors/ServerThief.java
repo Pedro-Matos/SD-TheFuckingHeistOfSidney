@@ -1,6 +1,6 @@
 package DistributedVersion.Actors;
 
-import DistributedVersion.ProblemInformation.Constants;
+import DistributedVersion.Messages.Constants;
 import genclass.GenericIO;
 
 /**

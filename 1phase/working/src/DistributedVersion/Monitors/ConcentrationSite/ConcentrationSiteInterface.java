@@ -2,10 +2,8 @@ package DistributedVersion.Monitors.ConcentrationSite;
 
 import DistributedVersion.Messages.ConcentrationSiteMessage;
 import DistributedVersion.Messages.ConcentrationSiteMessageException;
-import DistributedVersion.Messages.GeneralRepositoryMessageException;
-import DistributedVersion.Messages.MuseumMessage;
 
-import static DistributedVersion.ProblemInformation.Constants.MAX_AGIL;
+import static DistributedVersion.Messages.Constants.MAX_AGIL;
 
 /**
  * Created by pmatos9 on 18/04/17.

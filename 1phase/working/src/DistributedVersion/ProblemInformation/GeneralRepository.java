@@ -1,6 +1,6 @@
 package DistributedVersion.ProblemInformation;
 
-import static DistributedVersion.ProblemInformation.Constants.*;
+import static DistributedVersion.Messages.Constants.*;
 import genclass.GenericIO;
 import genclass.TextFile;
 

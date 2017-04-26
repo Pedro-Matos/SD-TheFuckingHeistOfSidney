@@ -1,4 +1,4 @@
-package DistributedVersion.ProblemInformation;
+package DistributedVersion.Messages;
 
 /**
  * General Definitions of the problem

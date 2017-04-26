@@ -1,7 +1,7 @@
 package DistributedVersion.Actors;
 
 import static DistributedVersion.ComInfo.ComPorts.*;
-import static DistributedVersion.ProblemInformation.Constants.*;
+import static DistributedVersion.Messages.Constants.*;
 
 import DistributedVersion.ComInfo.ClientCom;
 import DistributedVersion.Messages.CollectionSiteMessage;
