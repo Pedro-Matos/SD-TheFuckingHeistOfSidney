@@ -1,5 +1,6 @@
 package DistributedVersion.Monitors.Museum;
 
+import static DistributedVersion.ComInfo.ComPorts.portGeneralRepo;
 import static DistributedVersion.ProblemInformation.Constants.*;
 
 import DistributedVersion.Messages.GeneralRepositoryMessage;
@@ -17,39 +18,43 @@ public class Museum {
     /**
      * Rooms of the museum
      */
-    int[][] salas = new int[NUM_ROOMS][2];
+    int[][] rooms = new int[NUM_ROOMS][2];
     /**
      * General Repository
      */
     ClientCom generalRepository;
 
-    private int portRepository = 22460;
 
     /**
      * @param generalRepository General Repository
      */
     public Museum(String generalRepository){
 
-        this.generalRepository = new ClientCom(generalRepository, portRepository);
+        this.generalRepository = new ClientCom(generalRepository, portGeneralRepo);
 
-        for (int i = 0; i < salas.length; i++) {
+        for (int i = 0; i < rooms.length; i++) {
             Random r = new Random();
-            salas[i][0] = r.nextInt((MAX_PAINTS+1)-MIN_PAINTS) + MIN_PAINTS;
-            setNrQuadrosSala(i, salas[i][0]);
+            rooms[i][0] = r.nextInt((MAX_PAINTS+1)-MIN_PAINTS) + MIN_PAINTS;
+            setNumberofPaintings(i, rooms[i][0]);
             Random r2 = new Random();
 
-            salas[i][1] = r2.nextInt((MAX_DIST+1)-MIN_DIST) + MIN_DIST;
-            setDistanciaSala(i, salas[i][1]);
+            rooms[i][1] = r2.nextInt((MAX_DIST+1)-MIN_DIST) + MIN_DIST;
+            setRoomDistance(i, rooms[i][1]);
         }
 
-        for(int i =0; i < salas.length; i++){
-            System.out.println(salas[i][1]);
+        for(int i = 0; i < rooms.length; i++){
+            System.out.println(rooms[i][1]);
         }
 
     }
 
 
-    private void setNrQuadrosSala(int nrsala, int quadros){
+    /**
+     * Function that set's the number of paintings in a room
+     * @param num_room room id
+     * @param paintings number of paintings
+     */
+    private void setNumberofPaintings(int num_room, int paintings){
         GeneralRepositoryMessage inMessage, outMessage;
 
         while(!generalRepository.open()){
@@ -60,14 +65,18 @@ public class Museum {
             }
         }
 
-        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETNRQUADROSALA,nrsala, quadros);
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETNUMBEROFPAINTINGS,num_room, paintings);
         generalRepository.writeObject(outMessage);
         inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
     }
 
-
-    private void setDistanciaSala(int nrsala, int distancia){
+    /**
+     * Function that set's the room distance
+     * @param num_room id of the room
+     * @param distance distance to be applied
+     */
+    private void setRoomDistance(int num_room, int distance){
         GeneralRepositoryMessage inMessage, outMessage;
 
         while(!generalRepository.open()){
@@ -78,7 +87,7 @@ public class Museum {
             }
         }
 
-        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETDISTANCIASALA,nrsala, distancia);
+        outMessage = new GeneralRepositoryMessage(GeneralRepositoryMessage.SETROOMDISTANCE,num_room, distance);
         generalRepository.writeObject(outMessage);
         inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
@@ -89,13 +98,13 @@ public class Museum {
      *
      * Method to steal the paiting
      *
-     * @param nr_sala room id
+     * @param room_number room id
      * @return true if success
      */
-    public synchronized boolean roubarQuadro(int nr_sala) {
-        if (salas[nr_sala][0] > 0) {
-            salas[nr_sala][0]--;
-            //generalRepository.setNrQuadrosSala(nr_sala, salas[nr_sala][0]);
+    public synchronized boolean stealPainting(int room_number) {
+        if (rooms[room_number][0] > 0) {
+            rooms[room_number][0]--;
+            //generalRepository.setNumberofPaintings(nr_sala, rooms[nr_sala][0]);
             return true;
         } else {
             return false;
@@ -108,8 +117,8 @@ public class Museum {
      * @param nr_sala room id
      * @return distance
      */
-    public synchronized int getDistancia(int nr_sala) {
-        return salas[nr_sala][1];
+    public synchronized int getDistance(int nr_sala) {
+        return rooms[nr_sala][1];
     }
 
     /**
@@ -117,7 +126,7 @@ public class Museum {
      * @param nr_sala room id
      * @return nr of paitings
      */
-    public synchronized int getNumeroQuadros(int nr_sala) {
-        return salas[nr_sala][0];
+    public synchronized int getNumberofStolenPaintings(int nr_sala) {
+        return rooms[nr_sala][0];
     }
 }

@@ -324,7 +324,7 @@ public class Thief extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new AssaultPartyMessage(AssaultPartyMessage.GETDISTANCIASALA, group_id);
+        outMessage = new AssaultPartyMessage(AssaultPartyMessage.GETROOMDISTANCE, group_id);
         grupo.writeObject(outMessage);
         inMessage = (AssaultPartyMessage) grupo.readObject();
         grupo.close();
@@ -358,7 +358,7 @@ public class Thief extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new AssaultPartyMessage(AssaultPartyMessage.ROUBARQUADRO, meuGrupo);
+        outMessage = new AssaultPartyMessage(AssaultPartyMessage.STEALPAINTING, meuGrupo);
         grupo.writeObject(outMessage);
         inMessage = (AssaultPartyMessage) grupo.readObject();
         grupo.close();
@@ -376,7 +376,7 @@ public class Thief extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETSALAASSALTO, meuGrupo);
+        outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETASSAULTINGROOM, meuGrupo);
         collectionSite.writeObject(outMessage);
         inMessage = (CollectionSiteMessage) collectionSite.readObject();
         collectionSite.close();
@@ -429,7 +429,7 @@ public class Thief extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETPOSGRUPO,id, meuGrupo);
+        outMessage = new CollectionSiteMessage(CollectionSiteMessage.GETGROUPPOSITION,id, meuGrupo);
         collectionSite.writeObject(outMessage);
         inMessage = (CollectionSiteMessage) collectionSite.readObject();
         collectionSite.close();
@@ -464,7 +464,7 @@ public class Thief extends Thread {
             catch (InterruptedException e){
             }
         }
-        outMessage = new CollectionSiteMessage(CollectionSiteMessage.INDICARSALAVAZIA,tmp_salaassalto,meuGrupo,tmp_getPosGrupo);
+        outMessage = new CollectionSiteMessage(CollectionSiteMessage.FLAGEMPTYROOM,tmp_salaassalto,meuGrupo,tmp_getPosGrupo);
         collectionSite.writeObject(outMessage);
         inMessage = (CollectionSiteMessage) collectionSite.readObject();
         collectionSite.close();
@@ -699,8 +699,25 @@ public class Thief extends Thread {
                 case HEIST_END:
 
                     heistOver = true;
+                    end();
                     break;
             }
         }
+    }
+
+    private void end(){
+        AssaultPartyMessage inMessage, outMessage;
+
+        while(!grupo.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new AssaultPartyMessage(AssaultPartyMessage.END);
+        grupo.writeObject(outMessage);
+        inMessage = (AssaultPartyMessage) grupo.readObject();
+        grupo.close();
     }
 }

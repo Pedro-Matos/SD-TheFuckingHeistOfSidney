@@ -19,23 +19,23 @@ public class ConcentrationSite {
     /**
      * State of thief's
      */
-    private int[] estadoLadrao = new int[NUM_THIEVES];
+    private int[] thief_state = new int[NUM_THIEVES];
     /**
      * Flag if the thief is busy
      */
-    private boolean[] busyLadrao = new boolean[NUM_THIEVES];
+    private boolean[] busyThief = new boolean[NUM_THIEVES];
     /**
      * Number of thiefs in the ConcentrationSite
      */
-    private int nrLadroes;
+    private int number_of_thieves;
     /**
      * Agility of each thief
      */
-    private int agilidadeLadroes[] = new int[NUM_THIEVES];
+    private int thiefAgility[] = new int[NUM_THIEVES];
     /**
      * Group of each thief
      */
-    private int grupoLadrao[] = new int[NUM_THIEVES];
+    private int thievesGroups[] = new int[NUM_THIEVES];
     /**
      * General Repository
      */
@@ -43,7 +43,7 @@ public class ConcentrationSite {
     /**
      * Thief's situation
      */
-    private int situacaoLadrao[] = new int[NUM_THIEVES];
+    private int thiefSituation[] = new int[NUM_THIEVES];
 
 
     /**
@@ -51,14 +51,14 @@ public class ConcentrationSite {
      */
     public ConcentrationSite(String generalRepository) {
 
-        this.nrLadroes = 0;
+        this.number_of_thieves = 0;
 
         for (int i = 0; i < NUM_THIEVES; i++) {
-            estadoLadrao[i] = OUTSIDE;
-            this.busyLadrao[i] = false;
-            grupoLadrao[i] = -1;
-            agilidadeLadroes[i] = ((int) (Math.random() * (MAX_AGIL - 1))) + MIN_AGIL;
-            this.situacaoLadrao[i] = WAITING;
+            thief_state[i] = OUTSIDE;
+            this.busyThief[i] = false;
+            thievesGroups[i] = -1;
+            thiefAgility[i] = ((int) (Math.random() * (MAX_AGIL - 1))) + MIN_AGIL;
+            this.thiefSituation[i] = WAITING;
         }
 
         fifo = new MemFIFO(NUM_THIEVES);
@@ -71,10 +71,10 @@ public class ConcentrationSite {
      * @param id thief's id
      * @return thief's group
      */
-    public synchronized int getGrupoLadrao(int id) {
+    public synchronized int getThiefGroup(int id) {
 
 
-        return grupoLadrao[id];
+        return thievesGroups[id];
 
     }
 
@@ -84,19 +84,19 @@ public class ConcentrationSite {
      *
      * @param ladraoID thief's id
      */
-    public synchronized void estouPronto(int ladraoID) {
+    public synchronized void iAmReady(int ladraoID) {
 
 
         if (!fifo.full()) {
-            this.busyLadrao[ladraoID] = false;
+            this.busyThief[ladraoID] = false;
             fifo.write(ladraoID);
-            this.nrLadroes++;
-            this.grupoLadrao[ladraoID] = -1;
+            this.number_of_thieves++;
+            this.thievesGroups[ladraoID] = -1;
         } else {
             System.out.println("ERRO!!");
         }
 
-        if (this.nrLadroes >= NUM_GROUP) {
+        if (this.number_of_thieves >= NUM_GROUP) {
 
             notifyAll();
         } else {
@@ -112,10 +112,10 @@ public class ConcentrationSite {
      * Get for the number of thiefs in the ConcentrationSite
      * @return number of thiefs
      */
-    public synchronized int getNrLadroes() {
+    public synchronized int getNumber_of_thieves() {
 
 
-        return this.nrLadroes;
+        return this.number_of_thieves;
     }
 
     /**
@@ -124,9 +124,9 @@ public class ConcentrationSite {
      * @return thief state
      */
 
-    public synchronized int getStateLadrao(int ladraoID) {
+    public synchronized int getThiefState(int ladraoID) {
 
-        return this.estadoLadrao[ladraoID];
+        return this.thief_state[ladraoID];
 
     }
 
@@ -138,7 +138,7 @@ public class ConcentrationSite {
     public synchronized void amINeeded(int ladraoID) {
 
         notifyAll();
-        while (!this.busyLadrao[ladraoID] && this.estadoLadrao[ladraoID] != HEIST_END) {
+        while (!this.busyThief[ladraoID] && this.thief_state[ladraoID] != HEIST_END) {
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -148,6 +148,10 @@ public class ConcentrationSite {
 
     }
 
+    /**
+     * Function that set's the Master Thief state
+     * @param state Master Thief state
+     */
     private void setMasterThiefState(int state){
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -165,6 +169,12 @@ public class ConcentrationSite {
         general.close();
     }
 
+
+    /**
+     * Function that set's the Ordinary Thief Situation
+     * @param id Thief ID
+     * @param state Thief State
+     */
     private void setThiefSituation(int id, int state){
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -188,16 +198,16 @@ public class ConcentrationSite {
      * @param grupo group id
      * @return id of thief, or -1 if FIFO is empty
      */
-    public synchronized int chamaLadrao(int grupo) {
+    public synchronized int callThief(int grupo) {
 
 
         int id = -1;
 
         if (!fifo.empty()) {
             id = (Integer) fifo.read();
-            this.nrLadroes--;
-            this.busyLadrao[id] = true;
-            this.grupoLadrao[id] = grupo;
+            this.number_of_thieves--;
+            this.busyThief[id] = true;
+            this.thievesGroups[id] = grupo;
             setMasterThiefState(ASSEMBLING_A_GROUP);
             setThiefSituation(id,IN_PARTY);
             notifyAll();
@@ -212,8 +222,8 @@ public class ConcentrationSite {
      * @param ladraoID thief id
      * @return true if busy, false is free
      */
-    public synchronized boolean getBusyLadrao(int ladraoID) {
-        return this.busyLadrao[ladraoID];
+    public synchronized boolean getBusyThief(int ladraoID) {
+        return this.busyThief[ladraoID];
     }
 
     /**
@@ -221,7 +231,7 @@ public class ConcentrationSite {
      * @param ladraoID thief id
      */
     public synchronized void prepareExcursion(int ladraoID) {
-        this.estadoLadrao[ladraoID] = CRAWLING_INWARDS;
+        this.thief_state[ladraoID] = CRAWLING_INWARDS;
     }
 
     /**
@@ -229,18 +239,22 @@ public class ConcentrationSite {
      * @param ladraoID thief id
      */
     public synchronized void reverseDirection(int ladraoID) {
-        this.estadoLadrao[ladraoID] = CRAWLING_OUTWARDS;
+        this.thief_state[ladraoID] = CRAWLING_OUTWARDS;
     }
 
     /**
      * State changes to At a Room
      * @param ladraoID thief id
      */
-    public synchronized void naSala(int ladraoID) {
-        this.estadoLadrao[ladraoID] = AT_A_ROOM;
+    public synchronized void atARoom(int ladraoID) {
+        this.thief_state[ladraoID] = AT_A_ROOM;
     }
 
-
+    /**
+     * Function that set's the Ordinary Thief State
+     * @param ladraoID Ordinary Thief ID
+     * @param estado Ordinary Thief State
+     */
     private void setThiefState(int ladraoID, int estado){
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -264,14 +278,14 @@ public class ConcentrationSite {
      * Thief arrives at the ConcentrationSite
      * @param ladraoID thief id
      */
-    public synchronized void indicarChegada(int ladraoID) {
+    public synchronized void thiefArrived(int ladraoID) {
 
-        this.busyLadrao[ladraoID] = false;
-        this.grupoLadrao[ladraoID] = -1;
-        this.estadoLadrao[ladraoID] = OUTSIDE;
-        setThiefState(ladraoID,this.estadoLadrao[ladraoID]);
+        this.busyThief[ladraoID] = false;
+        this.thievesGroups[ladraoID] = -1;
+        this.thief_state[ladraoID] = OUTSIDE;
+        setThiefState(ladraoID,this.thief_state[ladraoID]);
         setThiefSituation(ladraoID,WAITING);
-        this.estouPronto(ladraoID);
+        this.iAmReady(ladraoID);
     }
 
     /**
@@ -279,15 +293,15 @@ public class ConcentrationSite {
      * @param ladraoID thief id
      * @return thief agility
      */
-    public synchronized int getAgilidade(int ladraoID) {
-        return agilidadeLadroes[ladraoID];
+    public synchronized int getAgility(int ladraoID) {
+        return thiefAgility[ladraoID];
     }
 
     /**
      * Waiting for the correct number of thiefs in order to create an assault party
      */
-    public synchronized void esperaLadroes() {
-        while (this.nrLadroes < NUM_GROUP) {
+    public synchronized void waitForThieves() {
+        while (this.number_of_thieves < NUM_GROUP) {
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -300,8 +314,8 @@ public class ConcentrationSite {
     /**
      * Waits for all the thiefs in order to finish operation
      */
-    public synchronized void esperaLadroesFim() {
-        while (this.nrLadroes < NUM_THIEVES) {
+    public synchronized void waitForThievesEnd() {
+        while (this.number_of_thieves < NUM_THIEVES) {
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -309,7 +323,7 @@ public class ConcentrationSite {
             }
         }
         for (int i = 0; i < NUM_THIEVES; i++) {
-            estadoLadrao[i] = HEIST_END;
+            thief_state[i] = HEIST_END;
         }
         notifyAll();
     }

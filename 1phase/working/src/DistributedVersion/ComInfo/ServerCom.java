@@ -125,19 +125,16 @@ public class ServerCom
      *    @return canal de comunicação
      */
 
-    public ServerCom accept () throws SocketTimeoutException{
+    public ServerCom accept () throws SocketTimeoutException {
         ServerCom scon;                                      // canal de comunicação
 
         scon = new ServerCom(serverPortNumb, listeningSocket);
         try
         { scon.commSocket = listeningSocket.accept();
-            listeningSocket.setSoTimeout(1000);
+            listeningSocket.setSoTimeout(5000);
         }
         catch (SocketTimeoutException e){
-            GenericIO.writelnString (Thread.currentThread ().getName () +
-                    " - foi fechado o socket de escuta durante o processo de escuta!");
-            e.printStackTrace ();
-            System.exit (1);
+            throw e;
         }
         catch (SocketException e)
         { GenericIO.writelnString (Thread.currentThread ().getName () +

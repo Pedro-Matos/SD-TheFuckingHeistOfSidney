@@ -1,7 +1,7 @@
 package DistributedVersion.Monitors.Museum;
 
 import DistributedVersion.ComInfo.ServerCom;
-import DistributedVersion.Messages.MuseuMessage;
+import DistributedVersion.Messages.MuseumMessage;
 import DistributedVersion.Messages.MuseumMessageException;
 import genclass.GenericIO;
 
@@ -47,10 +47,10 @@ public class ClientProxy extends Thread {
      */
     @Override
     public void run() {
-        MuseuMessage inMessage = null, // mensagem de entrada
+        MuseumMessage inMessage = null, // mensagem de entrada
                 outMessage = null;                      // mensagem de saída
 
-        inMessage = (MuseuMessage) sconi.readObject();                     // ler pedido do cliente
+        inMessage = (MuseumMessage) sconi.readObject();                     // ler pedido do cliente
         try {
             outMessage = museuInter.processAndReply(inMessage);         // processá-lo
         } catch (MuseumMessageException e) {

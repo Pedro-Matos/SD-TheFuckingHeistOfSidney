@@ -140,7 +140,7 @@ public class ConcentrationSiteMessage implements Serializable {
 
     public static final int RESPGETAGILITY = 22;
 
-    public static final int TERMINAR = 99;
+    public static final int END = 99;
 
 
     /**

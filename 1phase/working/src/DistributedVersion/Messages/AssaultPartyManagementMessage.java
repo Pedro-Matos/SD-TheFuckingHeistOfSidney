@@ -22,7 +22,7 @@ public class AssaultPartyManagementMessage implements Serializable {
     /**
      * Pedir distancia da sala do Museum
      *
-     * @serialField GETDISTANCIASALA
+     * @serialField GETROOMDISTANCE
      */
     public static final int GETDISTANCIASALA = 2;
     /**
@@ -94,7 +94,7 @@ public class AssaultPartyManagementMessage implements Serializable {
     /**
      * Roubar um quadro de uma sala do Museum
      *
-     * @serialField ROUBARQUADRO
+     * @serialField STEALPAINTING
      */
     public static final int ROUBARQUADRO = 14;
     /**
@@ -106,7 +106,7 @@ public class AssaultPartyManagementMessage implements Serializable {
     /**
      * Formar um novo grupo de assalto
      *
-     * @serialField FORMARGRUPO
+     * @serialField CREATEASSAULTPARTY
      */
     public static final int FORMARGRUPO = 16;
     /**

@@ -1,41 +1,52 @@
 package DistributedVersion.Monitors.Museum;
 
-import DistributedVersion.Messages.MuseuMessage;
+import DistributedVersion.Messages.MuseumMessage;
 import DistributedVersion.Messages.MuseumMessageException;
+
 import static DistributedVersion.ProblemInformation.Constants.*;
 
 /**
  * Created by pmatos9 on 17/04/17.
  */
-public class MuseumInterface  {
+public class MuseumInterface {
 
     private Museum museu;
     private boolean isALive = true;
+
     public MuseumInterface(Museum museu) {
         this.museu = museu;
 
     }
 
-    public MuseuMessage processAndReply(MuseuMessage inMessage) throws MuseumMessageException {
+    /**
+     * Function that executes the operation specified by each received message
+     *
+     * @param inMessage Message with the request
+     * @return MuseumMessage reply
+     * @throws MuseumMessageException if the message contains an invalid request
+     */
+    public MuseumMessage processAndReply(MuseumMessage inMessage) throws MuseumMessageException {
 
-        MuseuMessage outMessage = null;
+        MuseumMessage outMessage = null;
 
 
         switch (inMessage.getType()) {
-            case MuseuMessage.ROUBARQUADRO:
+            case MuseumMessage.STEALPAINTING:
                 if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
                     throw new MuseumMessageException("Sala inválida!", inMessage);
                 }
                 break;
-            case MuseuMessage.GETNUMEROQUADROS:
+            case MuseumMessage.GETNUMBEROFSTOLENGPAINTINGS:
                 if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
                     throw new MuseumMessageException("Sala inválida!", inMessage);
                 }
                 break;
-            case MuseuMessage.GETDISTANCIA:
+            case MuseumMessage.GETDISTANCE:
                 if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
                     throw new MuseumMessageException("Sala inválida!", inMessage);
                 }
+                break;
+            case MuseumMessage.END:
                 break;
             default:
                 throw new MuseumMessageException("Tipo inválido!", inMessage);
@@ -47,19 +58,19 @@ public class MuseumInterface  {
          */
 
         switch (inMessage.getType()) {
-            case MuseuMessage.ROUBARQUADRO:
-                boolean resp = museu.roubarQuadro(inMessage.getNrSala());
-                outMessage = new MuseuMessage(MuseuMessage.SENDRESPROUBARQUADRO, resp);
+            case MuseumMessage.STEALPAINTING:
+                boolean resp = museu.stealPainting(inMessage.getNrSala());
+                outMessage = new MuseumMessage(MuseumMessage.SENDRESPROUBARQUADRO, resp);
                 break;
-            case MuseuMessage.GETNUMEROQUADROS:
-                int nrQuadros = museu.getNumeroQuadros(inMessage.getNrSala());
-                outMessage = new MuseuMessage(MuseuMessage.SENDNUMEROQUADROS, nrQuadros);
+            case MuseumMessage.GETNUMBEROFSTOLENGPAINTINGS:
+                int nrQuadros = museu.getNumberofStolenPaintings(inMessage.getNrSala());
+                outMessage = new MuseumMessage(MuseumMessage.SENDNUMEROQUADROS, nrQuadros);
                 break;
-            case MuseuMessage.GETDISTANCIA:
-                int dist = museu.getDistancia(inMessage.getNrSala());
-                outMessage = new MuseuMessage(MuseuMessage.SENDDISTANCIA, dist);
+            case MuseumMessage.GETDISTANCE:
+                int dist = museu.getDistance(inMessage.getNrSala());
+                outMessage = new MuseumMessage(MuseumMessage.SENDDISTANCIA, dist);
                 break;
-            case MuseuMessage.TERMINAR:
+            case MuseumMessage.END:
                 this.isALive = false;
                 break;
             default:
@@ -70,7 +81,7 @@ public class MuseumInterface  {
         return outMessage;
     }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return this.isALive;
     }
 }

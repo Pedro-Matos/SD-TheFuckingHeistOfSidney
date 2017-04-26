@@ -447,6 +447,41 @@ public class MasterThief extends Thread {
         generalRepository.writeObject(outMessage);
         inMessage = (GeneralRepositoryMessage) generalRepository.readObject();
         generalRepository.close();
+
+
+        CollectionSiteMessage inMessage1, outMessage1;
+
+        while(!collectionSite.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage1 = new CollectionSiteMessage(CollectionSiteMessage.END);
+        collectionSite.writeObject(outMessage1);
+        inMessage1 = (CollectionSiteMessage) collectionSite.readObject();
+        collectionSite.close();
+
+
+        ConcentrationSiteMessage inMessage2, outMessage2;
+
+        while(!concentrationSite.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+
+        outMessage2 = new ConcentrationSiteMessage(ConcentrationSiteMessage.END);
+        concentrationSite.writeObject(outMessage2);
+        inMessage2 = (ConcentrationSiteMessage) concentrationSite.readObject();
+        concentrationSite.close();
+
+
+
     }
 
     @Override

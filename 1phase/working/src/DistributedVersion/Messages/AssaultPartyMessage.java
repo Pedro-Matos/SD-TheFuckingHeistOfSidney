@@ -16,15 +16,15 @@ public class AssaultPartyMessage implements Serializable {
     /**
      * Entrar no grupo de assalto
      *
-     * @serialField ENTRAR
+     * @serialField JOINPARTY
      */
-    public static final int ENTRAR = 1;
+    public static final int JOINPARTY = 1;
     /**
      * Pedir distancia da sala do Museum
      *
-     * @serialField GETDISTANCIASALA
+     * @serialField GETROOMDISTANCE
      */
-    public static final int GETDISTANCIASALA = 2;
+    public static final int GETROOMDISTANCE = 2;
     /**
      * Resposta ao pedido de distancia da sala
      *
@@ -76,9 +76,9 @@ public class AssaultPartyMessage implements Serializable {
     /**
      * Roubar um quadro de uma sala do Museum
      *
-     * @serialField ROUBARQUADRO
+     * @serialField STEALPAINTING
      */
-    public static final int ROUBARQUADRO = 16;
+    public static final int STEALPAINTING = 16;
     /**
      * Resposta a roubar quadro
      *
@@ -90,7 +90,7 @@ public class AssaultPartyMessage implements Serializable {
      *
      * @serialField PREPAREASSAULTPARTY
      */
-    public static final int FORMARGRUPO = 18;
+    public static final int CREATEASSAULTPARTY = 18;
     /**
      * Confirmaçao de novo grupo formado
      *
@@ -100,9 +100,9 @@ public class AssaultPartyMessage implements Serializable {
     /**
      * Desfazer um grupo de assalto
      *
-     * @serialField DESFAZERGRUPO
+     * @serialField DESTROYGRPOUP
      */
-    public static final int DESFAZERGRUPO = 20;
+    public static final int DESTROYGRPOUP = 20;
     /**
      * Verificar se o grupo está formado
      *
@@ -118,7 +118,7 @@ public class AssaultPartyMessage implements Serializable {
 
     public static final int WAITMYTURN = 23;
 
-    public static final int TERMINAR = 99;
+    public static final int END = 99;
     /**
      * Resposta de confirmação
      *

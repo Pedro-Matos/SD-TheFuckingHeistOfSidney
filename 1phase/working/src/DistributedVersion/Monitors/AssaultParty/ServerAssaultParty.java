@@ -28,17 +28,17 @@ public class ServerAssaultParty {
         GenericIO.writeString("\nNome do sistema computacional onde está o servidor General Repository? ");
         String generalRepository = GenericIO.readlnString();
 
-        GrupoAssaltoInterface grupoAssaltoInter;
+        AssaultPartyInterface grupoAssaltoInter;
         ServerCom scon, sconi;
 
         ClientProxy cliProxy;
 
         scon = new ServerCom(portAssaultGroup);
         scon.start();
-        GrupoAssalto[] grupo = new GrupoAssalto[2];
+        AssaultParty[] grupo = new AssaultParty[2];
         grupo[0] = null;
         grupo[1] = null;
-        grupoAssaltoInter = new GrupoAssaltoInterface(grupo, museu, generalRepository);
+        grupoAssaltoInter = new AssaultPartyInterface(grupo, museu, generalRepository);
         GenericIO.writelnString("O serviço grupo de assalto foi estabelecido!");
         GenericIO.writelnString("O servidor esta em escuta.");
 

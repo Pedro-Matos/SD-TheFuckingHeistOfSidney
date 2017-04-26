@@ -2,6 +2,8 @@ package DistributedVersion.Monitors.ConcentrationSite;
 
 import DistributedVersion.Messages.ConcentrationSiteMessage;
 import DistributedVersion.Messages.ConcentrationSiteMessageException;
+import DistributedVersion.Messages.GeneralRepositoryMessageException;
+import DistributedVersion.Messages.MuseumMessage;
 
 import static DistributedVersion.ProblemInformation.Constants.MAX_AGIL;
 
@@ -16,11 +18,11 @@ public class ConcentrationSiteInterface {
     }
 
     /**
-     * Metodo que processa as mensagens e gera a mensagem de resposta
+     * Function that executes the operation specified by each received message
      *
-     * @param inMessage mensagens recebida
-     * @return mensagens de resposta
-     * @throws ConcentrationSiteMessageException
+     * @param inMessage Message with the request
+     * @return ConcentrationSiteMessage reply
+     * @throws ConcentrationSiteMessageException if the message contains an invalid request
      */
     public ConcentrationSiteMessage processAndReply(ConcentrationSiteMessage inMessage) throws ConcentrationSiteMessageException {
 
@@ -88,6 +90,8 @@ public class ConcentrationSiteInterface {
                     throw new ConcentrationSiteMessageException("Agilidade inválida!", inMessage);
                 }
                 break;
+            case ConcentrationSiteMessage.END:
+                break;
             default:
                 throw new ConcentrationSiteMessageException("Tipo inválido!", inMessage);
         }
@@ -101,15 +105,15 @@ public class ConcentrationSiteInterface {
 
         switch (inMessage.getType()) {
             case ConcentrationSiteMessage.CALLTHIEF:
-                resp = base.chamaLadrao(inMessage.getArg1());
+                resp = base.callThief(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPCHAMALADRAO, resp);
                 break;
             case ConcentrationSiteMessage.WAITTHIVES:
-                base.esperaLadroes();
+                base.waitForThieves();
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.WAITTHIEVESEND:
-                base.esperaLadroesFim();
+                base.waitForThievesEnd();
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.AMINEEDED:
@@ -117,27 +121,27 @@ public class ConcentrationSiteInterface {
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.IMREADY:
-                base.estouPronto(inMessage.getArg1());
+                base.iAmReady(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.GETBUSYTHIEF:
-                check = base.getBusyLadrao(inMessage.getArg1());
+                check = base.getBusyThief(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETBUSYLADRAO, check);
                 break;
             case ConcentrationSiteMessage.GETGROUPTHIEF:
-                resp = base.getGrupoLadrao(inMessage.getArg1());
+                resp = base.getThiefGroup(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETGRUPOLADRAO, resp);
                 break;
             case ConcentrationSiteMessage.GETTHIEFNUMBER:
-                resp = base.getNrLadroes();
+                resp = base.getNumber_of_thieves();
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETNRLADROES, resp);
                 break;
             case ConcentrationSiteMessage.GETSTATETHIEF:
-                state = base.getStateLadrao(inMessage.getArg1());
+                state = base.getThiefState(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETSTATELADRAO, state);
                 break;
             case ConcentrationSiteMessage.INDICARCHEGADA:
-                base.indicarChegada(inMessage.getArg1());
+                base.thiefArrived(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.PREPAREEXCURSION:
@@ -145,7 +149,7 @@ public class ConcentrationSiteInterface {
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.NASALA:
-                base.naSala(inMessage.getArg1());
+                base.atARoom(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.REVERSEDIRECTION:
@@ -153,10 +157,10 @@ public class ConcentrationSiteInterface {
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.ACK);
                 break;
             case ConcentrationSiteMessage.GETAGILITY:
-                resp = base.getAgilidade(inMessage.getArg1());
+                resp = base.getAgility(inMessage.getArg1());
                 outMessage = new ConcentrationSiteMessage(ConcentrationSiteMessage.RESPGETAGILITY,resp);
                 break;
-            case ConcentrationSiteMessage.TERMINAR:
+            case ConcentrationSiteMessage.END:
                 isAlive = false;
                 break;
             default:

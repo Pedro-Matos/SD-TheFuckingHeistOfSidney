@@ -10,7 +10,7 @@ public class MuseumMessageException extends Exception {
      *
      * @serialField msg
      */
-    private MuseuMessage msg;
+    private MuseumMessage msg;
 
     /**
      * Instanciação de uma mensagem.
@@ -18,7 +18,7 @@ public class MuseumMessageException extends Exception {
      * @param errorMessage texto sinalizando a condição de erro
      * @param msg mensagem que está na origem da excepção
      */
-    public MuseumMessageException(String errorMessage, MuseuMessage msg) {
+    public MuseumMessageException(String errorMessage, MuseumMessage msg) {
         super(errorMessage);
         this.msg = msg;
     }
@@ -28,7 +28,7 @@ public class MuseumMessageException extends Exception {
      *
      * @return mensagem
      */
-    public MuseuMessage getMessageVal() {
+    public MuseumMessage getMessageVal() {
         return (msg);
     }
 }

@@ -4,6 +4,7 @@ import DistributedVersion.Messages.AssaultPartyMessage;
 import DistributedVersion.Messages.ConcentrationSiteMessage;
 import DistributedVersion.Messages.GeneralRepositoryMessage;
 import DistributedVersion.ComInfo.ClientCom;
+import DistributedVersion.Messages.MuseumMessage;
 
 import static DistributedVersion.ProblemInformation.Constants.*;
 
@@ -24,7 +25,7 @@ public class CollectionSite {
     /**
      * Assault partys manager
      */
-    private final ClientCom grupoAssaulto;
+    private final ClientCom assaultParty;
     /**
      * General Repository
      */
@@ -32,27 +33,27 @@ public class CollectionSite {
     /**
      * Master Thief state
      */
-    private int estadoChefe;
+    private int masterThiefState;
     /**
      * Empty rooms
      */
-    private boolean[] salaVazia = new boolean[NUM_ROOMS];
+    private boolean[] emptyRoom = new boolean[NUM_ROOMS];
     /**
      * Assault Partys
      */
-    private int[][] grupos = new int[2][NUM_GROUP];
+    private int[][] parties = new int[2][NUM_GROUP];
     /**
      * Nr of elements in the groups
      */
-    private int[] nrElemGrupo = new int[2];
+    private int[] number_of_group_elements = new int[2];
     /**
      * Total of stollen paintings
      */
-    private int quadrosRoubados;
+    private int stolenPaintings;
     /**
      * Rooms occupied
      */
-    private int[] salaAssalto = new int[NUM_ROOMS];
+    private int[] assaultRooms = new int[NUM_ROOMS];
 
     /**
      * Groups occupied
@@ -68,21 +69,21 @@ public class CollectionSite {
     /**
      *  @param museum Museum
      * @param concentrationSite ConcentrationSite
-     * @param grupoAssaulto Manager of assault partys
+     * @param assaultParty Manager of assault partys
      * @param generalRepository General Repository
      */
-    public CollectionSite(String museum, String concentrationSite, String grupoAssaulto, String generalRepository) {
+    public CollectionSite(String museum, String concentrationSite, String assaultParty, String generalRepository) {
         this.general = new ClientCom(generalRepository,22460);
         this.museum = new ClientCom(museum,22461);
         this.concentrationSite = new ClientCom(concentrationSite,22462);
-        this.grupoAssaulto = new ClientCom(grupoAssaulto,22463);
+        this.assaultParty = new ClientCom(assaultParty,22463);
 
         // Estado inicial do chefe
-        estadoChefe = PLANNING_THE_HEIST;
+        masterThiefState = PLANNING_THE_HEIST;
 
 
-        nrElemGrupo[0] = 0;
-        nrElemGrupo[1] = 0;
+        number_of_group_elements[0] = 0;
+        number_of_group_elements[1] = 0;
         countGrupos = 0;
         grupoOcup[0] = false;
         grupoOcup[1] = false;
@@ -90,16 +91,16 @@ public class CollectionSite {
 
 
         for (int i = 0; i < NUM_GROUP; i++) {
-            grupos[0][i] = -1;
-            grupos[1][i] = -1;
+            parties[0][i] = -1;
+            parties[1][i] = -1;
         }
 
         for (int i = 0; i < NUM_ROOMS; i++) {
-            this.salaVazia[i] = false;
-            this.salaAssalto[i] = -1;
+            this.emptyRoom[i] = false;
+            this.assaultRooms[i] = -1;
         }
 
-        this.quadrosRoubados = 0;
+        this.stolenPaintings = 0;
 
     }
 
@@ -108,7 +109,7 @@ public class CollectionSite {
      *
      * @return -1 if they are or 0/1 if they aren't.
      */
-    public synchronized int checkGrupos() {
+    public synchronized int checkGroups() {
 
         if (!this.grupoOcup[0]) {
 
@@ -129,16 +130,16 @@ public class CollectionSite {
      * @param grupo group id
      * @return Position in the group. -1 if the group is full
      */
-    public synchronized int entrarGrupo(int ladraoID, int grupo) {
+    public synchronized int joinGroup(int ladraoID, int grupo) {
 
 
-        boolean cond = this.grupoCheio(grupo);
+        boolean cond = this.isGroupFull(grupo);
 
         if (!cond) {
             for (int i = 0; i < NUM_GROUP; i++) {
-                if (this.grupos[grupo][i] == -1) {
-                    this.nrElemGrupo[grupo]++;
-                    this.grupos[grupo][i] = ladraoID;
+                if (this.parties[grupo][i] == -1) {
+                    this.number_of_group_elements[grupo]++;
+                    this.parties[grupo][i] = ladraoID;
                     //break;
 
 
@@ -146,17 +147,17 @@ public class CollectionSite {
                     AssaultPartyMessage inMessage, outMessage;
 
 
-                    while(!grupoAssaulto.open()){
+                    while(!assaultParty.open()){
                         try{
                             Thread.sleep((long)(1000));
                         }
                         catch (InterruptedException e){
                         }
                     }
-                    outMessage = new AssaultPartyMessage(AssaultPartyMessage.ENTRAR, ladraoID,grupo,i);
-                    grupoAssaulto.writeObject(outMessage);
-                    inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
-                    grupoAssaulto.close();
+                    outMessage = new AssaultPartyMessage(AssaultPartyMessage.JOINPARTY, ladraoID,grupo,i);
+                    assaultParty.writeObject(outMessage);
+                    inMessage = (AssaultPartyMessage) assaultParty.readObject();
+                    assaultParty.close();
 
                     return i;
                 }
@@ -174,9 +175,9 @@ public class CollectionSite {
      * @param grupoID group id
      * @return false if it isn't full; true if is
      */
-    public synchronized boolean grupoCheio(int grupoID) {
+    public synchronized boolean isGroupFull(int grupoID) {
 
-        if (this.nrElemGrupo[grupoID] != NUM_GROUP) {
+        if (this.number_of_group_elements[grupoID] != NUM_GROUP) {
             return false;
         } else {
             return true;
@@ -188,8 +189,8 @@ public class CollectionSite {
      *
      * @return master thief state
      */
-    public synchronized int getEstadoChefe() {
-        return this.estadoChefe;
+    public synchronized int getMasterThiefState() {
+        return this.masterThiefState;
     }
 
     /**
@@ -197,10 +198,14 @@ public class CollectionSite {
      */
     public synchronized void startOperations() {
 
-        this.estadoChefe = DECIDING_WHAT_TO_DO;
-        setMasterThiefState(this.estadoChefe);
+        this.masterThiefState = DECIDING_WHAT_TO_DO;
+        setMasterThiefState(this.masterThiefState);
     }
 
+    /**
+     * Function that set's the Master Thief state
+     * @param state Master Thief state
+     */
     private void setMasterThiefState(int state){
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -227,14 +232,14 @@ public class CollectionSite {
 
         this.grupoOcup[idGrupo] = true;
         this.countGrupos++;
-        this.estadoChefe = ASSEMBLING_A_GROUP;
-        //general.setMasterThiefState(this.estadoChefe);
+        this.masterThiefState = ASSEMBLING_A_GROUP;
+        //general.setMasterThiefState(this.masterThiefState);
 
         int j;
         for (j = 0; j < NUM_ROOMS; j++) {
 
-            if (this.salaAssalto[j] == -1 && !this.salaVazia[j]) {
-                this.salaAssalto[j] = idGrupo;
+            if (this.assaultRooms[j] == -1 && !this.emptyRoom[j]) {
+                this.assaultRooms[j] = idGrupo;
                 break;
             }
         }
@@ -246,17 +251,17 @@ public class CollectionSite {
         AssaultPartyMessage inMessage, outMessage;
 
 
-        while(!grupoAssaulto.open()){
+        while(!assaultParty.open()){
             try{
                 Thread.sleep((long)(1000));
             }
             catch (InterruptedException e){
             }
         }
-        outMessage = new AssaultPartyMessage(AssaultPartyMessage.FORMARGRUPO,idGrupo,j);
-        grupoAssaulto.writeObject(outMessage);
-        inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
-        grupoAssaulto.close();
+        outMessage = new AssaultPartyMessage(AssaultPartyMessage.CREATEASSAULTPARTY,idGrupo,j);
+        assaultParty.writeObject(outMessage);
+        inMessage = (AssaultPartyMessage) assaultParty.readObject();
+        assaultParty.close();
 
         int tmp = inMessage.getArg1();
 
@@ -266,6 +271,10 @@ public class CollectionSite {
         return true;
     }
 
+    /**
+     * Function that set's the room ID to the first assault party
+     * @param j room ID
+     */
     private void setAssaultParty1_room(int j){
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -282,6 +291,10 @@ public class CollectionSite {
         general.close();
     }
 
+    /**
+     * Function that set's the room ID to the first assault party
+     * @param j room ID
+     */
     private void setAssaultParty2_room(int j){
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -324,16 +337,16 @@ public class CollectionSite {
 
         int nrLadroes = inMessage.getArg1();
 
-        int checkGrupos = this.checkGrupos();
+        int checkGrupos = this.checkGroups();
 
         if (checkGrupos == -1 || nrLadroes < NUM_GROUP) {
-            if (this.estadoChefe == ASSEMBLING_A_GROUP) {
-                this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-                setMasterThiefState(this.estadoChefe);
+            if (this.masterThiefState == ASSEMBLING_A_GROUP) {
+                this.masterThiefState = WAITING_FOR_GROUP_ARRIVAL;
+                setMasterThiefState(this.masterThiefState);
                 return;
             }
-            this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-            setMasterThiefState(this.estadoChefe);
+            this.masterThiefState = WAITING_FOR_GROUP_ARRIVAL;
+            setMasterThiefState(this.masterThiefState);
 
             try {
                 wait();
@@ -341,8 +354,8 @@ public class CollectionSite {
                 System.out.println(ex.getMessage());
             }
         } else {
-            this.estadoChefe = DECIDING_WHAT_TO_DO;
-            setMasterThiefState(this.estadoChefe);
+            this.masterThiefState = DECIDING_WHAT_TO_DO;
+            setMasterThiefState(this.masterThiefState);
 
         }
     }
@@ -352,8 +365,8 @@ public class CollectionSite {
      * @param grupoID id of group
      * @return number of elements
      */
-    public synchronized int getNrElemGrupo(int grupoID) {
-        return this.nrElemGrupo[grupoID];
+    public synchronized int getGroupNumberOfElements(int grupoID) {
+        return this.number_of_group_elements[grupoID];
     }
 
 
@@ -369,39 +382,39 @@ public class CollectionSite {
     public synchronized void handACanvas(int ladraoID, int sala, int grupo, int pos){
 
 
-        this.quadrosRoubados++;
+        this.stolenPaintings++;
         for(int i = 0; i < 2;i++){
             for(int z = 0; z <3; z++){
-                System.out.print("-> "+grupos[i][z]);
+                System.out.print("-> "+ parties[i][z]);
             }
             System.out.println();
         }
         System.out.println("-------------------------------------------------");
         System.out.println("Grupo: "+grupo);
         System.out.println("Pos: "+pos);
-        this.grupos[grupo][pos] = -1;
-        if (--this.nrElemGrupo[grupo] == 0) {
-            this.salaAssalto[sala] = -1;
+        this.parties[grupo][pos] = -1;
+        if (--this.number_of_group_elements[grupo] == 0) {
+            this.assaultRooms[sala] = -1;
 
 
             AssaultPartyMessage inMessage, outMessage;
-            while(!grupoAssaulto.open()){
+            while(!assaultParty.open()){
                 try{
                     Thread.sleep((long)(1000));
                 }
                 catch (InterruptedException e){
                 }
             }
-            outMessage = new AssaultPartyMessage(AssaultPartyMessage.DESFAZERGRUPO, grupo);
-            grupoAssaulto.writeObject(outMessage);
-            inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
-            grupoAssaulto.close();
+            outMessage = new AssaultPartyMessage(AssaultPartyMessage.DESTROYGRPOUP, grupo);
+            assaultParty.writeObject(outMessage);
+            inMessage = (AssaultPartyMessage) assaultParty.readObject();
+            assaultParty.close();
 
 
             this.grupoOcup[grupo] = false;
-            if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
-                this.estadoChefe = DECIDING_WHAT_TO_DO;
-                setMasterThiefState(this.estadoChefe);
+            if (this.masterThiefState == WAITING_FOR_GROUP_ARRIVAL) {
+                this.masterThiefState = DECIDING_WHAT_TO_DO;
+                setMasterThiefState(this.masterThiefState);
             }
             notifyAll();
         }
@@ -415,6 +428,11 @@ public class CollectionSite {
 
     }
 
+    /**
+     * Function that reset's info about Assault Party 1
+     * @param pos_grupo
+     * @param id
+     */
     private void setAP1_reset(int pos_grupo, int id) {
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -431,6 +449,11 @@ public class CollectionSite {
         general.close();
     }
 
+    /**
+     * Function that reset's info about Assault Party 2
+     * @param pos_grupo
+     * @param id
+     */
     private void setAP2_reset(int pos_grupo, int id) {
         GeneralRepositoryMessage inMessage, outMessage;
 
@@ -454,32 +477,32 @@ public class CollectionSite {
      * @param grupo group id
      * @param pos position in the group
      */
-    public synchronized void indicarSalaVazia(int sala, int grupo, int pos){
+    public synchronized void flagEmptyRoom(int sala, int grupo, int pos){
 
 
-        this.salaVazia[sala] = true;
-        this.grupos[grupo][pos] = -1;
-        if (--this.nrElemGrupo[grupo] == 0) {
-            this.salaAssalto[sala] = -1;
+        this.emptyRoom[sala] = true;
+        this.parties[grupo][pos] = -1;
+        if (--this.number_of_group_elements[grupo] == 0) {
+            this.assaultRooms[sala] = -1;
 
             AssaultPartyMessage inMessage, outMessage;
-            while(!grupoAssaulto.open()){
+            while(!assaultParty.open()){
                 try{
                     Thread.sleep((long)(1000));
                 }
                 catch (InterruptedException e){
                 }
             }
-            outMessage = new AssaultPartyMessage(AssaultPartyMessage.DESFAZERGRUPO, grupo);
-            grupoAssaulto.writeObject(outMessage);
-            inMessage = (AssaultPartyMessage) grupoAssaulto.readObject();
-            grupoAssaulto.close();
+            outMessage = new AssaultPartyMessage(AssaultPartyMessage.DESTROYGRPOUP, grupo);
+            assaultParty.writeObject(outMessage);
+            inMessage = (AssaultPartyMessage) assaultParty.readObject();
+            assaultParty.close();
 
 
             this.grupoOcup[grupo] = false;
-            if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
-                this.estadoChefe = DECIDING_WHAT_TO_DO;
-                setMasterThiefState(this.estadoChefe);
+            if (this.masterThiefState == WAITING_FOR_GROUP_ARRIVAL) {
+                this.masterThiefState = DECIDING_WHAT_TO_DO;
+                setMasterThiefState(this.masterThiefState);
             }
             notifyAll();
         }
@@ -493,10 +516,10 @@ public class CollectionSite {
      * @param grupo group id
      * @return position in the group
      */
-    public int getPosGrupo(int id, int grupo) {
+    public int getGroupPosition(int id, int grupo) {
 
         for (int i = 0; i < NUM_GROUP; i++) {
-            if (grupos[grupo][i] == id) {
+            if (parties[grupo][i] == id) {
                 return i;
             }
         }
@@ -507,9 +530,9 @@ public class CollectionSite {
      * Verifies if there are paitings in the museum
      * @return true if empty
      */
-    public boolean checkEmptyMuseu() {
-        for (int i = 0; i < salaVazia.length; i++) {
-            if (!salaVazia[i]) {
+    public boolean checkEmptyMuseum() {
+        for (int i = 0; i < emptyRoom.length; i++) {
+            if (!emptyRoom[i]) {
                 return false;
             }
         }
@@ -520,8 +543,8 @@ public class CollectionSite {
      * Show the results of the assault
      */
     public void sumUpResults() {
-        this.estadoChefe = PRESENTING_THE_REPORT;
-        setMasterThiefState(this.estadoChefe);
+        this.masterThiefState = PRESENTING_THE_REPORT;
+        setMasterThiefState(this.masterThiefState);
     }
 
     /**
@@ -530,9 +553,9 @@ public class CollectionSite {
      * @return Number of stollen paitings
      */
 
-    public int getQuadrosRoubados() {
+    public int getStolenPaintings() {
 
-        return this.quadrosRoubados;
+        return this.stolenPaintings;
     }
 
     /**
@@ -540,10 +563,10 @@ public class CollectionSite {
      *
      * @return true if there are rooms with paitings
      */
-    public boolean checkSalasLivres() {
+    public boolean checkEmptyRooms() {
 
         for (int i = 0; i < NUM_ROOMS; i++) {
-            if (!salaVazia[i] && salaAssalto[i] == -1) {
+            if (!emptyRoom[i] && assaultRooms[i] == -1) {
                 //salasLivres = true;
                 return true;
             }
@@ -558,13 +581,27 @@ public class CollectionSite {
      * @param grupoID group id
      * @return room id
      */
-    public int getSalaAssalto(int grupoID) {
+    public int getAssaultingRoom(int grupoID) {
         for (int i = 0; i < NUM_ROOMS; i++) {
-            if (this.salaAssalto[i] == grupoID) {
+            if (this.assaultRooms[i] == grupoID) {
                 return i;
             }
         }
         return -1;
     }
 
+    public void end() {
+        MuseumMessage inMessage, outMessage;
+        while(!museum.open()){
+            try{
+                Thread.sleep((long)(1000));
+            }
+            catch (InterruptedException e){
+            }
+        }
+        outMessage = new MuseumMessage(MuseumMessage.END);
+        museum.writeObject(outMessage);
+        inMessage = (MuseumMessage) museum.readObject();
+        museum.close();
+    }
 }

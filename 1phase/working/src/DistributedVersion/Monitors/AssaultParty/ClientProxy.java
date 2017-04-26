@@ -27,7 +27,7 @@ public class ClientProxy extends Thread {
      *
      * @serialField grupoInter
      */
-    private GrupoAssaltoInterface grupoInter;
+    private AssaultPartyInterface grupoInter;
 
     /**
      * Instanciação do interface ao Grupo Assalto.
@@ -35,7 +35,7 @@ public class ClientProxy extends Thread {
      * @param sconi canal de comunicação
      * @param grupoInter interface ao grupo Assalto
      */
-    public ClientProxy(ServerCom sconi, GrupoAssaltoInterface grupoInter) {
+    public ClientProxy(ServerCom sconi, AssaultPartyInterface grupoInter) {
         super("Proxy_" + getProxyId());
 
         this.sconi = sconi;

@@ -15,9 +15,9 @@ public class GeneralRepositoryMessage implements Serializable {
 
     public static final int ENDLOG = 2;
 
-    public static final int SETDISTANCIASALA = 3;
+    public static final int SETROOMDISTANCE = 3;
 
-    public static final int SETNRQUADROSALA = 4;
+    public static final int SETNUMBEROFPAINTINGS = 4;
 
     public static final int SETMASTERTHIEFSTATE = 5;
 

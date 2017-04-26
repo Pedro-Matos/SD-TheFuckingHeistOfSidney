@@ -30,7 +30,7 @@ public class CollectionSiteMessage implements Serializable {
     /**
      * Mensagem que indica grupo cheio
      */
-    public static final int GRUPOCHEIO = 4;
+    public static final int ISGROUPDFULL = 4;
     /**
      * Resposta
      */
@@ -95,7 +95,7 @@ public class CollectionSiteMessage implements Serializable {
     /**
      * Mensagem que indica a sala vazia
      */
-    public static final int INDICARSALAVAZIA = 22;
+    public static final int FLAGEMPTYROOM = 22;
     /**
      * Resposta
      */
@@ -104,7 +104,7 @@ public class CollectionSiteMessage implements Serializable {
     /**
      * Mensagem que retorna a posição do grupo
      */
-    public static final int GETPOSGRUPO = 24;
+    public static final int GETGROUPPOSITION = 24;
     /**
      * Resposta
      */
@@ -149,13 +149,13 @@ public class CollectionSiteMessage implements Serializable {
     /**
      * Mensagem que retorna a sala de assalto de um grupo
      */
-    public static final int GETSALAASSALTO = 36;
+    public static final int GETASSAULTINGROOM = 36;
     /**
      * Resposta
      */
     public static final int RESPGETSALAASSALTO = 37;
 
-    public static final int TERMINAR = 99;
+    public static final int END = 99;
 
 
 
