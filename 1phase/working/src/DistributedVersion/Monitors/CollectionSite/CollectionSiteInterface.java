@@ -39,55 +39,55 @@ public class CollectionSiteInterface {
                 break;
             case CollectionSiteMessage.JOINGROUP:
                 if (inMessage.getArg1() < 0) {
-                    throw new CollectionSiteMessageException(" Id Thief inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Id Thief invalid!", inMessage);
                 } else if (inMessage.getArg2() < 0) {
-                    throw new CollectionSiteMessageException(" Id grupo inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Id grupo invalid!", inMessage);
                 }
                 break;
             case CollectionSiteMessage.PREPAREASSAULTPARTY:
                 break;
             case CollectionSiteMessage.HANDACANVAS:
                 if (inMessage.getArg1() < 0) {
-                    throw new CollectionSiteMessageException(" Id Thief inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Id Thief invalid!", inMessage);
                 } else if (inMessage.getArg2() < 0) {
-                    throw new CollectionSiteMessageException(" Sala assalto inválida!", inMessage);
+                    throw new CollectionSiteMessageException(" Sala assalto invalid!", inMessage);
                 } else if (inMessage.getArg3() < 0) {
-                    throw new CollectionSiteMessageException(" Id grupo inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Id grupo invalid!", inMessage);
                 } else if (inMessage.getArg4() < 0) {
-                    throw new CollectionSiteMessageException(" Id Pos Grupo inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Id Pos Grupo invalid!", inMessage);
                 }
                 break;
             case CollectionSiteMessage.GETMASTERTHIEFSTATE:
                 break;
             case CollectionSiteMessage.GETNRELEMENTSGROUP:
                 if (inMessage.getArg1() < 0) {
-                    throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Nr elements invalid!", inMessage);
                 }
                 break;
             case CollectionSiteMessage.GETGROUPPOSITION:
                 if (inMessage.getArg1() < 0) {
-                    throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Group Position invalid!", inMessage);
                 } else if (inMessage.getArg2() < 0) {
-                    throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Group Position invalid!", inMessage);
                 }
                 break;
             case CollectionSiteMessage.GETSTOLENPAINTINGS:
                 break;
             case CollectionSiteMessage.GETASSAULTINGROOM:
                 if (inMessage.getArg1() < 0) {
-                    throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Assault room invalid!", inMessage);
                 }
                 break;
             case CollectionSiteMessage.ISGROUPDFULL:
                 if (inMessage.getArg1() < 0) {
-                    throw new CollectionSiteMessageException(" inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Group ID invalid!", inMessage);
                 }
                 break;
             case CollectionSiteMessage.FLAGEMPTYROOM:
                 if (inMessage.getArg1() < 0) {
-                    throw new CollectionSiteMessageException(" Sala inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Room invalid!", inMessage);
                 } else if (inMessage.getArg3() < 0) {
-                    throw new CollectionSiteMessageException(" Posicao inválido!", inMessage);
+                    throw new CollectionSiteMessageException(" Position invalid!", inMessage);
                 }
                 break;
             case CollectionSiteMessage.STARTOPERATIONS:
@@ -180,7 +180,7 @@ public class CollectionSiteInterface {
                 collectionSite.end();
                 break;
             default:
-                throw new CollectionSiteMessageException("Tipo inválido!", inMessage);
+                throw new CollectionSiteMessageException("Type invalid!", inMessage);
         }
 
         return outMessage;

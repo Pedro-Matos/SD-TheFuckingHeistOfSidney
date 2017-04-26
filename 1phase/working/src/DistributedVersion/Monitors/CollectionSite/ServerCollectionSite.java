@@ -19,24 +19,24 @@ public class ServerCollectionSite {
             ServerCom scon, sconi;
             ClientProxy cliProxy;
 
-            GenericIO.writeString("\nNome do sistema computacional onde está o servidor Museu? ");
+            GenericIO.writeString("\nWhich machine is Museum on? ");
             String museu = GenericIO.readlnString();
 
-            GenericIO.writeString("\nNome do sistema computacional onde está o servidor ConcentrationSite? ");
+            GenericIO.writeString("\nWhich machine is ConcentrationSite on? ");
             String concentrationSite = GenericIO.readlnString();
 
-            GenericIO.writeString("\nNome do sistema computacional onde está o servidor Grupo de Asalto? ");
+            GenericIO.writeString("\nWhich machine is AssaultParty on? ");
             String assaultGroup = GenericIO.readlnString();
 
-            GenericIO.writeString("\nNome do sistema computacional onde está o servidor General Repository? ");
+            GenericIO.writeString("\nWhich machine is General Repository on? ");
             String generalRepository = GenericIO.readlnString();
 
             scon = new ServerCom(portCollectionSite);
             scon.start();
             escritorio = new CollectionSite(museu,concentrationSite, assaultGroup, generalRepository);
             escritorioInterface = new CollectionSiteInterface(escritorio);
-            GenericIO.writelnString("O serviço escritorio foi estabelecido!");
-            GenericIO.writelnString("O servidor esta em escuta.");
+            GenericIO.writelnString("Service CollectionSite has been established!");
+            GenericIO.writelnString("Server listening.");
 
 
         /*
@@ -47,8 +47,8 @@ public class ServerCollectionSite {
 
             while (keepAlive) {
                 try{
-                    sconi = scon.accept();                            // entrada em processo de escuta
-                    cliProxy = new ClientProxy(sconi, escritorioInterface);  // lançamento do agente prestador do serviço
+                    sconi = scon.accept();
+                    cliProxy = new ClientProxy(sconi, escritorioInterface);
                     cliProxy.start();
                 }catch(SocketTimeoutException e){
                     if(!escritorioInterface.isAlive()){
@@ -58,7 +58,7 @@ public class ServerCollectionSite {
 
             }
 
-            GenericIO.writelnString("O serviço CollectionSite foi terminado!");
+            GenericIO.writelnString("CollectionSite has been terminated!");
 
         }
 }

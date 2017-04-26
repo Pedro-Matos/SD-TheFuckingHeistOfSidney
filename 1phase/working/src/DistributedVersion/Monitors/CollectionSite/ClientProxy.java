@@ -11,29 +11,29 @@ import genclass.GenericIO;
 public class ClientProxy extends Thread {
 
     /**
-     * Contador de threads lançados
+     *
+     * Thread Counter
      *
      * @serialField nProxy
      */
     private static int nProxy;
     /**
-     * Canal de comunicação
-     *
+     * Comunication channel
      * @serialField sconi
      */
     private ServerCom sconi;
     /**
-     * Interface à barbearia
+     * Interface to collection site
      *
-     * @serialField bShopInter
+     * @serialField escriInter
      */
     private CollectionSiteInterface escriInter;
 
     /**
-     * Instanciação do interface à barbearia.
+     * Instantiation of Interface to collection site
      *
-     * @param sconi canal de comunicação
-     * @param escriInter interface ao escritorio
+     * @param sconi communication channel
+     * @param escriInter interface to collection site
      */
     public ClientProxy(ServerCom sconi, CollectionSiteInterface escriInter) {
         super("Proxy_" + getProxyId());
@@ -43,39 +43,39 @@ public class ClientProxy extends Thread {
     }
 
     /**
-     * Ciclo de vida do thread agente prestador de serviço.
+     * Life Cycle
      */
     @Override
     public void run() {
-        CollectionSiteMessage inMessage = null, // mensagem de entrada
-                outMessage = null;                      // mensagem de saída
+        CollectionSiteMessage inMessage = null,
+                outMessage = null;
 
-        inMessage = (CollectionSiteMessage) sconi.readObject();                     // ler pedido do cliente
+        inMessage = (CollectionSiteMessage) sconi.readObject();
         try {
-            outMessage = escriInter.processAndReply(inMessage);         // processá-lo
+            outMessage = escriInter.processAndReply(inMessage);
         } catch (CollectionSiteMessageException e) {
             GenericIO.writelnString("Thread " + getName() + ": " + e.getMessage() + "!");
             GenericIO.writelnString(e.getMessageVal().toString());
             System.exit(1);
         }
-        sconi.writeObject(outMessage);                                // enviar resposta ao cliente
-        sconi.close();                                                // fechar canal de comunicação
+        sconi.writeObject(outMessage);
+        sconi.close();
     }
 
     /**
-     * Geração do identificador da instanciação.
      *
-     * @return identificador da instanciação
+     * Generation of Id of instantiation
+     *
+     * @return Id of instantiation
      */
     private static int getProxyId() {
-        Class<DistributedVersion.Monitors.CollectionSite.ClientProxy> cl = null;             // representação do tipo de dados ClientProxy na máquina
-        //   virtual de Java
-        int proxyId;                                         // identificador da instanciação
+        Class<DistributedVersion.Monitors.CollectionSite.ClientProxy> cl = null;
+        int proxyId;
 
         try {
             cl = (Class<DistributedVersion.Monitors.CollectionSite.ClientProxy>) Class.forName("DistributedVersion.Monitors.CollectionSite.ClientProxy");
         } catch (ClassNotFoundException e) {
-            GenericIO.writelnString("O tipo de dados ClientProxy não foi encontrado!");
+            GenericIO.writelnString("Type of data hasn't been found.");
             e.printStackTrace();
             System.exit(1);
         }

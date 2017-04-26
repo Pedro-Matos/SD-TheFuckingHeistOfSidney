@@ -5,53 +5,51 @@ import java.io.*;
 import java.net.*;
 
 /**
- *   Este tipo de dados implementa o canal de comunicação, lado do cliente, para uma comunicação baseada em passagem de
- *   mensagens sobre sockets usando o protocolo TCP.
- *   A transferência de dados é baseada em objectos, um objecto de cada vez.
+ *   This type of data implements communication channel based on sockets over TCP.
  */
 
 public class ClientCom
 {
     /**
-     *  Socket de comunicação
+     *  Communication socket
      *    @serialField commSocket
      */
 
     private Socket commSocket = null;
 
     /**
-     *  Nome do sistema computacional onde está localizado o servidor
+     *      Machine of the server
      *    @serialField serverHostName
      */
 
     private String serverHostName = null;
 
     /**
-     *  Número do port de escuta do servidor
+     *  Port listening
      *    @serialField serverPortNumb
      */
 
     private int serverPortNumb;
 
     /**
-     *  Stream de entrada do canal de comunicação
+     *  Entry Stream
      *    @serialField in
      */
 
     private ObjectInputStream in = null;
 
     /**
-     *  Stream de saída do canal de comunicação
+     *  Exit Stream
      *    @serialField out
      */
 
     private ObjectOutputStream out = null;
 
     /**
-     *  Instanciação de um canal de comunicação.
+     *  Instantiation of communication channel
      *
-     *    @param hostName nome do sistema computacional onde está localizado o servidor
-     *    @param portNumb número do port de escuta do servidor
+     *    @param hostName name where the server is located
+     *    @param portNumb port number
      */
 
     public ClientCom (String hostName, int portNumb)
@@ -61,9 +59,7 @@ public class ClientCom
     }
 
     /**
-     *  Abertura do canal de comunicação.
-     *  Instanciação de um socket de comunicação e sua associação ao endereço do servidor.
-     *  Abertura dos streams de entrada e de saída do socket.
+     *  Opening socket communication
      *
      *    @return <li>true, se o canal de comunicação foi aberto
      *            <li>false, em caso contrário
