@@ -383,15 +383,6 @@ public class CollectionSite {
 
 
         this.stolenPaintings++;
-        for(int i = 0; i < 2;i++){
-            for(int z = 0; z <3; z++){
-                System.out.print("-> "+ parties[i][z]);
-            }
-            System.out.println();
-        }
-        System.out.println("-------------------------------------------------");
-        System.out.println("Grupo: "+grupo);
-        System.out.println("Pos: "+pos);
         this.parties[grupo][pos] = -1;
         if (--this.number_of_group_elements[grupo] == 0) {
             this.assaultRooms[sala] = -1;

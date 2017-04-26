@@ -41,11 +41,7 @@ public class Museum {
             rooms[i][1] = r2.nextInt((MAX_DIST+1)-MIN_DIST) + MIN_DIST;
             setRoomDistance(i, rooms[i][1]);
         }
-
-        for(int i = 0; i < rooms.length; i++){
-            System.out.println(rooms[i][1]);
-        }
-
+        
     }
 
 

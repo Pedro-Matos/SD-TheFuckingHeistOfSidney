@@ -128,7 +128,6 @@ public class GeneralRepositoryInterface {
                 break;
 
             case GeneralRepositoryMessage.END:
-                System.out.println("b8");
                 this.isALive = false;
                 break;
         }

@@ -158,7 +158,6 @@ public class AssaultPartyInterface {
                 break;
             case AssaultPartyMessage.STEALPAINTING:
                 boolean quadro = assaultParty[inMessage.getArg1()].stealPainting();
-                System.out.println(quadro);
                 outMessage = new AssaultPartyMessage(AssaultPartyMessage.RESPROUBARQUADRO, quadro);
                 break;
             case AssaultPartyMessage.WAITMYTURN:
@@ -185,7 +184,6 @@ public class AssaultPartyInterface {
      */
     public int createAssaultParty(int id, int nrSala) {
         if (assaultParty[id] == null) {
-            System.out.println("Id: " + id + "; + NrSala: " + nrSala);
             assaultParty[id] = new AssaultParty(museum, nrSala, id, repo);
             return id;
         } else {
