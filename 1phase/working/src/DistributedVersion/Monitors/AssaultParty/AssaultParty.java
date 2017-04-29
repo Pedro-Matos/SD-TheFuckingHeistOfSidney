@@ -37,7 +37,7 @@ public class AssaultParty {
      */
     private int atARoom;
     /**
-     * Number of thiefs in the ConcentrationSite
+     * Number of thiefs in the CollectionSite
      */
     private int atConcentrationSite;
     /**
@@ -49,7 +49,7 @@ public class AssaultParty {
      */
     private boolean[] at_a_room = new boolean[NUM_GROUP];
     /**
-     * Thiefs in the ConcentrationSite
+     * Thiefs in the CollectionSite
      */
     private boolean[] im_back = new boolean[NUM_GROUP];
     /**
@@ -95,6 +95,7 @@ public class AssaultParty {
     /**
      * Enter the assault party
      * @param ladraoID thief id
+     * @param pos_grupo group position
      */
     public synchronized void joinParty(int ladraoID, int pos_grupo) {
 

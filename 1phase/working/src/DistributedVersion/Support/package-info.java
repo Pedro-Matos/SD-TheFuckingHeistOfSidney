@@ -1,5 +1,5 @@
 /**
  * Contains the structure associated to the FIFO.
- * It's used in the thief's ordenation at the ConcentrationSite.
+ * It's used in the thief's ordenation at the CollectionSite.
  */
-package ConcorrentVersion.Apoio;
+package DistributedVersion.Support;

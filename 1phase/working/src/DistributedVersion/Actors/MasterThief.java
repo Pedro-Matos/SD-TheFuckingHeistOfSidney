@@ -44,7 +44,7 @@ public class MasterThief extends Thread {
      * @param name Masther Thief's name
      * @param generalRepository General Repository/log
      * @param collectionSite Concentration Site
-     * @param concentrationSite ConcentrationSite
+     * @param concentrationSite CollectionSite
      */
     public MasterThief(String name, String generalRepository, String collectionSite, String concentrationSite) {
 

@@ -29,7 +29,7 @@ public class ServerCollectionSite {
             scon.start();
             escritorio = new CollectionSite(museu,concentrationSite, assaultGroup, generalRepository);
             escritorioInterface = new CollectionSiteInterface(escritorio);
-            GenericIO.writelnString("Service CollectionSite has been established!");
+            GenericIO.writelnString("Service ConcentrationSite has been established!");
             GenericIO.writelnString("Server listening.");
 
 
@@ -52,7 +52,7 @@ public class ServerCollectionSite {
 
             }
 
-            GenericIO.writelnString("CollectionSite has been terminated!");
+            GenericIO.writelnString("ConcentrationSite has been terminated!");
 
         }
 }

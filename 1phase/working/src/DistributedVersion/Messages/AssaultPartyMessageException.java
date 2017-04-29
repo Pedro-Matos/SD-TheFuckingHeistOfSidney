@@ -6,17 +6,15 @@ package DistributedVersion.Messages;
 public class AssaultPartyMessageException extends Exception {
 
     /**
-     * Mensagem que originou a excepção
-     *
-     * @serialField msg
+     * Message with the exception
      */
     private AssaultPartyMessage msg;
 
     /**
-     * Instanciação de uma mensagem.
+     * Instantiation of message
      *
-     * @param errorMessage texto sinalizando a condição de erro
-     * @param msg mensagem que está na origem da excepção
+     * @param errorMessage Text with the error message
+     * @param msg Message with the exception
      */
     public AssaultPartyMessageException(String errorMessage, AssaultPartyMessage msg) {
         super(errorMessage);
@@ -24,9 +22,9 @@ public class AssaultPartyMessageException extends Exception {
     }
 
     /**
-     * Obtenção da mensagem que originou a excepção.
+     * Obtaining the message
      *
-     * @return mensagem
+     * @return message with error
      */
     public AssaultPartyMessage getMessageVal() {
         return (msg);

@@ -1,5 +1,5 @@
 /**
- * Package with the ConcentrationSite.
+ * Package with the CollectionSite.
  * Uses the FIFO.
  */
-package ConcorrentVersion.Regioes.base;
+package DistributedVersion.Monitors.ConcentrationSite;

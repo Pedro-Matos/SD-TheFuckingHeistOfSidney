@@ -12,11 +12,6 @@ import static DistributedVersion.ComInfo.ComPorts.*;
  */
 public class ServerConcentrationSite {
 
-    /**
-     * Programa Principal servidor ConcentrationSite(que representa o terreiro)
-     *
-     * @param args
-     */
     public static void main(String[] args) {
 
         ConcentrationSite base;
@@ -31,8 +26,8 @@ public class ServerConcentrationSite {
         scon.start();
         base = new ConcentrationSite(generalRepository);
         baseInter = new ConcentrationSiteInterface(base);
-        GenericIO.writelnString("O serviço ConcentrationSite foi estabelecido!");
-        GenericIO.writelnString("O servidor esta em escuta.");
+        GenericIO.writelnString("Service CollectionSite has been established");
+        GenericIO.writelnString("Server listening.");
 
 
         /*
@@ -43,8 +38,8 @@ public class ServerConcentrationSite {
 
         while (keepAlive) {
             try{
-                sconi = scon.accept();                            // entrada em processo de escuta
-                cliProxy = new ClientProxy(sconi, baseInter);   // lançamento do agente prestador do serviço
+                sconi = scon.accept();
+                cliProxy = new ClientProxy(sconi, baseInter);
                 cliProxy.start();
             }catch(SocketTimeoutException e){
                 if(!baseInter.isAlive()){
@@ -54,7 +49,7 @@ public class ServerConcentrationSite {
 
         }
 
-        GenericIO.writelnString("O serviço Concentration Site foi terminado!");
+        GenericIO.writelnString("Service CollectionSite has been terminated!");
     }
 }
 

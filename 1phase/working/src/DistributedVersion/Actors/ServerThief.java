@@ -28,7 +28,7 @@ public class ServerThief {
             try {
                 thief[i].join();
             } catch (InterruptedException ex) {
-                System.out.println("O Ladrão " + i + " terminou o seu trabalho!");
+                System.out.println("Thief " + i + " finished it's job!");
             }
         }
     }

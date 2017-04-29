@@ -13,7 +13,7 @@ import DistributedVersion.Messages.GeneralRepositoryMessage;
 public class ConcentrationSite {
 
     /**
-     * FIFO used when the Thiefs arrive to the ConcentrationSite.
+     * FIFO used when the Thiefs arrive to the CollectionSite.
      */
     private MemFIFO fifo;
     /**
@@ -25,7 +25,7 @@ public class ConcentrationSite {
      */
     private boolean[] busyThief = new boolean[NUM_THIEVES];
     /**
-     * Number of thiefs in the ConcentrationSite
+     * Number of thiefs in the CollectionSite
      */
     private int number_of_thieves;
     /**
@@ -109,7 +109,7 @@ public class ConcentrationSite {
     }
 
     /**
-     * Get for the number of thiefs in the ConcentrationSite
+     * Get for the number of thiefs in the CollectionSite
      * @return number of thiefs
      */
     public synchronized int getNumber_of_thieves() {
@@ -275,7 +275,7 @@ public class ConcentrationSite {
 
 
     /**
-     * Thief arrives at the ConcentrationSite
+     * Thief arrives at the CollectionSite
      * @param ladraoID thief id
      */
     public synchronized void thiefArrived(int ladraoID) {

@@ -27,8 +27,8 @@ public class ServerMuseum {
         scon.start();
         museu = new Museum(generalRepository);
         museuInter = new MuseumInterface(museu);
-        GenericIO.writelnString("O serviço Museum foi estabelecido!");
-        GenericIO.writelnString("O servidor esta em escuta.");
+        GenericIO.writelnString("Service Museum has been established!");
+        GenericIO.writelnString("Server listening.");
 
 
         /*
@@ -39,8 +39,8 @@ public class ServerMuseum {
 
         while (keepAlive) {
             try{
-                sconi = scon.accept();                            // entrada em processo de escuta
-                cliProxy = new ClientProxy(sconi, museuInter);    // lançamento do agente prestador do serviço
+                sconi = scon.accept();
+                cliProxy = new ClientProxy(sconi, museuInter);
                 cliProxy.start();
             }catch(SocketTimeoutException e){
                 if(!museuInter.isAlive()){
@@ -50,6 +50,6 @@ public class ServerMuseum {
 
         }
 
-        GenericIO.writelnString("O serviço Museum foi terminado!");
+        GenericIO.writelnString("Service Museum has been terminated!");
     }
 }

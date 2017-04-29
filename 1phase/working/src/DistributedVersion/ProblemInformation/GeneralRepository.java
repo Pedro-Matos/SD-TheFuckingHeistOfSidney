@@ -12,7 +12,7 @@ import genclass.TextFile;
 public class GeneralRepository {
 
     /**
-     * Array with each room's distances to the ConcentrationSite
+     * Array with each room's distances to the CollectionSite
      */
     private int[] distanciaSala;
     /**
@@ -256,7 +256,7 @@ public class GeneralRepository {
     /**
      * Set for the distance
      * @param nrSala id of room
-     * @param distancia distance from the room to the ConcentrationSite
+     * @param distancia distance from the room to the CollectionSite
      */
     public synchronized void setDistanciaSala(int nrSala, int distancia) {
         this.distanciaSala[nrSala] = distancia;
@@ -348,6 +348,7 @@ public class GeneralRepository {
      * Set for the presence of paiting
      * @param pos_grupo thief position in group
      * @param cv paiting
+     * @param room room
      */
     public synchronized void setAP1_canvas(int pos_grupo, boolean cv, int room){
         if (cv){
@@ -406,6 +407,7 @@ public class GeneralRepository {
      * Set paiting
      * @param pos_grupo thief position in group
      * @param cv paiting
+     * @param room room
      */
     public synchronized void setAP2_canvas(int pos_grupo, boolean cv, int room){
         if (cv){

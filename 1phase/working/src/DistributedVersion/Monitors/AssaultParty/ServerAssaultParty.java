@@ -12,16 +12,8 @@ import static DistributedVersion.ComInfo.ComPorts.*;
  */
 public class ServerAssaultParty {
 
-    /**
-     * Programa Principal servidor Grupo de Assalto
-     *
-     * @param args
-     */
     public static void main(String[] args) {
 
-        /*
-         * Obtenção dos parâmetros do problema
-         */
 
         String museu = machine_museum;
 
@@ -39,20 +31,18 @@ public class ServerAssaultParty {
         grupo[0] = null;
         grupo[1] = null;
         grupoAssaltoInter = new AssaultPartyInterface(grupo, museu, generalRepository);
-        GenericIO.writelnString("O serviço grupo de assalto foi estabelecido!");
-        GenericIO.writelnString("O servidor esta em escuta.");
+        GenericIO.writelnString("Assault party server has been established!");
+        GenericIO.writelnString("Server is listening!");
 
 
-        /*
-         * processamento de pedidos
-         */
+
 
         boolean keepAlive = true;
 
         while (keepAlive) {
             try{
-                sconi = scon.accept();                            // entrada em processo de escuta
-                cliProxy = new ClientProxy(sconi, grupoAssaltoInter);    // lançamento do agente prestador do serviço
+                sconi = scon.accept();
+                cliProxy = new ClientProxy(sconi, grupoAssaltoInter);
                 cliProxy.start();
             }catch(SocketTimeoutException e){
                 if(!grupoAssaltoInter.isAlive()){
@@ -62,7 +52,7 @@ public class ServerAssaultParty {
 
         }
 
-        GenericIO.writelnString("O serviço AssaultParty foi terminado!");
+        GenericIO.writelnString("Assault Party server has been terminated");
     }
 }
 

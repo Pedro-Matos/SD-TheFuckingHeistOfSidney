@@ -9,4 +9,4 @@
  *
  * 4 - Monitors: Divided in Concentration Site; Collection Site; Assault Partys and Museum
  */
-package ConcorrentVersion;
+package DistributedVersion;

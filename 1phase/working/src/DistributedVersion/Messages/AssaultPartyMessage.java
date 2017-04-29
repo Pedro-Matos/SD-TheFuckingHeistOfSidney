@@ -8,149 +8,149 @@ import java.io.Serializable;
 public class AssaultPartyMessage implements Serializable {
 
     /**
-     * Chave de serialização
+     * Serialization key
      *
-     * @serialField serialVersionUID
      */
     private static final long serialVersionUID = 1003L;
     /**
-     * Entrar no grupo de assalto
+     * Join assault party
      *
-     * @serialField JOINPARTY
      */
     public static final int JOINPARTY = 1;
     /**
-     * Pedir distancia da sala do Museum
+     * Room distance
      *
-     * @serialField GETROOMDISTANCE
      */
     public static final int GETROOMDISTANCE = 2;
     /**
-     * Resposta ao pedido de distancia da sala
+     * Response to room distance
      *
-     * @serialField RESPGETDISTANCIASALA
      */
     public static final int RESPGETDISTANCIASALA = 3;
     /**
-     * Pedido de indice do ladrao no grupo
+     * Thief position in the group
      *
-     * @serialField GETINDICE
      */
     public static final int GETINDICE = 4;
     /**
-     * Resposta ao pedido de indice do ladrao no grupo
+     * Response to Thief position in the group
      *
-     * @serialField RESPGETINDICE
      */
     public static final int RESPGETINDICE = 5;
     /**
-     * Pedido da posiçao do ladrao
+     * Thief position
      *
-     * @serialField GETPOS
      */
     public static final int GETPOS = 10;
     /**
-     * Resposta ao pedido de posiçao do ladrao
+     * Response to Thief position
      *
-     * @serialField RESPGETPOS
      */
     public static final int RESPGETPOS = 11;
     /**
-     * Rastejar em direçao á sala do Museum
-     *
-     * @serialField CRAWLIN
+     * Crawling In
      */
     public static final int CRAWLIN = 12;
 
+    /**
+     * Response to Crawling in
+     */
     public static final int RESPCRAWLIN = 13;
 
     /**
-     * Rastejar em direção ao terreiro
+     * Crawling out
      *
-     * @serialField CRAWLOUT
      */
     public static final int CRAWLOUT = 14;
-
+    /**
+     * Response to Crawling Out
+     */
     public static final int RESPCRAWLOUT = 15;
 
     /**
-     * Roubar um quadro de uma sala do Museum
+     * Steal painting
      *
-     * @serialField STEALPAINTING
      */
     public static final int STEALPAINTING = 16;
     /**
-     * Resposta a roubar quadro
+     * Response to steal painting
      *
-     * @serialField RESPROUBARQUADRO
      */
     public static final int RESPROUBARQUADRO = 17;
     /**
-     * Formar um novo grupo de assalto
-     *
-     * @serialField PREPAREASSAULTPARTY
+     * Create new assault party
      */
     public static final int CREATEASSAULTPARTY = 18;
     /**
-     * Confirmaçao de novo grupo formado
-     *
-     * @serialField RESPPREPAREASSAULTPARTY
+     * Response to Create new assault party
      */
     public static final int RESPFORMARGRUPO = 19;
     /**
-     * Desfazer um grupo de assalto
-     *
-     * @serialField DESTROYGRPOUP
+     * Destroy assault party
      */
     public static final int DESTROYGRPOUP = 20;
     /**
-     * Verificar se o grupo está formado
-     *
-     * @serialField CHECKGRUPONULL
+     * Check if group is formed
      */
     public static final int CHECKGRUPONULL = 21;
     /**
-     * Resposta a verificar se o grupo está formado
-     *
-     * @serialField RESPCHECKGRUPONULL
+     * Response to Check if group is formed
      */
     public static final int RESPCHECKGRUPONULL = 22;
 
+    /**
+     * Waiting for turn
+     */
     public static final int WAITMYTURN = 23;
 
-    public static final int END = 99;
     /**
-     * Resposta de confirmação
-     *
-     * @serialField ACK
+     * END server
+     */
+    public static final int END = 99;
+
+    /**
+     * ACK field
      */
     public static final int ACK = 0;
-/*    private int msgType = -1;
-    private int idGrupo = -1;
-    private int info = -1;
-    private int agilidade = -1;
-    private boolean quadro = false;
-    private boolean grupoNull = false;
-    private int ThiefId = -1;
-    private int PosGrupo = -1;*/
-
+    /**
+     * msg type field
+     */
     private int msgType = -1;
+    /**
+     * argument 1 to be received on messages
+     */
     private int arg1 = -1;
+    /**
+     * argument 2 to be received on messages
+     */
     private int arg2 = -1;
+    /**
+     * argument 3 to be received on messages
+     */
     private int arg3 = -1;
+    /**
+     * argument 4 to be received on messages
+     */
     private int arg4 = -1;
+    /**
+     * argument boolean 1 to be received on messages
+     */
     private boolean arg_b1 = false;
 
 
-
+    /**
+     * Constructor with the message type
+     * @param msgType type of message received
+     */
     public AssaultPartyMessage(int msgType) {
         this.msgType = msgType;
     }
 
+
     /**
-     *Instanciação de uma mensagem (tipo 2)
-     * @param msgType tipo de mensagem
-     * @param arg1
+     * Constructor with the message type and first argument
+     * @param msgType type of message received
+     * @param arg1 first argument to be received
      */
     public AssaultPartyMessage(int msgType, int arg1) {
         this.msgType = msgType;
@@ -158,10 +158,10 @@ public class AssaultPartyMessage implements Serializable {
     }
 
     /**
-     *Instanciação de uma mensagem (tipo 3)
-     * @param msgType tipo de mensagem
-     * @param arg1 id do grupo
-     * @param arg2 id do ladrao
+     * Constructor with the message type, first argument and second argument
+     * @param msgType type of message received
+     * @param arg1 first argument to be received
+     * @param arg2 second argument to be received
      */
     public AssaultPartyMessage(int msgType, int arg1, int arg2) {
         this.msgType = msgType;
@@ -170,11 +170,11 @@ public class AssaultPartyMessage implements Serializable {
     }
 
     /**
-     *Instanciação de uma mensagem (tipo 4)
-     * @param msgType tipo de mensagem
-     * @param arg1 id do grupo
-     * @param arg2 id do ladrão
-     * @param arg3 agilidade do ladrao
+     * Constructor with the message type, first argument, second argument and third argument
+     * @param msgType type of message received
+     * @param arg1 first argument to be received
+     * @param arg2 second argument to be received
+     * @param arg3 third argument to be received
      */
     public AssaultPartyMessage(int msgType, int arg1, int arg2, int arg3) {
         this.msgType = msgType;
@@ -182,6 +182,16 @@ public class AssaultPartyMessage implements Serializable {
         this.arg2 = arg2;
         this.arg3 = arg3;
     }
+
+
+    /**
+     * Constructor with the message type, first argument, second argument, third argument and fourth argument
+     * @param msgType type of message received
+     * @param arg1 first argument to be received
+     * @param arg2 second argument to be received
+     * @param arg3 third argument to be received
+     * @param arg4 fourth argument to be received
+     */
     public AssaultPartyMessage(int msgType, int arg1, int arg2, int arg3, int arg4) {
         this.msgType = msgType;
         this.arg1 = arg1;
@@ -192,9 +202,9 @@ public class AssaultPartyMessage implements Serializable {
 
 
     /**
-     *Instanciação de uma mensagem (tipo 5)
-     * @param msgType tipo de mensagem
-     * @param info
+     * Constructor with the message type and first boolean argument
+     * @param msgType type of message received
+     * @param info boolean argument
      */
     public AssaultPartyMessage(int msgType, boolean info) {
         this.msgType = msgType;
@@ -213,30 +223,58 @@ public class AssaultPartyMessage implements Serializable {
         }
     }
 
+    /**
+     * getter to type of message received
+     * @return msg type
+     */
     public int getMsgType() {
         return msgType;
     }
 
+    /**
+     * getter to first argument of message received
+     * @return argument 1
+     */
     public int getArg1() {
         return arg1;
     }
 
+    /**
+     * getter to second argument of message received
+     * @return argument 2
+     */
     public int getArg2() {
         return arg2;
     }
 
+    /**
+     * getter to third argument of message received
+     * @return argument 3
+     */
     public int getArg3() {
         return arg3;
     }
 
+    /**
+     * getter to fourth argument of message received
+     * @return argument 4
+     */
     public int getArg4() {
         return arg4;
     }
 
+    /**
+     * getter to first boolean argument of message received
+     * @return argument boolean
+     */
     public boolean getArg_b1() {
         return arg_b1;
     }
 
+    /**
+     * To string with the contents
+     * @return string with the contents
+     */
     @Override
     public String toString() {
         return "AssaultPartyMessage{" +

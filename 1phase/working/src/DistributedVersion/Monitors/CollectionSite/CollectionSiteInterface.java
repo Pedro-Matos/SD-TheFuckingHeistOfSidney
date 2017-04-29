@@ -2,7 +2,6 @@ package DistributedVersion.Monitors.CollectionSite;
 
 import DistributedVersion.Messages.CollectionSiteMessage;
 import DistributedVersion.Messages.CollectionSiteMessageException;
-import DistributedVersion.Messages.ConcentrationSiteMessage;
 
 /**
  * Created by pmatos9 on 18/04/17.
@@ -121,7 +120,7 @@ public class CollectionSiteInterface {
                 break;
             case CollectionSiteMessage.CHECKEMPTYROOMS:
                 bResp = collectionSite.checkEmptyRooms();
-                outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPCHECKSALASVAZIAS, bResp);
+                outMessage = new CollectionSiteMessage(CollectionSiteMessage.RESPEMPTYROOMS, bResp);
                 break;
             case CollectionSiteMessage.TAKEAREST:
                 collectionSite.takeARest();

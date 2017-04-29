@@ -10,202 +10,224 @@ public class CollectionSiteMessage implements Serializable {
     private static final long serialVersionUID = 1001L;
 
     /**
-     * Mensagem que verifica os grupos
+     * Message to check groups
      */
     public static final int CHECKGROUPS = 0;
     /**
-     * Resposta
+     * Answer to check groups
      */
     public static final int RESPCHECKGRUPOS = 1;
 
     /**
-     * Mensagem que faz o ladrao entrar no grupo
+     * Message to make thief join group
      */
     public static final int JOINGROUP = 2;
     /**
-     * Resposta
+     * Answer to joining group
      */
     public static final int RESPENTRARGRUPO = 3;
 
     /**
-     * Mensagem que indica grupo cheio
+     * Message to check if group is full
      */
     public static final int ISGROUPDFULL = 4;
     /**
-     * Resposta
+     * Answer of full group
      */
     public static final int RESPGRUPOCHEIO = 5;
 
     /**
-     * Mensagem que indica o estado do chefe
+     * Message to get master thief state
      */
     public static final int GETMASTERTHIEFSTATE = 6;
     /**
-     * Resposta
+     * Answer with master thief state
      */
     public static final int RESPGETESTADOCHEFE = 7;
 
     /**
-     * Mensagem que inicia o Assalto
+     * Message to start assault
      */
     public static final int STARTOPERATIONS = 8;
     /**
-     * Resposta
+     * Answer of start assault
      */
     public static final int RESPSTARTOPERATIONS = 9;
 
     /**
-     * Mensagem que forma o grupo
+     * Message to prepare assault party
      */
     public static final int PREPAREASSAULTPARTY = 10;
     /**
-     * Resposta
+     * Answer of preparation
      */
     public static final int RESPPREPAREASSAULTPARTY = 11;
-
-
     /**
-     * mensagem que descansa o chefe
+     * Message to take a rest
      */
     public static final int TAKEAREST = 14;
     /**
-     * Resposta
+     * Answer of taking a rest
      */
     public static final int RESPTAKEAREST = 15;
 
     /**
-     * Mensagem que retorna o nr de elementos por grupo
+     * Message to get the number of elements in the group
      */
     public static final int GETNRELEMENTSGROUP = 16;
     /**
-     * Resposta
+     * Answer with the number of elements
      */
     public static final int RESPGETNRELEMENTOSGRUPO = 17;
-
-
     /**
-     * Mensagem que entrega o quadro
+     * Message to hand a canvas
      */
     public static final int HANDACANVAS = 20;
     /**
-     * Resposta
+     * Answer of handing a canvas
      */
     public static final int RESPHANDACANVAS = 21;
 
     /**
-     * Mensagem que indica a sala vazia
+     * Message of empty room
      */
     public static final int FLAGEMPTYROOM = 22;
     /**
-     * Resposta
+     * Answer with empty room
      */
     public static final int RESPINDICARSALAVAZIA = 23;
 
     /**
-     * Mensagem que retorna a posição do grupo
+     * Message with the position in the group
      */
     public static final int GETGROUPPOSITION = 24;
     /**
-     * Resposta
+     * Answer with the position
      */
     public static final int RESPGETPOSGRUPO = 25;
-
     /**
-     * Mensagem que verifica se o Museum está vazio
+     * Message to check if museum is empty
      */
     public static final int CHECKEMPTYMUSEUM = 26;
     /**
-     * Resposta
+     * Answer if museum is empty
      */
     public static final int RESPCHECKEMPTYMUSEU = 27;
 
     /**
-     * Mensagem que termina o assalto
+     * Message to terminate the assault and report the results
      */
     public static final int SUMUPRESULTS = 28;
     /**
-     * Resposta
+     * Answer with the results
      */
     public static final int RESPSUMUPRESULTS = 29;
 
     /**
-     * Mensagem que retorna o nr de quadros roubados
+     * Message with the number of stolen paintings
      */
     public static final int GETSTOLENPAINTINGS = 30;
     /**
-     * Resposta
+     * Answer with the paintings
      */
     public static final int RESPGETQUADROSROUBADOS = 31;
 
     /**
-     * Mensagem que verifica se existe salas vazias
+     * Message to check empty rooms
      */
     public static final int CHECKEMPTYROOMS = 32;
     /**
-     * Resposta
+     * Answer with empty rooms
      */
-    public static final int RESPCHECKSALASVAZIAS = 33;
+    public static final int RESPEMPTYROOMS = 33;
 
     /**
-     * Mensagem que retorna a sala de assalto de um grupo
+     * Message with assault room
      */
     public static final int GETASSAULTINGROOM = 36;
     /**
-     * Resposta
+     * Answer with assault room
      */
     public static final int RESPGETSALAASSALTO = 37;
-
+    /**
+     * Message to end server
+     */
     public static final int END = 99;
 
 
-
-    private int info = -1;
+    /**
+     * Boolean argument
+     */
     private boolean bInfo = false;
+    /**
+     * Message type
+     */
     private int msgType = -1;
-
-
+    /**
+     * First argument
+     */
     private int arg1 = -1;
+    /**
+     * Second argument
+     */
     private int arg2 = -1;
+    /**
+     * Third argument
+     */
     private int arg3 = -1;
+    /**
+     * Fourth argument
+     */
     private int arg4 = -1;
-
+    /**
+     * Get first argument
+     * @return argument 1
+     */
     public int getArg1() {
         return arg1;
     }
-
+    /**
+     * Get second argument
+     * @return argument 2
+     */
     public int getArg2() {
         return arg2;
     }
-
+    /**
+     * Get third argument
+     * @return argument 3
+     */
     public int getArg3() {
         return arg3;
     }
-
+    /**
+     * Get fourth argument
+     * @return argument 4
+     */
     public int getArg4() {
         return arg4;
     }
-
     /**
-     * Retorna informação da mensagem
-     * @return
+     * Get boolean
+     * @return boolea received
      */
-    public int getInfo(){
-        return this.info;
-    }
-
-    /**
-     * Retorna informação da mensagem booleana
-     * @return
-     */
-    public boolean bInfo(){
-        return this.bInfo;
+    public boolean getBool(){
+        return bInfo;
     }
 
 
     /**
-     * Mensagem tipo 2
-     * @param type
-     * @param arg1
+     * Message type
+     * @return msg type
+     */
+    public int getMsgType(){
+        return this.msgType;
+    }
+
+    /**
+     * Possible Message
+     * @param type message type
+     * @param arg1 first argument
      */
     public CollectionSiteMessage(int type, int arg1){
         this.msgType = type;
@@ -214,17 +236,17 @@ public class CollectionSiteMessage implements Serializable {
     }
 
     /**
-     * Mensagem Tipo 1
-     * @param type
+     * Possible Message
+     * @param type message type
      */
     public CollectionSiteMessage(int type){
         this.msgType = type;
     }
 
     /**
-     * Mensagem tipo 4
-     * @param type
-     * @param info
+     * Possible Message
+     * @param type message type
+     * @param info boolean message
      */
     public CollectionSiteMessage(int type, boolean info){
         this.msgType = type;
@@ -232,16 +254,24 @@ public class CollectionSiteMessage implements Serializable {
     }
 
     /**
-     * Mensagem tipo 5
-     * @param type
-     * @param arg1
-     * @param arg2
+     * Possible Message
+     * @param type message type
+     * @param arg1 argument 1
+     * @param arg2 argument 2
      */
     public CollectionSiteMessage(int type, int arg1, int arg2){
         this.msgType = type;
         this.arg1 = arg1;
         this.arg2 = arg2;
     }
+
+    /**
+     * Possible Message
+     * @param type message type
+     * @param arg1 argument 1
+     * @param arg2 argument 2
+     * @param arg3 argument 3
+     */
     public CollectionSiteMessage(int type, int arg1, int arg2, int arg3){
         this.msgType = type;
         this.arg1 = arg1;
@@ -249,6 +279,14 @@ public class CollectionSiteMessage implements Serializable {
         this.arg3 = arg3;
     }
 
+    /**
+     * Possible Message
+     * @param type message type
+     * @param arg1 argument 1
+     * @param arg2 argument 2
+     * @param arg3 argument 3
+     * @param arg4 argument 4
+     */
     public CollectionSiteMessage(int type, int arg1, int arg2, int arg3, int arg4){
         this.msgType = type;
         this.arg1 = arg1;
@@ -257,24 +295,15 @@ public class CollectionSiteMessage implements Serializable {
         this.arg4 = arg4;
     }
 
-    public boolean getBool(){
-        return bInfo;
-    }
 
 
     /**
-     * Retorna o Tipo de Mensagem
-     * @return
+     * To string
+     * @return string with information
      */
-    public int getMsgType(){
-        return this.msgType;
-    }
-
-
     @Override
     public String toString() {
         return "CollectionSiteMessage{" +
-                "info=" + info +
                 ", bInfo=" + bInfo +
                 ", msgType=" + msgType +
                 ", arg1=" + arg1 +

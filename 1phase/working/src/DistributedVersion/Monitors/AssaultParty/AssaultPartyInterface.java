@@ -30,97 +30,93 @@ public class AssaultPartyInterface {
     AssaultPartyMessage processAndReply(AssaultPartyMessage inMessage) throws AssaultPartyMessageException {
         AssaultPartyMessage outMessage = null;
 
-
-        /*
-         * validação da mensagem recebida
-         */
         switch (inMessage.getMsgType()) {
             case AssaultPartyMessage.JOINPARTY:
                 if (inMessage.getArg2() > 1 || inMessage.getArg2() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party ID!", inMessage);
                 }
                 if (inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do ladrao invalido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.DESTROYGRPOUP:
                 if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.CREATEASSAULTPARTY:
                 if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 if (inMessage.getArg2() < 0) {
-                    throw new AssaultPartyMessageException("Id da sala inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid room id!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.GETROOMDISTANCE:
                 if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.GETPOS:
                 if (inMessage.getArg2() > 1 || inMessage.getArg2() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 if (inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid thief id", inMessage);
                 }
 
                 break;
             case AssaultPartyMessage.CRAWLIN:
                 if (inMessage.getArg3() > 1 || inMessage.getArg3() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 if (inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid thief id!", inMessage);
                 }
                 if (inMessage.getArg2() < 0) {
-                    throw new AssaultPartyMessageException("IAgilidade", inMessage);
+                    throw new AssaultPartyMessageException("Invalid agility!", inMessage);
                 }
                 if (inMessage.getArg4() < 0) {
-                    throw new AssaultPartyMessageException("posicao", inMessage);
+                    throw new AssaultPartyMessageException("Invalid position!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.CRAWLOUT:
                 if (inMessage.getArg3() > 1 || inMessage.getArg3() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 if (inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid thief id!", inMessage);
                 }
                 if (inMessage.getArg2() < 0) {
-                    throw new AssaultPartyMessageException("IAgilidade", inMessage);
+                    throw new AssaultPartyMessageException("Invalid agility!", inMessage);
                 }
                 if (inMessage.getArg4() < 0) {
-                    throw new AssaultPartyMessageException("posicao", inMessage);
+                    throw new AssaultPartyMessageException("Invalid position!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.STEALPAINTING:
                 if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.WAITMYTURN:
                 if (inMessage.getArg2() > 1 || inMessage.getArg2() < 0) {
-                    throw new AssaultPartyMessageException("Id do assaultParty inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid assault party id!", inMessage);
                 }
                 if (inMessage.getArg1() < 0) {
-                    throw new AssaultPartyMessageException("Id do ladrao inválido!", inMessage);
+                    throw new AssaultPartyMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case AssaultPartyMessage.END:
                 break;
             default:
-                throw new AssaultPartyMessageException("Tipo inválido!", inMessage);
+                throw new AssaultPartyMessageException("Invalid type!", inMessage);
         }
 
 
         int resp;
         /*
-         * processamento das mensagens recebidas
+         * processing
          */
 
         switch (inMessage.getMsgType()) {
@@ -168,7 +164,7 @@ public class AssaultPartyInterface {
                 isAlive = false;
                 break;
             default:
-                throw new AssaultPartyMessageException("Tipo inválido!", inMessage);
+                throw new AssaultPartyMessageException("Invalid type!", inMessage);
         }
 
         return outMessage;
@@ -180,7 +176,7 @@ public class AssaultPartyInterface {
      *
      * @param id     assault party ID
      * @param nrSala room to steal
-     * @return
+     * @return id of party
      */
     public int createAssaultParty(int id, int nrSala) {
         if (assaultParty[id] == null) {
@@ -194,7 +190,7 @@ public class AssaultPartyInterface {
 
     /**
      * Function that returns the state of the communication socket
-     * @return
+     * @return boolean to terminate
      */
     public boolean isAlive() {
         return this.isAlive;

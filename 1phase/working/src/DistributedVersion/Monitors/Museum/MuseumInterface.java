@@ -33,28 +33,28 @@ public class MuseumInterface {
         switch (inMessage.getType()) {
             case MuseumMessage.STEALPAINTING:
                 if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
-                    throw new MuseumMessageException("Sala inválida!", inMessage);
+                    throw new MuseumMessageException("Room invalid!", inMessage);
                 }
                 break;
             case MuseumMessage.GETNUMBEROFSTOLENGPAINTINGS:
                 if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
-                    throw new MuseumMessageException("Sala inválida!", inMessage);
+                    throw new MuseumMessageException("Room invalid!", inMessage);
                 }
                 break;
             case MuseumMessage.GETDISTANCE:
                 if (inMessage.getNrSala() > NUM_ROOMS || inMessage.getNrSala() < 0) {
-                    throw new MuseumMessageException("Sala inválida!", inMessage);
+                    throw new MuseumMessageException("Room invalid!", inMessage);
                 }
                 break;
             case MuseumMessage.END:
                 break;
             default:
-                throw new MuseumMessageException("Tipo inválido!", inMessage);
+                throw new MuseumMessageException("Room invalid!", inMessage);
         }
 
 
         /*
-         * processamento das mensagens recebidas
+         * processing
          */
 
         switch (inMessage.getType()) {
@@ -74,13 +74,17 @@ public class MuseumInterface {
                 this.isALive = false;
                 break;
             default:
-                throw new MuseumMessageException("Tipo inválido!", inMessage);
+                throw new MuseumMessageException("Type invalid!", inMessage);
         }
 
 
         return outMessage;
     }
 
+    /**
+     * Check if server can terminate
+     * @return boolean to terminate server
+     */
     public boolean isAlive() {
         return this.isALive;
     }

@@ -23,8 +23,8 @@ public class ServerGeneralRepo {
         scon.start();
         GeneralRepository god = new GeneralRepository();
         godInter = new GeneralRepositoryInterface(god);
-        GenericIO.writelnString("O serviço god foi estabelecido!");
-        GenericIO.writelnString("O servidor esta em escuta.");
+        GenericIO.writelnString("Service General Repository has been established!");
+        GenericIO.writelnString("Server listening");
 
         god.iniciarLog();
 
@@ -36,8 +36,8 @@ public class ServerGeneralRepo {
 
         while (keepAlive) {
             try{
-                sconi = scon.accept();                            // entrada em processo de escuta
-                cliProxy = new ClientProxy(sconi, godInter);    // lançamento do agente prestador do serviço
+                sconi = scon.accept();
+                cliProxy = new ClientProxy(sconi, godInter);
                 cliProxy.start();
             }catch(SocketTimeoutException e){
                 if(!godInter.isAlive()){
@@ -48,7 +48,7 @@ public class ServerGeneralRepo {
 
         }
 
-        GenericIO.writelnString("O serviço god foi terminado!");
+        GenericIO.writelnString("The service has been terminated!");
     }
 
 }

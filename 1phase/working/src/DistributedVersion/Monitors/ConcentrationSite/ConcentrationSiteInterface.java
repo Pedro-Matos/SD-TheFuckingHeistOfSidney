@@ -29,7 +29,7 @@ public class ConcentrationSiteInterface {
         switch (inMessage.getType()) {
             case ConcentrationSiteMessage.CALLTHIEF:
                 if (inMessage.getArg1() > 1 || inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Grupo inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid Group!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.WAITTHIVES:
@@ -40,62 +40,62 @@ public class ConcentrationSiteInterface {
                 break;
             case ConcentrationSiteMessage.AMINEEDED:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.IMREADY:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.GETBUSYTHIEF:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.GETGROUPTHIEF:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.GETSTATETHIEF:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.INDICARCHEGADA:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.PREPAREEXCURSION:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.NASALA:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.REVERSEDIRECTION:
                 if (inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Id do ladrao inválido!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid thief id!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.GETAGILITY:
                 if (inMessage.getArg1() > MAX_AGIL || inMessage.getArg1() < 0) {
-                    throw new ConcentrationSiteMessageException("Agilidade inválida!", inMessage);
+                    throw new ConcentrationSiteMessageException("Invalid agility!", inMessage);
                 }
                 break;
             case ConcentrationSiteMessage.END:
                 break;
             default:
-                throw new ConcentrationSiteMessageException("Tipo inválido!", inMessage);
+                throw new ConcentrationSiteMessageException("Invalid type!", inMessage);
         }
 
         /*
-         * processamento das mensagens recebidas
+         * processing msg received
          */
         boolean check;
         int resp;
@@ -162,7 +162,7 @@ public class ConcentrationSiteInterface {
                 isAlive = false;
                 break;
             default:
-                throw new ConcentrationSiteMessageException("Tipo inválido!", inMessage);
+                throw new ConcentrationSiteMessageException("Invalid type!", inMessage);
 
         }
         return outMessage;

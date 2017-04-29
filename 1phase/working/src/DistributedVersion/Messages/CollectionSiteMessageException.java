@@ -6,17 +6,15 @@ package DistributedVersion.Messages;
 public class CollectionSiteMessageException extends Exception {
 
     /**
-     * Mensagem que originou a excepção
-     *
-     * @serialField msg
+     * Message with the exception
      */
     private CollectionSiteMessage msg;
 
     /**
-     * Instanciação de uma mensagem.
+     * Instantiation of message
      *
-     * @param errorMessage texto sinalizando a condição de erro
-     * @param msg mensagem que está na origem da excepção
+     * @param errorMessage text with the error message
+     * @param msg message with the exception
      */
     public CollectionSiteMessageException(String errorMessage, CollectionSiteMessage msg) {
         super(errorMessage);
@@ -24,9 +22,9 @@ public class CollectionSiteMessageException extends Exception {
     }
 
     /**
-     * Obtenção da mensagem que originou a excepção.
+     * Obtaining the message
      *
-     * @return mensagem
+     * @return mensage with error
      */
     public CollectionSiteMessage getMessageVal() {
         return (msg);

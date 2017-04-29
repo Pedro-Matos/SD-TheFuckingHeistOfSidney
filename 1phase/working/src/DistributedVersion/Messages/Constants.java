@@ -35,12 +35,12 @@ public class Constants {
 
 
     /**
-     * Max distance from the room to the ConcentrationSite
+     * Max distance from the room to the CollectionSite
      */
     public static final int MAX_DIST = 30;
 
     /**
-     * Min distance from the room to the ConcentrationSite
+     * Min distance from the room to the CollectionSite
      */
     public static final int MIN_DIST = 15;
 

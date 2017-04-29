@@ -6,28 +6,24 @@ package DistributedVersion.Messages;
 public class ConcentrationSiteMessageException extends Exception {
 
         /**
-         * Mensagem que originou a excepção
-         *
-         * @serialField msg
+         * Message with the exception
          */
         private ConcentrationSiteMessage msg;
 
-        /**
-         * Instanciação de uma mensagem.
-         *
-         * @param errorMessage texto sinalizando a condição de erro
-         * @param msg mensagem que está na origem da excepção
-         */
+    /**
+     * Instantiation of message
+     *
+     * @param errorMessage text with the error message
+     * @param msg message with the exception
+     */
      public ConcentrationSiteMessageException(String errorMessage, ConcentrationSiteMessage msg) {
             super(errorMessage);
             this.msg = msg;
         }
-
-        /**
-         * Obtenção da mensagem que originou a excepção.
-         *
-         * @return mensagem
-         */
+    /**
+     * Obtaining the message
+     * @return mensage with error
+     */
     public ConcentrationSiteMessage getMessageVal() {
         return (msg);
     }

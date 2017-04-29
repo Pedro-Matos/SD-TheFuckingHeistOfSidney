@@ -3,4 +3,4 @@
  * - Normal Thief
  * - Master Thief
  */
-package ConcorrentVersion.AtoresPrincipais;
+package DistributedVersion.Actors;

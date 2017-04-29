@@ -3,4 +3,4 @@
  * Also contains the General Repository that will create the log file.
  *
  */
-package ConcorrentVersion.ParametrosDoProblema;
+package DistributedVersion.ProblemInformation;

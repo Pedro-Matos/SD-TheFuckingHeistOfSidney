@@ -30,7 +30,7 @@ public class Thief extends Thread {
      */
     private ClientCom collectionSite;
     /**
-     * ConcentrationSite
+     * CollectionSite
      */
     private ClientCom concentrationSite;
     /**
@@ -65,7 +65,7 @@ public class Thief extends Thread {
      * @param generalRepository General Repository
      * @param grupo Assault Party manager
      * @param collectionSite Concentration Site
-     * @param concentrationSite ConcentrationSite
+     * @param concentrationSite CollectionSite
      */
     public Thief(int id, String name, String generalRepository, String grupo, String collectionSite, String concentrationSite) {
 
@@ -150,8 +150,8 @@ public class Thief extends Thread {
 
     /**
      * Get the state of thief
-     * @param id
-     * @return
+     * @param id thief id
+     * @return thief state
      */
     public int getStateThief(int id){
         ConcentrationSiteMessage inMessage, outMessage;
@@ -261,8 +261,8 @@ public class Thief extends Thread {
     }
 
     /**
-     *
-     * @param id
+     * Preparing excursion
+     * @param id thief id
      */
     public void prepareExcursion(int id){
         ConcentrationSiteMessage inMessage, outMessage;

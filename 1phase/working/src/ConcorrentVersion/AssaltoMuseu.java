@@ -1,14 +1,14 @@
 package ConcorrentVersion;
 
-import static ConcorrentVersion.ParametrosDoProblema.Constantes.*;
+import static ConcorrentVersion.ProblemInformation.Constantes.*;
 
-import ConcorrentVersion.ParametrosDoProblema.GeneralRepository;
-import ConcorrentVersion.Regioes.base.ConcentrationSite;
-import ConcorrentVersion.Regioes.escritorioChefe.CollectionSite;
-import ConcorrentVersion.Regioes.gruposAssalto.GestorGruposAssalto;
-import ConcorrentVersion.Regioes.museu.Museum;
-import ConcorrentVersion.AtoresPrincipais.Chefe;
-import ConcorrentVersion.AtoresPrincipais.Ladrao;
+import ConcorrentVersion.ProblemInformation.GeneralRepository;
+import ConcorrentVersion.Monitors.ConcentrationSite.ConcentrationSite;
+import ConcorrentVersion.Monitors.CollectionSite.CollectionSite;
+import ConcorrentVersion.Monitors.AssaultParty.AssaultPartyManager;
+import ConcorrentVersion.Monitors.Museum.Museum;
+import ConcorrentVersion.Actors.MasterThief;
+import ConcorrentVersion.Actors.Thief;
 
 /**
  * Main Program
@@ -32,21 +32,21 @@ public class AssaltoMuseu {
 
             Museum museum = new Museum(generalRepository);
             ConcentrationSite concentrationSite = new ConcentrationSite(generalRepository);
-            GestorGruposAssalto gestorGrupos = new GestorGruposAssalto(museum, generalRepository);
+            AssaultPartyManager gestorGrupos = new AssaultPartyManager(museum, generalRepository);
             CollectionSite escritorio = new CollectionSite(museum, concentrationSite, gestorGrupos, generalRepository);
 
 
-            Chefe chefe;
+            MasterThief chefe;
 
-            Ladrao[] ladrao = new Ladrao[NUM_THIEVES];
+            Thief[] ladrao = new Thief[NUM_THIEVES];
             for (int i = 0; i < NUM_THIEVES; i++) {
                 String nomeLadrao = "Thief-" + i;
-                ladrao[i] = new Ladrao(i, nomeLadrao, generalRepository, gestorGrupos, escritorio, concentrationSite);
+                ladrao[i] = new Thief(i, nomeLadrao, generalRepository, gestorGrupos, escritorio, concentrationSite);
                 ladrao[i].start();
             }
 
 
-            chefe = new Chefe("LadraoChefe", generalRepository, escritorio, concentrationSite);
+            chefe = new MasterThief("LadraoChefe", generalRepository, escritorio, concentrationSite);
             chefe.start();
 
             try {

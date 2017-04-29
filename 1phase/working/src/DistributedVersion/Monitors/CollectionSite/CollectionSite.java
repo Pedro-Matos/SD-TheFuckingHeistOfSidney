@@ -15,7 +15,7 @@ import static DistributedVersion.Messages.Constants.*;
  */
 public class CollectionSite {
     /**
-     * ConcentrationSite
+     * CollectionSite
      */
     private final ClientCom concentrationSite;
     /**
@@ -68,7 +68,7 @@ public class CollectionSite {
 
     /**
      *  @param museum Museum
-     * @param concentrationSite ConcentrationSite
+     * @param concentrationSite CollectionSite
      * @param assaultParty Manager of assault partys
      * @param generalRepository General Repository
      */
