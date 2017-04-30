@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "-------- Heist to the Museum --------"
+echo " Sistemas Distribuídos 2017 - P4G07"
 echo "Pedro Matos 71902, Tiago Bastos 71770"
 echo ""
 
@@ -66,7 +67,5 @@ echo "Waiting for simulation to end (generate a logging file).."
 wait $PID_Logging
 
 
-echo "  > Simulation ended, copying log file to the local machine"
+echo "Simulation ended, copying log file to the local machine"
 sshpass -p "sportingsempre" scp -o StrictHostKeyChecking=no sd0407@l040101-ws01.ua.pt:/home/sd0407/Log/Log.txt .
-
-
