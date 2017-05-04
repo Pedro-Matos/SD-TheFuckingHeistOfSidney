@@ -2,6 +2,7 @@
 
 rm -r Collection
 unzip -qq  Collection.zip
+rm Collection.zip
 cd Collection
 javac -cp \* DistributedVersion/Monitors/CollectionSite/*.java DistributedVersion/ComInfo/*.java DistributedVersion/Messages/*.java
 rm DistributedVersion/Monitors/CollectionSite/*.java DistributedVersion/ComInfo/*.java DistributedVersion/Messages/*.java

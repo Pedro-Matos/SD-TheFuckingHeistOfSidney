@@ -2,6 +2,7 @@
 
 rm -r Museum
 unzip -qq  Museum.zip
+rm Museum.zip
 cd Museum
 javac -cp \* DistributedVersion/Monitors/Museum/*.java DistributedVersion/ComInfo/*.java DistributedVersion/Messages/*.java
 rm DistributedVersion/Monitors/Museum/*.java DistributedVersion/ComInfo/*.java DistributedVersion/Messages/*.java

@@ -2,7 +2,8 @@
 
 rm -r AssaultParty
 unzip -qq AssaultParty.zip
+rm AssaultParty.zip
 cd AssaultParty
-javac -cp \* DistributedVersion/Monitors/AssaultParty/*.java DistributedVersion/ComInfo/*.java DistributedVersion/Messages/*.java
+javac -nowarn -cp \* DistributedVersion/Monitors/AssaultParty/*.java DistributedVersion/ComInfo/*.java DistributedVersion/Messages/*.java
 rm DistributedVersion/Monitors/AssaultParty/*.java DistributedVersion/ComInfo/*.java DistributedVersion/Messages/*.java
 java -cp .:\* DistributedVersion.Monitors.AssaultParty.ServerAssaultParty
