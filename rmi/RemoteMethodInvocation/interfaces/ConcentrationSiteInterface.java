@@ -15,7 +15,7 @@ public interface ConcentrationSiteInterface extends Remote {
 
     public Tuple<VectorTimestamp, Integer> imReady(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> getNumberOfThieves(int id, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getNumberOfThieves(VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> getThiefState(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 

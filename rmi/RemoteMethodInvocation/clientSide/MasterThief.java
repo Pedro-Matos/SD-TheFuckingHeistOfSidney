@@ -330,7 +330,7 @@ public class MasterThief extends Thread {
         int ret = -1;
         try {
             vt.increment();
-            Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getNumberOfThieves(id, vectorTimestamp);
+            Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getNumberOfThieves(vectorTimestamp);
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
         } catch (RemoteException e){

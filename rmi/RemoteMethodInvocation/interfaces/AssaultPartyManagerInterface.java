@@ -11,13 +11,13 @@ import java.rmi.RemoteException;
  */
 public interface AssaultPartyManagerInterface extends Remote {
 
-    public boolean formarGrupo(int idGrupo, int nrSala) throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> formarGrupo(int idGrupo, int nrSala, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> getPos(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void desfazerGrupo(int idGrupo) throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> desfazerGrupo(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void entrar(int ladraoID, int idGrupo, int pos_grupo) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> entrar(int ladraoID, int idGrupo, int pos_grupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 

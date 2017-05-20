@@ -4,6 +4,8 @@ import RemoteMethodInvocation.interfaces.*;
 import RemoteMethodInvocation.support.Tuple;
 import RemoteMethodInvocation.support.VectorTimestamp;
 
+import java.rmi.RemoteException;
+
 import static RemoteMethodInvocation.support.Constantes.*;
 
 /**
@@ -110,7 +112,6 @@ public class CollectionSite implements CollectionSiteInterface {
      * Checks if the groups are done
      *
      * @return -1 if they are or 0/1 if they aren't.
-     * @param id
      * @param vectorTimestamp
      */
     public synchronized Tuple<VectorTimestamp, Integer> checkGroups(VectorTimestamp vectorTimestamp) {
@@ -149,7 +150,7 @@ public class CollectionSite implements CollectionSiteInterface {
                     this.nrElemGrupo[grupo]++;
                     this.grupos[grupo][i] = ladraoID;
                     //break;
-                    this.gestorGrupos.entrar(ladraoID,grupo,i);
+                    entrar(ladraoID,grupo,i, local.clone());
                     return new Tuple<>(local.clone(), i);
                 }
             }
@@ -157,7 +158,6 @@ public class CollectionSite implements CollectionSiteInterface {
 
         return new Tuple<>(local.clone(), -1);
     }
-
 
 
     /**
@@ -197,9 +197,11 @@ public class CollectionSite implements CollectionSiteInterface {
         local.update(vectorTimestamp);
 
         this.estadoChefe = DECIDING_WHAT_TO_DO;
-        general.setMasterThiefState(this.estadoChefe, local.clone());
+        setMasterThiefState(this.estadoChefe, local.clone());
         return new Tuple<>(local.clone(), -1);
     }
+
+
 
     /**
      * Creates assault party
@@ -224,15 +226,16 @@ public class CollectionSite implements CollectionSiteInterface {
             }
         }
 
-        if(idGrupo == 0) general.setAssaultParty1_room(j, );
-        if(idGrupo == 1) general.setAssaultParty2_room(j, );
+        if(idGrupo == 0) setAssaultParty1_room(j, local.clone());
+        if(idGrupo == 1) setAssaultParty2_room(j, local.clone());
 
 
-        Tuple<VectorTimestamp, Boolean> tuple = gestorGrupos.formarGrupo(idGrupo, j);
+        boolean ret = formarGrupo(idGrupo, j, local.clone());
 
 
-        return tuple;
+        return new Tuple<>(local.clone(), ret);
     }
+
 
 
     /**
@@ -243,18 +246,19 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        int nrLadroes = concentrationSite.getNumberOfThieves(id, vectorTimestamp);
 
-        int checkGrupos = this.checkGroups(vectorTimestamp);
+        int nrLadroes = getNumberOffThieves(local.clone());
+
+        int checkGrupos = this.checkGroups(local.clone()).getSecond();
 
         if (checkGrupos == -1 || nrLadroes < NUM_GROUP) {
             if (this.estadoChefe == ASSEMBLING_A_GROUP) {
                 this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-                general.setMasterThiefState(this.estadoChefe, );
+                setMasterThiefState(this.estadoChefe, local.clone());
                 return new Tuple<>(local.clone(), false);
             }
             this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-            general.setMasterThiefState(this.estadoChefe, );
+            setMasterThiefState(this.estadoChefe, local.clone());
 
             try {
                 wait();
@@ -263,10 +267,28 @@ public class CollectionSite implements CollectionSiteInterface {
             }
         } else {
             this.estadoChefe = DECIDING_WHAT_TO_DO;
-            general.setMasterThiefState(this.estadoChefe, );
+            setMasterThiefState(this.estadoChefe, local.clone());
 
         }
         return new Tuple<>(local.clone(), false);
+    }
+
+    private int getNumberOffThieves(VectorTimestamp vectorTimestamp) {
+        int ret = -1;
+
+        try {
+            local.increment();
+            Tuple<VectorTimestamp, Integer> tuple =
+                    this.concentrationSite.getNumberOfThieves(vectorTimestamp);
+            ret = tuple.getSecond();
+            local.update(tuple.getClock());
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return ret;
     }
 
     /**
@@ -300,24 +322,26 @@ public class CollectionSite implements CollectionSiteInterface {
         this.grupos[grupo][pos] = -1;
         if (--this.nrElemGrupo[grupo] == 0) {
             this.salaAssalto[sala] = -1;
-            this.gestorGrupos.desfazerGrupo(grupo);
+            desfazerGrupo(grupo, local.clone());
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                general.setMasterThiefState(this.estadoChefe, );
+                setMasterThiefState(this.estadoChefe, local.clone());
             }
             notifyAll();
         }
 
         if(grupo == 0){
-            general.setAP1_reset(pos,ladraoID, );
+            setAP1_reset(pos, ladraoID, local.clone());
         }
         else if (grupo == 1){
-            general.setAP2_reset(pos,ladraoID, );
+            setAP2_reset(pos,ladraoID, local.clone());
         }
 
         return new Tuple<>(local.clone(), -1);
     }
+
+
 
     /**
      * Room is empty
@@ -334,11 +358,11 @@ public class CollectionSite implements CollectionSiteInterface {
         this.grupos[grupo][pos] = -1;
         if (--this.nrElemGrupo[grupo] == 0) {
             this.salaAssalto[sala] = -1;
-            this.gestorGrupos.desfazerGrupo(grupo);
+            desfazerGrupo(grupo, local.clone());
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                general.setMasterThiefState(this.estadoChefe, );
+                setMasterThiefState(this.estadoChefe, local.clone());
             }
             notifyAll();
         }
@@ -369,12 +393,14 @@ public class CollectionSite implements CollectionSiteInterface {
      * @param vectorTimestamp
      */
     public Tuple<VectorTimestamp, Boolean> checkEmptyMuseum(VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
         for (int i = 0; i < salaVazia.length; i++) {
             if (!salaVazia[i]) {
-                return false;
+                return new Tuple<>(local.clone(), false);
             }
         }
-        return true;
+        return new Tuple<>(local.clone(), true);
     }
 
     /**
@@ -386,7 +412,7 @@ public class CollectionSite implements CollectionSiteInterface {
         local.update(vectorTimestamp);
 
         this.estadoChefe = PRESENTING_THE_REPORT;
-        general.setMasterThiefState(this.estadoChefe, );
+        setMasterThiefState(this.estadoChefe, local.clone());
         return new Tuple<>(local.clone(), false);
     }
 
@@ -440,13 +466,99 @@ public class CollectionSite implements CollectionSiteInterface {
         return new Tuple<>(local.clone(), -1);
     }
 
-    /**
-     * Get the number of paitings in the room
-     * @param sala room id
-     * @return number of paitings
-     */
-    public int get_paitings(int sala){
-       return museum.getNumeroQuadros(sala);
+
+    private void entrar(int ladraoID, int grupo, int i, VectorTimestamp vectorTimestamp){
+        try {
+            local.increment();
+            Tuple<VectorTimestamp, Integer> tuple = this.gestorGrupos.entrar(ladraoID, grupo, i, vectorTimestamp);
+            local.update(tuple.getClock());
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void setMasterThiefState(int stat, VectorTimestamp vectorTimestamp) {
+        try {
+            this.general.setMasterThiefState(stat, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private boolean formarGrupo(int idGrupo, int j, VectorTimestamp vectorTimestamp){
+        boolean ret = false;
+
+        try {
+            local.increment();
+            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.formarGrupo(idGrupo, j, vectorTimestamp);
+            ret = tuple.getSecond();
+            local.update(tuple.getClock());
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return ret;
+    }
+
+
+    private void setAssaultParty1_room(int j, VectorTimestamp vectorTimestamp){
+        try {
+            this.general.setAssaultParty1_room(j, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void setAssaultParty2_room(int j, VectorTimestamp vectorTimestamp){
+        try {
+            this.general.setAssaultParty2_room(j, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void desfazerGrupo(int grupo, VectorTimestamp vectorTimestamp) {
+
+        try {
+            local.increment();
+            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.desfazerGrupo(grupo, vectorTimestamp);
+            local.update(tuple.getClock());
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    private void setAP1_reset(int pos, int ladraoID, VectorTimestamp vectorTimestamp){
+        try {
+            this.general.setAP1_reset(pos, ladraoID, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void setAP2_reset(int pos, int ladraoID, VectorTimestamp vectorTimestamp){
+        try {
+            this.general.setAP2_reset(pos, ladraoID, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
 }

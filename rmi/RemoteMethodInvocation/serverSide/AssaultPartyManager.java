@@ -40,15 +40,18 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * Group Formation
      * @param idGrupo group id
      * @param nrSala room id
+     * @param vectorTimestamp
      * @return true if creation is successful
      */
-    public synchronized boolean formarGrupo(int idGrupo, int nrSala) {
+    public synchronized Tuple<VectorTimestamp, Boolean> formarGrupo(int idGrupo, int nrSala, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
         if (grupo[idGrupo] == null) {
             grupo[idGrupo] = new AssaultParty(museum, nrSala,idGrupo, general);
-            return true;
+            return new Tuple<>(local.clone(), true);
         }
 
-        return false;
+        return new Tuple<>(local.clone(), false);
     }
 
     public Tuple<VectorTimestamp, Integer> getPos(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp){
@@ -64,9 +67,14 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
     /**
      * Destroys the group
      * @param idGrupo group id
+     * @param vectorTimestamp
      */
-    public synchronized void desfazerGrupo(int idGrupo) {
+    public synchronized Tuple<VectorTimestamp, Boolean> desfazerGrupo(int idGrupo, VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
+
         grupo[idGrupo] = null;
+        return new Tuple<>(local.clone(), false);
     }
 
     /**
@@ -74,9 +82,16 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param ladraoID thief id
      * @param idGrupo group id
      * @param pos_grupo group position
+     * @param vectorTimestamp
      */
-    public void entrar(int ladraoID, int idGrupo, int pos_grupo) {
-         grupo[idGrupo].entrar(ladraoID,pos_grupo);
+    public Tuple<VectorTimestamp, Integer> entrar(int ladraoID, int idGrupo, int pos_grupo, VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
+
+        grupo[idGrupo].entrar(ladraoID,pos_grupo, vectorTimestamp);
+        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].entrar(ladraoID,pos_grupo, vectorTimestamp);
+
+        return tuple;
     }
 
     /**

@@ -43,6 +43,5 @@ public interface CollectionSiteInterface extends Remote {
 
     public Tuple<VectorTimestamp, Integer> getAssaultRoom(int grupoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int get_paitings(int sala) throws RemoteException;
 
 }

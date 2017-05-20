@@ -244,7 +244,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
     public synchronized void finalizarRelatorio(int total, VectorTimestamp vectorTimestamp) {
         assault_party1_room = '-';
         assault_party2_room = '-';
-        add_log();
+        add_log(vectorTimestamp);
 
         if (!log.openForAppending(".", fileName2)) {
             GenericIO.writelnString("Operation " + fileName2 + " failed!");
@@ -282,7 +282,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     public synchronized void setNrQuadrosSala(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) {
         this.nrQuadrosSala[nrSala] = nrQuadrosSala;
-        add_log();
+        add_log(vectorTimestamp);
     }
 
     /**
@@ -330,7 +330,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     public synchronized void setThiefDisplacement(int id, int disp, VectorTimestamp vectorTimestamp) {
         this.thief_displacement[id] = disp;
-        add_log();
+        add_log(vectorTimestamp);
     }
 
     /**
@@ -343,7 +343,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
         room++;
         this.assault_party1_room = Integer.toString(room).charAt(0);
-        add_log();
+        add_log(vectorTimestamp);
     }
 
     /**
@@ -355,7 +355,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
     public synchronized void setAssaultParty2_room(int room, VectorTimestamp vectorTimestamp) {
         room++;
         this.assault_party2_room = Integer.toString(room).charAt(0);
-        add_log();
+        add_log(vectorTimestamp);
     }
 
     /**
@@ -367,7 +367,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     public synchronized void setAP1_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
         assault_party1_thief_pos[pos_grupo] = Integer.toString(pos);
-        add_log();
+        add_log(vectorTimestamp);
     }
 
     /**
@@ -383,7 +383,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             nrQuadrosSala[room]--;
         } else assault_party1_thief_canvas[pos_grupo] = '0';
 
-        add_log();
+        add_log(vectorTimestamp);
     }
 
     /**
@@ -403,7 +403,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         if (cv) assault_party1_thief_canvas[pos_grupo] = '1';
         else assault_party1_thief_canvas[pos_grupo] = '0';
 
-        add_log();
+        add_log(vectorTimestamp);
     }
 
     /**
@@ -418,7 +418,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         assault_party1_thief_canvas[pos_grupo] = '-';
         assault_party1_thief_id[pos_grupo] = '-';
         thief_situation[id] = WAITING;
-        add_log();
+        add_log(vectorTimestamp);
     }
 
 
@@ -431,7 +431,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     public synchronized void setAP2_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
         assault_party2_thief_pos[pos_grupo] = String.valueOf(pos);
-        add_log();
+        add_log(vectorTimestamp);
     }
 
 
@@ -448,7 +448,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             nrQuadrosSala[room]--;
         } else assault_party2_thief_canvas[pos_grupo] = '0';
 
-        add_log();
+        add_log(vectorTimestamp);
     }
 
 
@@ -469,7 +469,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         if (cv) assault_party2_thief_canvas[pos_grupo] = '1';
         else assault_party2_thief_canvas[pos_grupo] = '0';
 
-        add_log();
+        add_log(vectorTimestamp);
     }
 
 
@@ -485,7 +485,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         assault_party2_thief_canvas[pos_grupo] = '-';
         assault_party2_thief_id[pos_grupo] = '-';
         thief_situation[id] = WAITING;
-        add_log();
+        add_log(vectorTimestamp);
     }
 
 }

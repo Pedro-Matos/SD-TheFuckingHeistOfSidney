@@ -6,6 +6,8 @@ import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.support.Tuple;
 import RemoteMethodInvocation.support.VectorTimestamp;
 
+import java.rmi.RemoteException;
+
 import static RemoteMethodInvocation.support.Constantes.*;
 
 /**
@@ -120,10 +122,9 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     /**
      * Get for the number of thiefs in the CollectionSite
      * @return number of thiefs
-     * @param id
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Integer> getNumberOfThieves(int id, VectorTimestamp vectorTimestamp) {
+    public synchronized Tuple<VectorTimestamp, Integer> getNumberOfThieves(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
         return new Tuple<>(local.clone(), this.nrLadroes);
@@ -183,13 +184,14 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
             this.nrLadroes--;
             this.busyLadrao[id] = true;
             this.grupoLadrao[id] = grupo;
-            general.setMasterThiefState(ASSEMBLING_A_GROUP, );
-            general.setThiefSituation(id,IN_PARTY, );
+            setMasterThiefState(ASSEMBLING_A_GROUP, local.clone());
+            setThiefSituation(id,IN_PARTY, local.clone());
             notifyAll();
         }
 
         return new Tuple<>(local.clone(), id);
     }
+
 
     /**
      * Verifies if the thief is busy
@@ -247,17 +249,20 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     public synchronized Tuple<VectorTimestamp, Integer> flagArrival(int ladraoID, VectorTimestamp vectorTimestamp) {
 
+        local.update(vectorTimestamp);
 
         this.busyLadrao[ladraoID] = false;
         this.grupoLadrao[ladraoID] = -1;
         this.estadoLadrao[ladraoID] = OUTSIDE;
-        general.setThiefState(ladraoID,this.estadoLadrao[ladraoID], );
-        general.setThiefSituation(ladraoID,WAITING, );
-        this.imReady(ladraoID, vt.clone());
+        setThiefState(ladraoID,this.estadoLadrao[ladraoID], local.clone());
+        setThiefSituation(ladraoID,WAITING, local.clone());
+        this.imReady(ladraoID, local.clone());
 
 
         return null;
     }
+
+
 
     /**
      * GET for the agility
@@ -312,5 +317,35 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         }
         notifyAll();
         return new Tuple<>(local.clone(), -1);
+    }
+
+    private void setThiefSituation(int id, int inParty, VectorTimestamp vectorTimestamp) {
+        try {
+            this.general.setThiefSituation(id, inParty, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void setMasterThiefState(int stat, VectorTimestamp vectorTimestamp) {
+        try {
+            this.general.setMasterThiefState(stat, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void setThiefState(int ladraoID, int i, VectorTimestamp clone) {
+        try {
+            this.general.setThiefState(ladraoID, i, clone);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }
