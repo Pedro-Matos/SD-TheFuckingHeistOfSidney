@@ -1,5 +1,10 @@
 package RemoteMethodInvocation.serverSide;
 
+import RemoteMethodInvocation.interfaces.AssaultPartyManagerInterface;
+import RemoteMethodInvocation.interfaces.ConcentrationSiteInterface;
+import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
+import RemoteMethodInvocation.interfaces.MuseumInterface;
+
 import static RemoteMethodInvocation.Support.Constantes.*;
 
 /**
@@ -11,15 +16,15 @@ public class CollectionSite {
     /**
      * CollectionSite
      */
-    private final ConcentrationSite concentrationSite;
+    private final ConcentrationSiteInterface concentrationSite;
     /**
      * Museum
      */
-    private final Museum museum;
+    private final MuseumInterface museum;
     /**
      * Assault partys manager
      */
-    private final AssaultPartyManager gestorGrupos;
+    private final AssaultPartyManagerInterface gestorGrupos;
     /**
      * Master Thief state
      */
@@ -53,7 +58,7 @@ public class CollectionSite {
     /**
      * General Repository
      */
-    private GeneralRepository general;
+    private GeneralRepositoryInterface general;
 
     /**
      * Number of groups
@@ -66,7 +71,8 @@ public class CollectionSite {
      * @param gestorGrupos Manager of assault partys
      * @param generalRepository General Repository
      */
-    public CollectionSite(Museum museum, ConcentrationSite concentrationSite, AssaultPartyManager gestorGrupos, GeneralRepository generalRepository) {
+    public CollectionSite(MuseumInterface museum, ConcentrationSiteInterface concentrationSite,
+                          AssaultPartyManagerInterface gestorGrupos, GeneralRepositoryInterface generalRepository) {
         this.concentrationSite = concentrationSite;
         this.museum = museum;
         this.gestorGrupos = gestorGrupos;

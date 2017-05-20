@@ -1,5 +1,8 @@
 package RemoteMethodInvocation.serverSide;
 
+import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
+import RemoteMethodInvocation.interfaces.MuseumInterface;
+
 /**
  * @author Pedro Matos and Tiago Bastos
  */
@@ -12,18 +15,18 @@ public class AssaultPartyManager {
     /**
      * Museum
      */
-    private Museum museum;
+    private MuseumInterface museum;
     /**
      * General Repository
      */
-    private GeneralRepository general;
+    private GeneralRepositoryInterface general;
 
     /**
      *
      * @param museum Museum
      * @param general General Repository
      */
-    public AssaultPartyManager(Museum museum, GeneralRepository general) {
+    public AssaultPartyManager(MuseumInterface museum, GeneralRepositoryInterface general) {
         this.museum = museum;
         this.general = general;
     }

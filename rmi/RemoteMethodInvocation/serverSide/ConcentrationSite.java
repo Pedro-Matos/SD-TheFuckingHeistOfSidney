@@ -2,6 +2,7 @@ package RemoteMethodInvocation.serverSide;
 
 import static RemoteMethodInvocation.Support.Constantes.*;
 import RemoteMethodInvocation.Support.MemFIFO;
+import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 
 /**
  * Monitor Concentration Site.
@@ -36,7 +37,7 @@ public class ConcentrationSite {
     /**
      * General Repository
      */
-    private GeneralRepository general;
+    private GeneralRepositoryInterface general;
     /**
      * Thief's situation
      */
@@ -45,7 +46,7 @@ public class ConcentrationSite {
     /**
      * @param generalRepository General Repository
      */
-    public ConcentrationSite(GeneralRepository generalRepository) {
+    public ConcentrationSite(GeneralRepositoryInterface generalRepository) {
 
         this.nrLadroes = 0;
 
