@@ -2,8 +2,10 @@ package RemoteMethodInvocation.serverSide;
 
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.MuseumInterface;
+import RemoteMethodInvocation.support.Tuple;
 import RemoteMethodInvocation.support.VectorTimestamp;
 
+import java.rmi.RemoteException;
 import java.util.Arrays;
 
 import static RemoteMethodInvocation.support.Constantes.*;
@@ -117,15 +119,16 @@ public class AssaultParty {
         this.nrElementos++;
     }
 
-    public synchronized int getPos(int ladraoID){
+    public synchronized Tuple<VectorTimestamp, Integer> getPos(int ladraoID, VectorTimestamp vectorTimestamp){
 
+        local.update(vectorTimestamp);
 
         for(int i = 0; i<nrElementos; i++){
             if(this.posicao[1][i] == ladraoID){
-                return i;
+                return new Tuple<>(local.clone(), i);
             }
         }
-        return -1;
+        return new Tuple<>(local.clone(), -1);
     }
 
     /**
@@ -134,14 +137,16 @@ public class AssaultParty {
      * @param agilidade thief agility
      * @param idGrupo group id
      * @param posgrupo position in the group
+     * @param vectorTimestamp
      * @return final position
      */
-    public synchronized int rastejarIn(int ladraoID, int agilidade, int idGrupo, int posgrupo) {
+    public synchronized Tuple<VectorTimestamp, Integer> crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
 
+        local.update(vectorTimestamp);
 
         int indiceNoGrupo = this.getPosicao(ladraoID);
 
-        int getDistanciaSala = this.getDistanciaSala();
+        int getDistanciaSala = this.getRoomDistance();
 
 
         if (this.naSala != nrElementos) {
@@ -234,7 +239,7 @@ public class AssaultParty {
         }
         notifyAll();
 
-        return this.posicao[0][indiceNoGrupo];
+        return new Tuple<>(local.clone(), this.posicao[0][indiceNoGrupo]);
 
     }
 
@@ -244,13 +249,16 @@ public class AssaultParty {
      * @param agilidade thief agility
      * @param idGrupo group id
      * @param posgrupo position in the group
+     * @param vectorTimestamp
      * @return final position
      */
-    public synchronized int rastejarOut(int ladraoID, int agilidade, int idGrupo, int posgrupo ){
+    public synchronized Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp){
+
+        local.update(vectorTimestamp);
 
         int indiceNoGrupo = this.getPosicao(ladraoID);
 
-        int getDistanciaSala = this.getDistanciaSala();
+        int getDistanciaSala = this.getRoomDistance();
 
         if(naSala ==nrElementos){
             if (this.minhaVez[indiceNoGrupo]) {
@@ -338,7 +346,7 @@ public class AssaultParty {
             }
         }
         notifyAll();
-        return this.posicao[0][indiceNoGrupo];
+        return new Tuple<>(local.clone(), this.posicao[0][indiceNoGrupo]);
     }
 
     /**
@@ -361,32 +369,43 @@ public class AssaultParty {
     /**
      * Get distance
      * @return distance
+     * @param vectorTimestamp
      */
-    public int getDistanciaSala(){
+    public Tuple<VectorTimestamp, Integer> getRoomDistance(VectorTimestamp vectorTimestamp){
+        local.update(vectorTimestamp);
 
         if (distanciaSala == -1) {
             distanciaSala = museum.getDistancia(nrSala);
         }
-        return distanciaSala;
+
+        return new Tuple<>(local.clone(), distanciaSala);
     }
 
     /**
      * Steals paiting
      *
      * @return true if success
+     * @param vectorTimestamp
      */
-    public synchronized boolean roubarQuadro(){
+    public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp){
+        local.update(vectorTimestamp);
 
-
-        return museum.roubarQuadro(nrSala);
+        try {
+            return new Tuple<>(local.clone(), museum.rollACanvas(nrSala, vectorTimestamp));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
     }
 
     /**
      * Waiting for it's turn
      * @param id thief id
+     * @param clone
      */
-    public synchronized void waitMinhaVez(int id) {
+    public synchronized Tuple<VectorTimestamp, Integer> waitMinhaVez(int id, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
         notifyAll();
         int pos = this.getPosicao(id);
         while (!minhaVez[pos]) {
@@ -397,5 +416,6 @@ public class AssaultParty {
                 System.out.println(ex.getMessage());
             }
         }
+        return new Tuple<>(local.clone(), -1);
     }
 }

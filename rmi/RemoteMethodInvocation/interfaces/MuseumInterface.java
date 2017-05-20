@@ -1,5 +1,7 @@
 package RemoteMethodInvocation.interfaces;
 
+import RemoteMethodInvocation.support.VectorTimestamp;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -8,7 +10,7 @@ import java.rmi.RemoteException;
  */
 public interface MuseumInterface extends Remote {
 
-    public boolean roubarQuadro(int nr_sala) throws RemoteException;
+    public boolean rollACanvas(int nr_sala, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public int getDistancia(int nr_sala) throws RemoteException;
 

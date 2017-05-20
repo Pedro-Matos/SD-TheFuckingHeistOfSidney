@@ -1,5 +1,8 @@
 package RemoteMethodInvocation.interfaces;
 
+import RemoteMethodInvocation.support.Tuple;
+import RemoteMethodInvocation.support.VectorTimestamp;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -8,37 +11,37 @@ import java.rmi.RemoteException;
  */
 public interface CollectionSiteInterface extends Remote {
 
-    public int checkGrupos() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> checkGroups(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int entrarGrupo(int ladraoID, int grupo) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> joinAssaultParty(int ladraoID, int grupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public boolean grupoCheio(int grupoID)  throws RemoteException;
 
-    public int getEstadoChefe() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getMasterThiefState(int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void startOperations() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> startOperations(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public boolean prepareAssaultParty(int idGrupo) throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public boolean takeARest() throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> takeARest(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int getNrElemGrupo(int grupoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getNumberElemGroup(int grupoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void handACanvas(int ladraoID, int sala, int grupo, int pos) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void indicarSalaVazia(int sala, int grupo, int pos) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public int getPosGrupo(int id, int grupo) throws RemoteException;
 
-    public boolean checkEmptyMuseu() throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> checkEmptyMuseum(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void sumUpResults() throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> sumUpResults(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int getQuadrosRoubados() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getNumberofStolenPaints(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public boolean checkSalasLivres() throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> checkEmptyRooms(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int getSalaAssalto(int grupoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getAssaultRoom(int grupoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public int get_paitings(int sala) throws RemoteException;
 

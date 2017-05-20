@@ -54,9 +54,10 @@ public class Museum implements MuseumInterface {
      * Method to steal the paiting
      *
      * @param nr_sala room id
+     * @param vectorTimestamp
      * @return true if success
      */
-    public synchronized boolean roubarQuadro(int nr_sala) {
+    public synchronized boolean rollACanvas(int nr_sala, VectorTimestamp vectorTimestamp) {
         if (salas[nr_sala][0] > 0) {
             salas[nr_sala][0]--;
             //generalRepository.setNrQuadrosSala(nr_sala, salas[nr_sala][0]);

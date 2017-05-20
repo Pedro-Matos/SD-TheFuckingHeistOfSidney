@@ -11,32 +11,32 @@ import java.rmi.RemoteException;
  */
 public interface ConcentrationSiteInterface extends Remote {
 
-    public int getGrupoLadrao(int id) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getThiefGroup(int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void estouPronto(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> imReady(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int getNrLadroes() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getNumberOfThieves(int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int getStateLadrao(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getThiefState(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void amINeeded(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> amINeeded(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int chamaLadrao(int grupo) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> callThief(int grupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public boolean getBusyLadrao(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> getBusyThief(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void prepareExcursion(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> prepareExcursion(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void reverseDirection(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> reverseDirection(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void naSala(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> atARoom(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void indicarChegada(int ladraoID) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> flagArrival(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> getAgilidade(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;;
+    public Tuple<VectorTimestamp, Integer> getAgility(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;;
 
-    public void esperaLadroes() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> waitForThieves(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void esperaLadroesFim() throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> waitForThievesEnd(VectorTimestamp vectorTimestamp) throws RemoteException;
 
 }

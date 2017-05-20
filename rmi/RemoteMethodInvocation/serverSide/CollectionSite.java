@@ -1,6 +1,7 @@
 package RemoteMethodInvocation.serverSide;
 
 import RemoteMethodInvocation.interfaces.*;
+import RemoteMethodInvocation.support.Tuple;
 import RemoteMethodInvocation.support.VectorTimestamp;
 
 import static RemoteMethodInvocation.support.Constantes.*;
@@ -109,18 +110,22 @@ public class CollectionSite implements CollectionSiteInterface {
      * Checks if the groups are done
      *
      * @return -1 if they are or 0/1 if they aren't.
+     * @param id
+     * @param vectorTimestamp
      */
-    public synchronized int checkGrupos() {
+    public synchronized Tuple<VectorTimestamp, Integer> checkGroups(VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
 
         if (!this.grupoOcup[0]) {
 
-            return 0;
+            return new Tuple<>(local.clone(), 0);
         } else if (!this.grupoOcup[1]) {
 
-            return 1;
+            return new Tuple<>(local.clone(), 1);
         } else {
 
-            return -1;
+            return new Tuple<>(local.clone(), -1);
         }
     }
 
@@ -129,10 +134,12 @@ public class CollectionSite implements CollectionSiteInterface {
      *
      * @param ladraoID thief id
      * @param grupo group id
+     * @param vectorTimestamp
      * @return Position in the group. -1 if the group is full
      */
-    public synchronized int entrarGrupo(int ladraoID, int grupo) {
+    public synchronized Tuple<VectorTimestamp, Integer> joinAssaultParty(int ladraoID, int grupo, VectorTimestamp vectorTimestamp) {
 
+        local.update(vectorTimestamp);
 
         boolean cond = this.grupoCheio(grupo);
 
@@ -143,12 +150,12 @@ public class CollectionSite implements CollectionSiteInterface {
                     this.grupos[grupo][i] = ladraoID;
                     //break;
                     this.gestorGrupos.entrar(ladraoID,grupo,i);
-                    return i;
+                    return new Tuple<>(local.clone(), i);
                 }
             }
         }
 
-        return -1;
+        return new Tuple<>(local.clone(), -1);
     }
 
 
@@ -172,18 +179,26 @@ public class CollectionSite implements CollectionSiteInterface {
      * Verifies master thief state
      *
      * @return master thief state
+     * @param id
+     * @param vectorTimestamp
      */
-    public synchronized int getEstadoChefe() {
-        return this.estadoChefe;
+    public synchronized Tuple<VectorTimestamp, Integer> getMasterThiefState(int id, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
+        return new Tuple<>(local.clone(), this.estadoChefe);
     }
 
     /**
      * Starts the assault
+     * @param vectorTimestamp
      */
-    public synchronized void startOperations() {
+    public synchronized Tuple<VectorTimestamp, Integer> startOperations(VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
 
         this.estadoChefe = DECIDING_WHAT_TO_DO;
-        general.setMasterThiefState(this.estadoChefe, );
+        general.setMasterThiefState(this.estadoChefe, local.clone());
+        return new Tuple<>(local.clone(), -1);
     }
 
     /**
@@ -191,8 +206,9 @@ public class CollectionSite implements CollectionSiteInterface {
      * @param idGrupo if of party
      * @return true if formed, false if not.
      */
-    public synchronized boolean prepareAssaultParty(int idGrupo){
+    public synchronized Tuple<VectorTimestamp, Boolean>  prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp){
 
+        local.update(vectorTimestamp);
 
         this.grupoOcup[idGrupo] = true;
         this.countGrupos++;
@@ -212,29 +228,30 @@ public class CollectionSite implements CollectionSiteInterface {
         if(idGrupo == 1) general.setAssaultParty2_room(j, );
 
 
-        boolean aux = gestorGrupos.formarGrupo(idGrupo, j);
+        Tuple<VectorTimestamp, Boolean> tuple = gestorGrupos.formarGrupo(idGrupo, j);
 
 
-        return aux;
+        return tuple;
     }
 
 
     /**
      * Master is resting
+     * @param vectorTimestamp
      */
-    public synchronized void takeARest(){
+    public synchronized Tuple<VectorTimestamp, Boolean> takeARest(VectorTimestamp vectorTimestamp){
 
+        local.update(vectorTimestamp);
 
+        int nrLadroes = concentrationSite.getNumberOfThieves(id, vectorTimestamp);
 
-        int nrLadroes = concentrationSite.getNrLadroes();
-
-        int checkGrupos = this.checkGrupos();
+        int checkGrupos = this.checkGroups(vectorTimestamp);
 
         if (checkGrupos == -1 || nrLadroes < NUM_GROUP) {
             if (this.estadoChefe == ASSEMBLING_A_GROUP) {
                 this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
                 general.setMasterThiefState(this.estadoChefe, );
-                return;
+                return new Tuple<>(local.clone(), false);
             }
             this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
             general.setMasterThiefState(this.estadoChefe, );
@@ -249,29 +266,35 @@ public class CollectionSite implements CollectionSiteInterface {
             general.setMasterThiefState(this.estadoChefe, );
 
         }
+        return new Tuple<>(local.clone(), false);
     }
 
     /**
      * Returns the number of elements in the group
      * @param grupoID id of group
+     * @param vectorTimestamp
      * @return number of elements
      */
-    public synchronized int getNrElemGrupo(int grupoID) {
-        return this.nrElemGrupo[grupoID];
+    public synchronized Tuple<VectorTimestamp, Integer> getNumberElemGroup(int grupoID, VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
+
+        return new Tuple<>(local.clone(), this.nrElemGrupo[grupoID]);
     }
 
 
 
     /**
      * Hand canvas to the thief and leave the group
-     *
      * @param ladraoID thief id
      * @param sala room id
      * @param grupo group id
      * @param pos position in group
+     * @param vectorTimestamp
      */
-    public synchronized void handACanvas(int ladraoID, int sala, int grupo, int pos){
+    public synchronized Tuple<VectorTimestamp, Integer> handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
 
+        local.update(vectorTimestamp);
 
         this.quadrosRoubados++;
         this.grupos[grupo][pos] = -1;
@@ -293,17 +316,19 @@ public class CollectionSite implements CollectionSiteInterface {
             general.setAP2_reset(pos,ladraoID, );
         }
 
+        return new Tuple<>(local.clone(), -1);
     }
 
     /**
      * Room is empty
-     *
      * @param sala room id
      * @param grupo group id
      * @param pos position in the group
+     * @param vectorTimestamp
      */
-    public synchronized void indicarSalaVazia(int sala, int grupo, int pos){
+    public synchronized Tuple<VectorTimestamp, Integer> flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
 
+        local.update(vectorTimestamp);
 
         this.salaVazia[sala] = true;
         this.grupos[grupo][pos] = -1;
@@ -319,6 +344,7 @@ public class CollectionSite implements CollectionSiteInterface {
         }
 
 
+        return new Tuple<>(local.clone(), -1);
     }
 
     /**
@@ -340,8 +366,9 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Verifies if there are paitings in the museum
      * @return true if empty
+     * @param vectorTimestamp
      */
-    public boolean checkEmptyMuseu() {
+    public Tuple<VectorTimestamp, Boolean> checkEmptyMuseum(VectorTimestamp vectorTimestamp) {
         for (int i = 0; i < salaVazia.length; i++) {
             if (!salaVazia[i]) {
                 return false;
@@ -352,37 +379,46 @@ public class CollectionSite implements CollectionSiteInterface {
 
     /**
      * Show the results of the assault
+     * @param vectorTimestamp
      */
-    public void sumUpResults() {
+    public Tuple<VectorTimestamp, Boolean> sumUpResults(VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
+
         this.estadoChefe = PRESENTING_THE_REPORT;
         general.setMasterThiefState(this.estadoChefe, );
+        return new Tuple<>(local.clone(), false);
     }
 
     /**
      * Number of stollen paitings
      *
      * @return Number of stollen paitings
+     * @param vectorTimestamp
      */
 
-    public int getQuadrosRoubados() {
-
-        return this.quadrosRoubados;
+    public Tuple<VectorTimestamp, Integer> getNumberofStolenPaints(VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+        return new Tuple<>(local.clone(), this.quadrosRoubados);
     }
 
     /**
      * Checks if there are rooms with paitings
      *
      * @return true if there are rooms with paitings
+     * @param vectorTimestamp
      */
-    public boolean checkSalasLivres() {
+    public Tuple<VectorTimestamp, Boolean> checkEmptyRooms(VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
 
         for (int i = 0; i < NUM_ROOMS; i++) {
             if (!salaVazia[i] && salaAssalto[i] == -1) {
                 //salasLivres = true;
-                return true;
+                return new Tuple<>(local.clone(), true);
             }
         }
-        return false;
+        return new Tuple<>(local.clone(), false);
     }
 
 
@@ -390,15 +426,18 @@ public class CollectionSite implements CollectionSiteInterface {
      * Returns the room the group is assaulting
      *
      * @param grupoID group id
+     * @param vectorTimestamp
      * @return room id
      */
-    public int getSalaAssalto(int grupoID) {
+    public Tuple<VectorTimestamp, Integer> getAssaultRoom(int grupoID, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
         for (int i = 0; i < NUM_ROOMS; i++) {
             if (this.salaAssalto[i] == grupoID) {
-                return i;
+                return new Tuple<>(local.clone(), i);
             }
         }
-        return -1;
+        return new Tuple<>(local.clone(), -1);
     }
 
     /**

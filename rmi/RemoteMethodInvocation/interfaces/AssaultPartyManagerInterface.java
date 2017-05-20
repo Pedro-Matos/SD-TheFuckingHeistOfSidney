@@ -1,29 +1,33 @@
 package RemoteMethodInvocation.interfaces;
 
+import RemoteMethodInvocation.support.Tuple;
+import RemoteMethodInvocation.support.VectorTimestamp;
+
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  * Created by tiagoalexbastos on 19-05-2017.
  */
 public interface AssaultPartyManagerInterface extends Remote {
 
-    public boolean formarGrupo(int idGrupo, int nrSala);
+    public boolean formarGrupo(int idGrupo, int nrSala) throws RemoteException;
 
-    public int getPos(int ladraoID, int idGrupo);
+    public Tuple<VectorTimestamp, Integer> getPos(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void desfazerGrupo(int idGrupo);
+    public void desfazerGrupo(int idGrupo) throws RemoteException;
 
-    public void entrar(int ladraoID, int idGrupo, int pos_grupo);
+    public void entrar(int ladraoID, int idGrupo, int pos_grupo) throws RemoteException;
 
-    public int crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo);
+    public Tuple<VectorTimestamp, Integer> crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo);
+    public Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public int getDistanciaSala(int idGrupo);
+    public Tuple<VectorTimestamp, Integer> getRoomDistance(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public boolean rollACanvas(int idGrupo);
+    public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public void waitMinhaVez(int id, int idGrupo);
+    public Tuple<VectorTimestamp, Integer> waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
 
 

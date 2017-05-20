@@ -3,6 +3,7 @@ package RemoteMethodInvocation.serverSide;
 import RemoteMethodInvocation.interfaces.AssaultPartyManagerInterface;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.MuseumInterface;
+import RemoteMethodInvocation.support.Tuple;
 import RemoteMethodInvocation.support.VectorTimestamp;
 
 /**
@@ -50,8 +51,13 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
         return false;
     }
 
-    public int getPos(int ladraoID, int idGrupo){
-        return grupo[idGrupo].getPos(ladraoID);
+    public Tuple<VectorTimestamp, Integer> getPos(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp){
+        local.update(vectorTimestamp);
+
+
+        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].getPos(ladraoID, local.clone());
+
+        return tuple;
     }
 
 
@@ -79,10 +85,15 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param agilidade thief agility
      * @param idGrupo group id
      * @param posgrupo position in the group
+     * @param vectorTimestamp
      * @return final position
      */
-    public int crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo){
-        return grupo[idGrupo].rastejarIn(ladraoID, agilidade,idGrupo,posgrupo);
+    public Tuple<VectorTimestamp, Integer> crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp){
+        local.update(vectorTimestamp);
+
+        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].crawlIn(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
+
+        return tuple;
     }
 
     /**
@@ -91,38 +102,54 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param agilidade thief agility
      * @param idGrupo group id
      * @param posgrupo position in the group
+     * @param vectorTimestamp
      * @return final position
      */
-    public int crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo){
-        return grupo[idGrupo].rastejarOut(ladraoID, agilidade,idGrupo, posgrupo);
-    }
+    public Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp){
+        local.update(vectorTimestamp);
+
+        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].crawlOut(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
+
+        return tuple;    }
 
 
     /**
      * Get distance of room
      * @param idGrupo group id
+     * @param vectorTimestamp
      * @return distance
      */
-    public int getDistanciaSala(int idGrupo){
-        return grupo[idGrupo].getDistanciaSala();
+    public Tuple<VectorTimestamp, Integer> getRoomDistance(int idGrupo, VectorTimestamp vectorTimestamp){
+        local.update(vectorTimestamp);
+
+        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].getRoomDistance(local.clone());
+        return tuple;
     }
 
     /**
      * Steal paiting
      * @param idGrupo group id
+     * @param vectorTimestamp
      * @return true if paiting was stolen
      */
-    public boolean rollACanvas(int idGrupo){
-        return grupo[idGrupo].roubarQuadro();
+    public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp){
+        local.update(vectorTimestamp);
+
+        Tuple<VectorTimestamp, Boolean> tuple = grupo[idGrupo].rollACanvas(local.clone());
+        return tuple;
     }
 
     /**
      * Thief is waiting for it's turn
      * @param id Thief id
      * @param idGrupo Group id
+     * @param vectorTimestamp
      */
-    public void waitMinhaVez(int id, int idGrupo) {
-        grupo[idGrupo].waitMinhaVez(id);
+    public Tuple<VectorTimestamp, Integer> waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
+        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].waitMinhaVez(id, local.clone());
+        return tuple;
     }
 
     
