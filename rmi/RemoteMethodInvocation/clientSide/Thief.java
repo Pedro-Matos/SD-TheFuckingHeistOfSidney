@@ -4,13 +4,12 @@ import RemoteMethodInvocation.interfaces.AssaultPartyManagerInterface;
 import RemoteMethodInvocation.interfaces.CollectionSiteInterface;
 import RemoteMethodInvocation.interfaces.ConcentrationSiteInterface;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
-import RemoteMethodInvocation.serverSide.GeneralRepository;
-import RemoteMethodInvocation.serverSide.ConcentrationSite;
-import RemoteMethodInvocation.serverSide.CollectionSite;
-import RemoteMethodInvocation.serverSide.AssaultPartyManager;
+import RemoteMethodInvocation.support.Tuple;
+import RemoteMethodInvocation.support.VectorTimestamp;
 
+import java.rmi.RemoteException;
 
-import static RemoteMethodInvocation.Support.Constantes.*;
+import static RemoteMethodInvocation.support.Constantes.*;
 
 /**
  * Ordinary Thief
@@ -56,6 +55,8 @@ public class Thief extends Thread {
      */
     private int pos_grupo;
 
+    private VectorTimestamp vt;
+
 
     /**
      * @param id Thief ID
@@ -77,10 +78,24 @@ public class Thief extends Thread {
         this.grupo = grupo;
         this.concentrationSite = concentrationSite;
 
-        this.agilidade = concentrationSite.getAgilidade(id);
+
         this.meuGrupo = -1;
-        this.generalRepository.setThiefDisplacement(this.id, this.agilidade);
         this.pos_grupo = -1;
+
+        vt = new VectorTimestamp(VECTOR_TIMESTAMP_SIZE, (id + 1));
+
+        try {
+            vt.increment();
+            Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getAgilidade(id, vt.clone());
+            vt.update(tuple.getClock());
+            this.agilidade = tuple.getSecond();
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        this.generalRepository.setThiefDisplacement(this.id, this.agilidade, vt.clone());
     }
 
     @Override
@@ -98,7 +113,7 @@ public class Thief extends Thread {
             switch (stat) {
 
                 case OUTSIDE:
-                    generalRepository.setThiefState(this.id, stat);
+                    generalRepository.setThiefState(this.id, stat, );
 
                     boolean getBusyLadrao = concentrationSite.getBusyLadrao(id);
 
@@ -141,9 +156,9 @@ public class Thief extends Thread {
                     int room = escritorio.getSalaAssalto(this.meuGrupo);
 
                     if (this.meuGrupo == 0) {
-                        generalRepository.setAP1_canvas(this.pos_grupo, quadro, room);
+                        generalRepository.setAP1_canvas(this.pos_grupo, quadro, room, );
                     } else if (this.meuGrupo == 1) {
-                        generalRepository.setAP2_canvas(this.pos_grupo, quadro, room);
+                        generalRepository.setAP2_canvas(this.pos_grupo, quadro, room, );
                     }
 
 
@@ -158,9 +173,9 @@ public class Thief extends Thread {
                     }
 
                     if (this.meuGrupo == 0) {
-                        generalRepository.setAP1_pos(this.pos_grupo, posicao);
+                        generalRepository.setAP1_pos(this.pos_grupo, posicao, );
                     } else if (this.meuGrupo == 1) {
-                        generalRepository.setAP2_pos(this.pos_grupo, posicao);
+                        generalRepository.setAP2_pos(this.pos_grupo, posicao, );
                     }
 
                     if (posicao == 0) {
@@ -177,8 +192,8 @@ public class Thief extends Thread {
                             escritorio.indicarSalaVazia(getSalaAssalto, this.meuGrupo, getPosGrupo);
                         }
 
-                        if (this.meuGrupo == 0) generalRepository.setAP1_reset(this.pos_grupo, this.id);
-                        else if (this.meuGrupo == 1) generalRepository.setAP2_reset(this.pos_grupo, this.id);
+                        if (this.meuGrupo == 0) generalRepository.setAP1_reset(this.pos_grupo, this.id, );
+                        else if (this.meuGrupo == 1) generalRepository.setAP2_reset(this.pos_grupo, this.id, );
 
                         this.meuGrupo = -1;
                         concentrationSite.indicarChegada(id);

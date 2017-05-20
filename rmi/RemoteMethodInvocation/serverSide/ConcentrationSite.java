@@ -1,14 +1,18 @@
 package RemoteMethodInvocation.serverSide;
 
-import static RemoteMethodInvocation.Support.Constantes.*;
-import RemoteMethodInvocation.Support.MemFIFO;
+import RemoteMethodInvocation.interfaces.ConcentrationSiteInterface;
+import RemoteMethodInvocation.support.MemFIFO;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
+import RemoteMethodInvocation.support.Tuple;
+import RemoteMethodInvocation.support.VectorTimestamp;
+
+import static RemoteMethodInvocation.support.Constantes.*;
 
 /**
  * Monitor Concentration Site.
  * @author Pedro Matos and Tiago Bastos
  */
-public class ConcentrationSite {
+public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * FIFO used when the Thiefs arrive to the CollectionSite.
@@ -42,6 +46,10 @@ public class ConcentrationSite {
      * Thief's situation
      */
     private int situacaoLadrao[] = new int[NUM_THIEVES];
+
+
+    private VectorTimestamp local;
+
 
     /**
      * @param generalRepository General Repository
@@ -160,8 +168,8 @@ public class ConcentrationSite {
             this.nrLadroes--;
             this.busyLadrao[id] = true;
             this.grupoLadrao[id] = grupo;
-            general.setMasterThiefState(ASSEMBLING_A_GROUP);
-            general.setThiefSituation(id,IN_PARTY);
+            general.setMasterThiefState(ASSEMBLING_A_GROUP, );
+            general.setThiefSituation(id,IN_PARTY, );
             notifyAll();
         }
 
@@ -212,8 +220,8 @@ public class ConcentrationSite {
         this.busyLadrao[ladraoID] = false;
         this.grupoLadrao[ladraoID] = -1;
         this.estadoLadrao[ladraoID] = OUTSIDE;
-        general.setThiefState(ladraoID,this.estadoLadrao[ladraoID] );
-        general.setThiefSituation(ladraoID,WAITING);
+        general.setThiefState(ladraoID,this.estadoLadrao[ladraoID], );
+        general.setThiefSituation(ladraoID,WAITING, );
         this.estouPronto(ladraoID);
 
 
@@ -223,10 +231,14 @@ public class ConcentrationSite {
     /**
      * GET for the agility
      * @param ladraoID thief id
+     * @param vectorTimestamp
      * @return thief agility
      */
-    public synchronized int getAgilidade(int ladraoID) {
-        return agilidadeLadroes[ladraoID];
+    public synchronized Tuple<VectorTimestamp, Integer> getAgilidade(int ladraoID, VectorTimestamp vectorTimestamp) {
+
+        local.update(vectorTimestamp);
+
+        return new Tuple<VectorTimestamp, Integer>(local.clone(), agilidadeLadroes[ladraoID]);
     }
 
     /**

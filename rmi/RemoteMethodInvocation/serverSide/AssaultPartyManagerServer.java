@@ -1,6 +1,9 @@
 package RemoteMethodInvocation.serverSide;
 
-import RemoteMethodInvocation.interfaces.*;
+import RemoteMethodInvocation.interfaces.AssaultPartyManagerInterface;
+import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
+import RemoteMethodInvocation.interfaces.MuseumInterface;
+import RemoteMethodInvocation.interfaces.Register;
 import RemoteMethodInvocation.registry.RegistryConfig;
 
 import java.rmi.AlreadyBoundException;

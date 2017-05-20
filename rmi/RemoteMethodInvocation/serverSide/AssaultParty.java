@@ -1,9 +1,12 @@
 package RemoteMethodInvocation.serverSide;
 
-import static RemoteMethodInvocation.Support.Constantes.*;
-import static RemoteMethodInvocation.Support.Constantes.DIST_THIEVES;
+import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
+import RemoteMethodInvocation.interfaces.MuseumInterface;
+import RemoteMethodInvocation.support.VectorTimestamp;
 
 import java.util.Arrays;
+
+import static RemoteMethodInvocation.support.Constantes.*;
 
 /**
  * Assault Party
@@ -14,12 +17,12 @@ public class AssaultParty {
     /**
      * Museum
      */
-    Museum museum;
+    MuseumInterface museum;
 
     /**
      * General Repository
      */
-    GeneralRepository gen;
+    GeneralRepositoryInterface gen;
     /**
      * Thief's positions
      */
@@ -62,6 +65,10 @@ public class AssaultParty {
      */
     private int id = -1;
 
+
+    private VectorTimestamp local;
+
+
     /**
      *
      * @param museum  Museum
@@ -69,7 +76,7 @@ public class AssaultParty {
      * @param id thief id
      * @param general General Repository
      */
-    public AssaultParty(Museum museum, int nrSala, int id, GeneralRepository general) {
+    public AssaultParty(MuseumInterface museum, int nrSala, int id, GeneralRepositoryInterface general) {
 
         this.gen = general;
         this.museum = museum;
@@ -101,10 +108,10 @@ public class AssaultParty {
         }
 
         if (id == 0) {
-            gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, 0, false);
+            gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, 0, false, );
 
         } else if (id == 1) {
-            gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, 0, false);
+            gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, 0, false, );
         }
 
         this.nrElementos++;
@@ -141,7 +148,7 @@ public class AssaultParty {
 
             if (this.minhaVez[indiceNoGrupo]) {
 
-                gen.setThiefState(ladraoID,CRAWLING_INWARDS);
+                gen.setThiefState(ladraoID,CRAWLING_INWARDS, );
 
                 boolean repetir = true;
                 int[] partnersPos = new int[NUM_GROUP - 1];
@@ -184,20 +191,20 @@ public class AssaultParty {
                                 cheguei[indiceNoGrupo] = true;
                                 repetir = false;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,getDistanciaSala);
-                                    gen.setThiefState(ladraoID,AT_A_ROOM );
+                                    gen.setAP1_pos(posgrupo,getDistanciaSala, );
+                                    gen.setThiefState(ladraoID,AT_A_ROOM, );
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,getDistanciaSala);
-                                    gen.setThiefState(ladraoID,AT_A_ROOM );
+                                    gen.setAP2_pos(posgrupo,getDistanciaSala, );
+                                    gen.setThiefState(ladraoID,AT_A_ROOM, );
                                 }
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition + i;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,myPosition + i);
+                                    gen.setAP1_pos(posgrupo,myPosition + i, );
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,myPosition + i);
+                                    gen.setAP2_pos(posgrupo,myPosition + i, );
                                 }
                             }
 
@@ -264,7 +271,7 @@ public class AssaultParty {
 
                     }
 
-                    if(myPosition == getDistanciaSala) gen.setThiefState(ladraoID,CRAWLING_OUTWARDS );
+                    if(myPosition == getDistanciaSala) gen.setThiefState(ladraoID,CRAWLING_OUTWARDS, );
 
                     Arrays.sort(partnersPos);
                     for (i = agilidade; i > 0; i--) {
@@ -291,19 +298,19 @@ public class AssaultParty {
                                 voltei[indiceNoGrupo] = true;
                                 repetir = false;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,0);
+                                    gen.setAP1_pos(posgrupo,0, );
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,0);
+                                    gen.setAP2_pos(posgrupo,0, );
                                 }
-                                gen.setThiefState(ladraoID, OUTSIDE);
+                                gen.setThiefState(ladraoID, OUTSIDE, );
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition - i;
                                 if(idGrupo == 0){
-                                    gen.setAP1_pos(posgrupo,myPosition - i);
+                                    gen.setAP1_pos(posgrupo,myPosition - i, );
                                 }
                                 else if(idGrupo== 1){
-                                    gen.setAP2_pos(posgrupo,myPosition - i);
+                                    gen.setAP2_pos(posgrupo,myPosition - i, );
                                 }
                             }
                             break;

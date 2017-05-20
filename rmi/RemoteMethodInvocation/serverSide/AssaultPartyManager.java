@@ -1,12 +1,14 @@
 package RemoteMethodInvocation.serverSide;
 
+import RemoteMethodInvocation.interfaces.AssaultPartyManagerInterface;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.MuseumInterface;
+import RemoteMethodInvocation.support.VectorTimestamp;
 
 /**
  * @author Pedro Matos and Tiago Bastos
  */
-public class AssaultPartyManager {
+public class AssaultPartyManager implements AssaultPartyManagerInterface {
 
     /**
      * Assault Groups
@@ -20,6 +22,8 @@ public class AssaultPartyManager {
      * General Repository
      */
     private GeneralRepositoryInterface general;
+
+    private VectorTimestamp local;
 
     /**
      *

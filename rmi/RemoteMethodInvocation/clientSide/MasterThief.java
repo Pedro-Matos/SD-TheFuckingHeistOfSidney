@@ -1,13 +1,11 @@
 package RemoteMethodInvocation.clientSide;
 
-import static RemoteMethodInvocation.Support.Constantes.*;
-
 import RemoteMethodInvocation.interfaces.CollectionSiteInterface;
 import RemoteMethodInvocation.interfaces.ConcentrationSiteInterface;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
-import RemoteMethodInvocation.serverSide.GeneralRepository;
-import RemoteMethodInvocation.serverSide.ConcentrationSite;
-import RemoteMethodInvocation.serverSide.CollectionSite;
+import RemoteMethodInvocation.support.VectorTimestamp;
+
+import static RemoteMethodInvocation.support.Constantes.*;
 
 
 /**
@@ -38,6 +36,9 @@ public class MasterThief extends Thread {
      */
     private String name;
 
+    private VectorTimestamp vt;
+
+
     /**
      *
      * @param name Masther Thief's name
@@ -56,6 +57,8 @@ public class MasterThief extends Thread {
 
         this.concentrationSite = concentrationSite;
         this.escritorio = escritorio;
+
+        vt = new VectorTimestamp(VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     @Override
@@ -72,7 +75,7 @@ public class MasterThief extends Thread {
                     case PLANNING_THE_HEIST:
 
                         generalRepository.iniciarLog();
-                        generalRepository.setMasterThiefState(stat);
+                        generalRepository.setMasterThiefState(stat, );
 
                         if (concentrationSite.getNrLadroes() == NUM_THIEVES) {
                             escritorio.startOperations();
@@ -141,7 +144,7 @@ public class MasterThief extends Thread {
 
 
                         int nrQuadrosRoubados = escritorio.getQuadrosRoubados();
-                        generalRepository.finalizarRelatorio(nrQuadrosRoubados);
+                        generalRepository.finalizarRelatorio(nrQuadrosRoubados, );
                         heistOver = true;
                         break;
                 }

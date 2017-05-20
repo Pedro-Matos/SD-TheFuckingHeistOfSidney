@@ -1,18 +1,16 @@
 package RemoteMethodInvocation.serverSide;
 
-import RemoteMethodInvocation.interfaces.AssaultPartyManagerInterface;
-import RemoteMethodInvocation.interfaces.ConcentrationSiteInterface;
-import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
-import RemoteMethodInvocation.interfaces.MuseumInterface;
+import RemoteMethodInvocation.interfaces.*;
+import RemoteMethodInvocation.support.VectorTimestamp;
 
-import static RemoteMethodInvocation.Support.Constantes.*;
+import static RemoteMethodInvocation.support.Constantes.*;
 
 /**
  * Monitor Collection Site
  *
  * @author Pedro Matos and Tiago Bastos
  */
-public class CollectionSite {
+public class CollectionSite implements CollectionSiteInterface {
     /**
      * CollectionSite
      */
@@ -59,6 +57,10 @@ public class CollectionSite {
      * General Repository
      */
     private GeneralRepositoryInterface general;
+
+
+    private VectorTimestamp local;
+
 
     /**
      * Number of groups
@@ -181,7 +183,7 @@ public class CollectionSite {
     public synchronized void startOperations() {
 
         this.estadoChefe = DECIDING_WHAT_TO_DO;
-        general.setMasterThiefState(this.estadoChefe);
+        general.setMasterThiefState(this.estadoChefe, );
     }
 
     /**
@@ -206,8 +208,8 @@ public class CollectionSite {
             }
         }
 
-        if(idGrupo == 0) general.setAssaultParty1_room(j);
-        if(idGrupo == 1) general.setAssaultParty2_room(j);
+        if(idGrupo == 0) general.setAssaultParty1_room(j, );
+        if(idGrupo == 1) general.setAssaultParty2_room(j, );
 
 
         boolean aux = gestorGrupos.formarGrupo(idGrupo, j);
@@ -231,11 +233,11 @@ public class CollectionSite {
         if (checkGrupos == -1 || nrLadroes < NUM_GROUP) {
             if (this.estadoChefe == ASSEMBLING_A_GROUP) {
                 this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-                general.setMasterThiefState(this.estadoChefe);
+                general.setMasterThiefState(this.estadoChefe, );
                 return;
             }
             this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-            general.setMasterThiefState(this.estadoChefe);
+            general.setMasterThiefState(this.estadoChefe, );
 
             try {
                 wait();
@@ -244,7 +246,7 @@ public class CollectionSite {
             }
         } else {
             this.estadoChefe = DECIDING_WHAT_TO_DO;
-            general.setMasterThiefState(this.estadoChefe);
+            general.setMasterThiefState(this.estadoChefe, );
 
         }
     }
@@ -279,16 +281,16 @@ public class CollectionSite {
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                general.setMasterThiefState(this.estadoChefe);
+                general.setMasterThiefState(this.estadoChefe, );
             }
             notifyAll();
         }
 
         if(grupo == 0){
-            general.setAP1_reset(pos,ladraoID);
+            general.setAP1_reset(pos,ladraoID, );
         }
         else if (grupo == 1){
-            general.setAP2_reset(pos,ladraoID);
+            general.setAP2_reset(pos,ladraoID, );
         }
 
     }
@@ -311,7 +313,7 @@ public class CollectionSite {
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                general.setMasterThiefState(this.estadoChefe);
+                general.setMasterThiefState(this.estadoChefe, );
             }
             notifyAll();
         }
@@ -353,7 +355,7 @@ public class CollectionSite {
      */
     public void sumUpResults() {
         this.estadoChefe = PRESENTING_THE_REPORT;
-        general.setMasterThiefState(this.estadoChefe);
+        general.setMasterThiefState(this.estadoChefe, );
     }
 
     /**

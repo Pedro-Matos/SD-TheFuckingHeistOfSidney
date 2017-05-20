@@ -11,8 +11,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import static RemoteMethodInvocation.Support.Constantes.NUM_THIEVES;
-
 /**
  * Created by tiagoalexbastos on 19-05-2017.
  */

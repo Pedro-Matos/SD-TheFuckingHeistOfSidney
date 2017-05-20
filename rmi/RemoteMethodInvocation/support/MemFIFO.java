@@ -1,4 +1,4 @@
-package RemoteMethodInvocation.Support;
+package RemoteMethodInvocation.support;
 
 /**
  *    This type of data define a FIFO memory derivated from a generic memory

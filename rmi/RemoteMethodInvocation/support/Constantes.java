@@ -1,4 +1,4 @@
-package RemoteMethodInvocation.Support;
+package RemoteMethodInvocation.support;
 
 /**
  * General Definitions of the problem
@@ -59,6 +59,10 @@ public class Constantes {
      * Max agility of a thief
      */
     public static final int MAX_AGIL = 6;
+
+
+    // 6 ladroes + chefe
+    public static final int VECTOR_TIMESTAMP_SIZE = NUM_THIEVES + 1;
 
 
     /**

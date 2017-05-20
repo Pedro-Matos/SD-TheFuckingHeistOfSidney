@@ -1,4 +1,4 @@
-package RemoteMethodInvocation.Support;
+package RemoteMethodInvocation.support;
 
 /**
  *    This type of data defines a generic memory

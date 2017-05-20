@@ -2,10 +2,11 @@ package RemoteMethodInvocation.serverSide;
 
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.MuseumInterface;
-
-import static RemoteMethodInvocation.Support.Constantes.*;
+import RemoteMethodInvocation.support.VectorTimestamp;
 
 import java.util.Random;
+
+import static RemoteMethodInvocation.support.Constantes.*;
 
 /**
  * Monitor Museum
@@ -23,6 +24,10 @@ public class Museum implements MuseumInterface {
      */
     GeneralRepositoryInterface generalRepository;
 
+
+    private VectorTimestamp local;
+
+
     /**
      * @param generalRepository General Repository
      */
@@ -33,11 +38,11 @@ public class Museum implements MuseumInterface {
         for (int i = 0; i < salas.length; i++) {
             Random r = new Random();
             salas[i][0] = r.nextInt((MAX_PAINTS+1)-MIN_PAINTS) + MIN_PAINTS;
-            this.generalRepository.setNrQuadrosSala(i, salas[i][0]);
+            this.generalRepository.setNrQuadrosSala(i, salas[i][0], );
             Random r2 = new Random();
 
             salas[i][1] = r2.nextInt((MAX_DIST+1)-MIN_DIST) + MIN_DIST;
-            this.generalRepository.setDistanciaSala(i, salas[i][1]);
+            this.generalRepository.setDistanciaSala(i, salas[i][1], );
         }
 
 

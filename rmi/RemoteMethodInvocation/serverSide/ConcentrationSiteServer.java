@@ -2,7 +2,6 @@ package RemoteMethodInvocation.serverSide;
 
 import RemoteMethodInvocation.interfaces.ConcentrationSiteInterface;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
-import RemoteMethodInvocation.interfaces.MuseumInterface;
 import RemoteMethodInvocation.interfaces.Register;
 import RemoteMethodInvocation.registry.RegistryConfig;
 

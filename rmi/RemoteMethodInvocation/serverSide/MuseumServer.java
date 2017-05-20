@@ -1,9 +1,9 @@
 package RemoteMethodInvocation.serverSide;
 
-import RemoteMethodInvocation.clientSide.Thief;
-import RemoteMethodInvocation.interfaces.*;
+import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
+import RemoteMethodInvocation.interfaces.MuseumInterface;
+import RemoteMethodInvocation.interfaces.Register;
 import RemoteMethodInvocation.registry.RegistryConfig;
-import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -12,8 +12,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
-import static RemoteMethodInvocation.Support.Constantes.NUM_THIEVES;
 
 /**
  * Created by tiagoalexbastos on 20-05-2017.
