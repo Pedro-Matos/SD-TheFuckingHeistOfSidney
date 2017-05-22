@@ -33,10 +33,9 @@ public class ServerRegisterRemoteObject
 
         RegisterRemoteObject regEngine = new RegisterRemoteObject (rmiRegHostName, rmiRegPortNumb);
         Register regEngineStub = null;
-        int listeningPort = 22000;                            /* it should be set accordingly in each case */
 
         try
-        { regEngineStub = (Register) UnicastRemoteObject.exportObject (regEngine, listeningPort);
+        { regEngineStub = (Register) UnicastRemoteObject.exportObject (regEngine, RegistryConfig.RMI_REGISTER_PORT);
         }
         catch (RemoteException e)
         { GenericIO.writelnString ("RegisterRemoteObject stub generation exception: " + e.getMessage ());

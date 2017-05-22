@@ -31,7 +31,9 @@ public class MasterThiefClient {
         try {
             registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
         } catch (RemoteException e) {
+            GenericIO.writelnString("RMI registry creation exception: " + e.getMessage());
             e.printStackTrace();
+            System.exit(1);
         }
 
         /*

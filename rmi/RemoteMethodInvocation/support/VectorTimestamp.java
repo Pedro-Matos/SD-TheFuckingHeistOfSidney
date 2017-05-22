@@ -26,9 +26,6 @@ public class VectorTimestamp implements Cloneable {
             timestamps[i] = Math.max(timestamps[i], vt.timestamps[i]);
     }
 
-    public int[] toIntArray() {
-        return timestamps;
-    }
 
     @Override
     public VectorTimestamp clone() {

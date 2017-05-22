@@ -400,7 +400,7 @@ public class AssaultParty {
     public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp){
         local.update(vectorTimestamp);
 
-        boolean ret = rollACanvas(nrSala, vectorTimestamp);
+        boolean ret = rollACanvas(nrSala, local.clone());
 
         return new Tuple<>(local.clone(), ret);
 
@@ -411,7 +411,7 @@ public class AssaultParty {
      * @param id thief id
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Integer> waitMinhaVez(int id, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp waitMyTurn(int id, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
         notifyAll();
@@ -424,14 +424,14 @@ public class AssaultParty {
                 System.out.println(ex.getMessage());
             }
         }
-        return new Tuple<>(local.clone(), -1);
+        return local.clone();
     }
 
     private boolean rollACanvas(int nrSala, VectorTimestamp vectorTimestamp){
         boolean ret = false;
 
         try {
-            local.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Boolean> tuple =
                     this.museum.rollACanvas(nrSala, vectorTimestamp);
             ret = tuple.getSecond();
@@ -448,7 +448,7 @@ public class AssaultParty {
         int ret = -1;
 
         try {
-            local.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple =
                     this.museum.getMuseumRoomDistance(nrSala, vectorTimestamp);
             ret = tuple.getSecond();

@@ -3,6 +3,7 @@ package RemoteMethodInvocation.serverSide;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.Register;
 import RemoteMethodInvocation.registry.RegistryConfig;
+import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -30,6 +31,7 @@ public class GeneralRepositoryServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
+        GenericIO.writelnString ("Security manager was installed!");
 
         // Instanciçãoo do RefereeSite
         GeneralRepository generalRepository = new GeneralRepository();
@@ -37,7 +39,7 @@ public class GeneralRepositoryServer {
 
         try {
             generalRepositoryInterface = (GeneralRepositoryInterface)
-                    UnicastRemoteObject.exportObject((Remote) generalRepositoryInterface, RegistryConfig.RMI_GENREPO_PORT);
+                    UnicastRemoteObject.exportObject( generalRepositoryInterface, RegistryConfig.RMI_GENREPO_PORT);
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o General Repository: " + e.getMessage());
             System.exit(1);
@@ -69,7 +71,7 @@ public class GeneralRepositoryServer {
         }
 
         try {
-            reg.bind(nameEntryObject, (Remote) generalRepositoryInterface);
+            reg.bind(nameEntryObject,  generalRepositoryInterface);
         } catch (RemoteException e) {
             System.out.println("Excepção no registo do General Repository: " + e.getMessage());
             System.exit(1);

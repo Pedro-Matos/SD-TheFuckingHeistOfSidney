@@ -1,6 +1,7 @@
 package RemoteMethodInvocation.serverSide;
 
 import RemoteMethodInvocation.interfaces.*;
+import RemoteMethodInvocation.support.Constantes;
 import RemoteMethodInvocation.support.Tuple;
 import RemoteMethodInvocation.support.VectorTimestamp;
 
@@ -106,6 +107,9 @@ public class CollectionSite implements CollectionSiteInterface {
 
         this.quadrosRoubados = 0;
 
+        local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
+
+
     }
 
     /**
@@ -192,13 +196,13 @@ public class CollectionSite implements CollectionSiteInterface {
      * Starts the assault
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Integer> startOperations(VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp startOperations(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
         this.estadoChefe = DECIDING_WHAT_TO_DO;
         setMasterThiefState(this.estadoChefe, local.clone());
-        return new Tuple<>(local.clone(), -1);
+        return local.clone();
     }
 
 
@@ -208,7 +212,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * @param idGrupo if of party
      * @return true if formed, false if not.
      */
-    public synchronized Tuple<VectorTimestamp, Boolean>  prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp){
+    public synchronized VectorTimestamp prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp){
 
         local.update(vectorTimestamp);
 
@@ -233,7 +237,7 @@ public class CollectionSite implements CollectionSiteInterface {
         boolean ret = formarGrupo(idGrupo, j, local.clone());
 
 
-        return new Tuple<>(local.clone(), ret);
+        return local.clone();
     }
 
 
@@ -242,7 +246,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * Master is resting
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Boolean> takeARest(VectorTimestamp vectorTimestamp){
+    public synchronized VectorTimestamp takeARest(VectorTimestamp vectorTimestamp){
 
         local.update(vectorTimestamp);
 
@@ -255,7 +259,7 @@ public class CollectionSite implements CollectionSiteInterface {
             if (this.estadoChefe == ASSEMBLING_A_GROUP) {
                 this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
                 setMasterThiefState(this.estadoChefe, local.clone());
-                return new Tuple<>(local.clone(), false);
+                return local.clone();
             }
             this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
             setMasterThiefState(this.estadoChefe, local.clone());
@@ -270,7 +274,7 @@ public class CollectionSite implements CollectionSiteInterface {
             setMasterThiefState(this.estadoChefe, local.clone());
 
         }
-        return new Tuple<>(local.clone(), false);
+        return local.clone();
     }
 
     private int getNumberOffThieves(VectorTimestamp vectorTimestamp) {
@@ -314,7 +318,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * @param pos position in group
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Integer> handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
+    public synchronized VectorTimestamp handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
 
         local.update(vectorTimestamp);
 
@@ -338,7 +342,7 @@ public class CollectionSite implements CollectionSiteInterface {
             setAP2_reset(pos,ladraoID, local.clone());
         }
 
-        return new Tuple<>(local.clone(), -1);
+        return local.clone();
     }
 
 
@@ -350,7 +354,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * @param pos position in the group
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Integer> flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
+    public synchronized VectorTimestamp flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
 
         local.update(vectorTimestamp);
 
@@ -368,7 +372,7 @@ public class CollectionSite implements CollectionSiteInterface {
         }
 
 
-        return new Tuple<>(local.clone(), -1);
+        return local.clone();
     }
 
     /**
@@ -407,13 +411,13 @@ public class CollectionSite implements CollectionSiteInterface {
      * Show the results of the assault
      * @param vectorTimestamp
      */
-    public Tuple<VectorTimestamp, Boolean> sumUpResults(VectorTimestamp vectorTimestamp) {
+    public VectorTimestamp sumUpResults(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
         this.estadoChefe = PRESENTING_THE_REPORT;
         setMasterThiefState(this.estadoChefe, local.clone());
-        return new Tuple<>(local.clone(), false);
+        return local.clone();
     }
 
     /**
@@ -469,7 +473,7 @@ public class CollectionSite implements CollectionSiteInterface {
 
     private void entrar(int ladraoID, int grupo, int i, VectorTimestamp vectorTimestamp){
         try {
-            local.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = this.gestorGrupos.entrar(ladraoID, grupo, i, vectorTimestamp);
             local.update(tuple.getClock());
         } catch (RemoteException e){
@@ -493,7 +497,7 @@ public class CollectionSite implements CollectionSiteInterface {
         boolean ret = false;
 
         try {
-            local.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.formarGrupo(idGrupo, j, vectorTimestamp);
             ret = tuple.getSecond();
             local.update(tuple.getClock());
@@ -530,7 +534,7 @@ public class CollectionSite implements CollectionSiteInterface {
     private void desfazerGrupo(int grupo, VectorTimestamp vectorTimestamp) {
 
         try {
-            local.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.desfazerGrupo(grupo, vectorTimestamp);
             local.update(tuple.getClock());
         } catch (RemoteException e){

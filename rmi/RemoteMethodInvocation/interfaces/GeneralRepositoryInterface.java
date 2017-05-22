@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
  */
 public interface GeneralRepositoryInterface extends Remote {
 
-    public void iniciarLog() throws RemoteException;
+    public void startLog(VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public void add_log(VectorTimestamp vectorTimestamp) throws RemoteException;
 

@@ -4,6 +4,7 @@ import RemoteMethodInvocation.interfaces.ConcentrationSiteInterface;
 import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.Register;
 import RemoteMethodInvocation.registry.RegistryConfig;
+import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -30,11 +31,6 @@ public class ConcentrationSiteServer {
         /* localização por nome do objecto remoto no serviço de registos RMI */
         GeneralRepositoryInterface generalRepositoryInterface = null;
 
-        /* instanciação e instalação do gestor de segurança */
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
-
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
             generalRepositoryInterface = (GeneralRepositoryInterface)
@@ -53,6 +49,7 @@ public class ConcentrationSiteServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
+        GenericIO.writelnString ("Security manager was installed!");
 
 
         /* instanciação do objecto remoto que representa o Concentration Site e geração de um stub para ele */
@@ -61,7 +58,7 @@ public class ConcentrationSiteServer {
 
         try {
             concentrationSiteInterface = (ConcentrationSiteInterface)
-                    UnicastRemoteObject.exportObject((Remote) concentrationSite, RegistryConfig.RMI_CONC_PORT);
+                    UnicastRemoteObject.exportObject( concentrationSite, RegistryConfig.RMI_CONC_PORT);
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o ConcentrationSite: " + e.getMessage());
             e.printStackTrace();
@@ -99,7 +96,7 @@ public class ConcentrationSiteServer {
         }
 
         try {
-            reg.bind(nameEntryObject, (Remote) concentrationSiteInterface);
+            reg.bind(nameEntryObject, concentrationSiteInterface);
         } catch (RemoteException e) {
             System.out.println("Excepção no registo do ConcentrationSite: " + e.getMessage());
             e.printStackTrace();

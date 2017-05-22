@@ -4,6 +4,7 @@ import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.MuseumInterface;
 import RemoteMethodInvocation.interfaces.Register;
 import RemoteMethodInvocation.registry.RegistryConfig;
+import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -30,11 +31,6 @@ public class MuseumServer {
         /* localização por nome do objecto remoto no serviço de registos RMI */
         GeneralRepositoryInterface generalRepositoryInterface = null;
 
-        /* instanciação e instalação do gestor de segurança */
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
-
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
             generalRepositoryInterface = (GeneralRepositoryInterface)
@@ -53,6 +49,7 @@ public class MuseumServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
+        GenericIO.writelnString ("Security manager was installed!");
 
 
         /* instanciação do objecto remoto que representa o Museu e geração de um stub para ele */
@@ -61,7 +58,7 @@ public class MuseumServer {
 
         try {
             museumInterface = (MuseumInterface)
-                    UnicastRemoteObject.exportObject((Remote) museum, RegistryConfig.RMI_MUSEUM_PORT);
+                    UnicastRemoteObject.exportObject(museum, RegistryConfig.RMI_MUSEUM_PORT);
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o Museum: " + e.getMessage());
             e.printStackTrace();
@@ -98,7 +95,7 @@ public class MuseumServer {
         }
 
         try {
-            reg.bind(nameEntryObject, (Remote) museumInterface);
+            reg.bind(nameEntryObject, museumInterface);
         } catch (RemoteException e) {
             System.out.println("Excepção no registo do Museum: " + e.getMessage());
             e.printStackTrace();

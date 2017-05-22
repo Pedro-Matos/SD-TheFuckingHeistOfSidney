@@ -53,26 +53,6 @@ public class Museum implements MuseumInterface {
 
     }
 
-    private void setDistanciaSala(int i, int i1, VectorTimestamp vectorTimestamp) {
-        try {
-            this.generalRepository.setDistanciaSala(i, i1, vectorTimestamp);
-        } catch (RemoteException e){
-            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    private void setNrQuadrosSala(int i, int i1, VectorTimestamp vectorTimestamp) {
-        try {
-            this.generalRepository.setNrQuadrosSala(i, i1, vectorTimestamp);
-        } catch (RemoteException e){
-            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
 
     /**
      *
@@ -108,12 +88,24 @@ public class Museum implements MuseumInterface {
         return new Tuple<>(local.clone(), salas[nr_sala][1]);
     }
 
-    /**
-     * Number of paitings
-     * @param nr_sala room id
-     * @return nr of paitings
-     */
-    public synchronized int getNumeroQuadros(int nr_sala) {
-        return salas[nr_sala][0];
+
+    private void setDistanciaSala(int i, int i1, VectorTimestamp vectorTimestamp) {
+        try {
+            this.generalRepository.setDistanciaSala(i, i1, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void setNrQuadrosSala(int i, int i1, VectorTimestamp vectorTimestamp) {
+        try {
+            this.generalRepository.setNrQuadrosSala(i, i1, vectorTimestamp);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }

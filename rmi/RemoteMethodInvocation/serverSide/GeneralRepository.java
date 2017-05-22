@@ -138,9 +138,10 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
     /**
      * The first lines to be written in the file.
+     * @param vectorTimestamp
      */
 
-    public synchronized void iniciarLog() {
+    public synchronized void startLog(VectorTimestamp vectorTimestamp) {
         if (!log.openForWriting(".", fileName2)) {
             GenericIO.writelnString("Operation " + fileName2 + " failed!");
             System.exit(1);

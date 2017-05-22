@@ -19,23 +19,21 @@ public interface CollectionSiteInterface extends Remote {
 
     public Tuple<VectorTimestamp, Integer> getMasterThiefState(int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> startOperations(VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp startOperations(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Boolean> prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Boolean> takeARest(VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp takeARest(VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> getNumberElemGroup(int grupoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
-
-    public int getPosGrupo(int id, int grupo) throws RemoteException;
+    public VectorTimestamp flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Boolean> checkEmptyMuseum(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Boolean> sumUpResults(VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp sumUpResults(VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> getNumberofStolenPaints(VectorTimestamp vectorTimestamp) throws RemoteException;
 

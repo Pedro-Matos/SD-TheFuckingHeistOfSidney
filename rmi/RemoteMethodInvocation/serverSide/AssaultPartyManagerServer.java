@@ -5,6 +5,7 @@ import RemoteMethodInvocation.interfaces.GeneralRepositoryInterface;
 import RemoteMethodInvocation.interfaces.MuseumInterface;
 import RemoteMethodInvocation.interfaces.Register;
 import RemoteMethodInvocation.registry.RegistryConfig;
+import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -32,10 +33,6 @@ public class AssaultPartyManagerServer {
         GeneralRepositoryInterface generalRepositoryInterface = null;
         MuseumInterface museumInterface = null;
 
-        /* instanciação e instalação do gestor de segurança */
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
 
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
@@ -70,6 +67,8 @@ public class AssaultPartyManagerServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
+        GenericIO.writelnString ("Security manager was installed!");
+
 
 
         /* instanciação do objecto remoto que representa o Concentration Site e geração de um stub para ele */
@@ -78,7 +77,7 @@ public class AssaultPartyManagerServer {
 
         try {
             assaultPartyManagerInterface = (AssaultPartyManagerInterface)
-                    UnicastRemoteObject.exportObject((Remote) assaultPartyManager, RegistryConfig.RMI_ASSGMAN_PORT);
+                    UnicastRemoteObject.exportObject(assaultPartyManager, RegistryConfig.RMI_ASSGMAN_PORT);
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o AssaultPartyManager: " + e.getMessage());
             e.printStackTrace();
@@ -116,7 +115,7 @@ public class AssaultPartyManagerServer {
         }
 
         try {
-            reg.bind(nameEntryObject, (Remote) assaultPartyManagerInterface);
+            reg.bind(nameEntryObject, assaultPartyManagerInterface);
         } catch (RemoteException e) {
             System.out.println("Excepção no registo do AssaultPartyManager: " + e.getMessage());
             e.printStackTrace();

@@ -13,30 +13,30 @@ public interface ConcentrationSiteInterface extends Remote {
 
     public Tuple<VectorTimestamp, Integer> getThiefGroup(int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> imReady(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp imReady(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> getNumberOfThieves(VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> getThiefState(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> amINeeded(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp amINeeded(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> callThief(int grupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Boolean> getBusyThief(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> prepareExcursion(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp prepareExcursion(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> reverseDirection(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp reverseDirection(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> atARoom(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp atARoom(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> flagArrival(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp flagArrival(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     public Tuple<VectorTimestamp, Integer> getAgility(int ladraoID, VectorTimestamp vectorTimestamp) throws RemoteException;;
 
-    public Tuple<VectorTimestamp, Integer> waitForThieves(VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp waitForThieves(VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> waitForThievesEnd(VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp waitForThievesEnd(VectorTimestamp vectorTimestamp) throws RemoteException;
 
 }

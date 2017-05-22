@@ -160,11 +160,10 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param idGrupo Group id
      * @param vectorTimestamp
      */
-    public Tuple<VectorTimestamp, Integer> waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) {
+    public VectorTimestamp waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].waitMinhaVez(id, local.clone());
-        return tuple;
+        return grupo[idGrupo].waitMyTurn(id, local.clone());
     }
 
     

@@ -7,6 +7,7 @@ import RemoteMethodInvocation.support.Tuple;
 import RemoteMethodInvocation.support.VectorTimestamp;
 
 import java.rmi.RemoteException;
+import java.util.Vector;
 
 import static RemoteMethodInvocation.support.Constantes.*;
 
@@ -78,7 +79,7 @@ public class MasterThief extends Thread {
                 switch (stat) {
                     case PLANNING_THE_HEIST:
 
-                        startLog();
+                        startLog(vt.clone());
                         setMasterThiefState(stat, vt.clone());
 
                         if (getNumberOfThieves(vt.clone()) == NUM_THIEVES) {
@@ -147,7 +148,7 @@ public class MasterThief extends Thread {
     private int getNumberOfStolenPaints(VectorTimestamp vectorTimestamp) {
         int ret = -1;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getNumberofStolenPaints(vectorTimestamp);
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
@@ -161,9 +162,9 @@ public class MasterThief extends Thread {
 
     private void waitForThievesEnd(VectorTimestamp vectorTimestamp) {
         try {
-            vt.increment();
-            Tuple<VectorTimestamp, Integer> tuple = concentrationSite.waitForThievesEnd(vectorTimestamp);
-            vt.update(tuple.getClock());
+            vectorTimestamp.increment();
+            VectorTimestamp clock = concentrationSite.waitForThievesEnd(vectorTimestamp);
+            vt.update(clock);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -174,7 +175,7 @@ public class MasterThief extends Thread {
     private int joinAssaultParty(int ladrao, int numero_grupos, VectorTimestamp vectorTimestamp) {
         int ret = -1;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.joinAssaultParty(ladrao, numero_grupos, vectorTimestamp);
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
@@ -190,7 +191,7 @@ public class MasterThief extends Thread {
     private int callThief(int numero_grupos, VectorTimestamp vectorTimestamp) {
         int ret = -1;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.callThief(numero_grupos, vectorTimestamp);
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -205,7 +206,7 @@ public class MasterThief extends Thread {
     private int getNumberElemGroup(int numero_grupos, VectorTimestamp vectorTimestamp) {
         int ret = -1;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getNumberElemGroup(numero_grupos, vectorTimestamp);
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -220,9 +221,9 @@ public class MasterThief extends Thread {
 
     private void waitForThieves(VectorTimestamp vectorTimestamp) {
         try {
-            vt.increment();
-            Tuple<VectorTimestamp, Integer> tuple = concentrationSite.waitForThieves(vectorTimestamp);
-            vt.update(tuple.getClock());
+            vectorTimestamp.increment();
+            VectorTimestamp clock = concentrationSite.waitForThieves(vectorTimestamp);
+            vt.update(clock);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -232,9 +233,9 @@ public class MasterThief extends Thread {
 
     private void takeARest(VectorTimestamp vectorTimestamp) {
         try {
-            vt.increment();
-            Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.takeARest(vectorTimestamp);
-            vt.update(tuple.getClock());
+            vectorTimestamp.increment();
+            VectorTimestamp clock = collectionSiteInterface.takeARest(vectorTimestamp);
+            vt.update(clock);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -244,9 +245,9 @@ public class MasterThief extends Thread {
 
     private void sumUpResults(VectorTimestamp vectorTimestamp) {
         try {
-            vt.increment();
-            Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.sumUpResults(vectorTimestamp);
-            vt.update(tuple.getClock());
+            vectorTimestamp.increment();
+            VectorTimestamp clock = collectionSiteInterface.sumUpResults(vectorTimestamp);
+            vt.update(clock);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -256,9 +257,9 @@ public class MasterThief extends Thread {
 
     private void prepareAssaultParty(int numero_grupos, VectorTimestamp vectorTimestamp) {
         try {
-            vt.increment();
-            Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.prepareAssaultParty(numero_grupos, vectorTimestamp);
-            vt.update(tuple.getClock());
+            vectorTimestamp.increment();
+            VectorTimestamp clock = collectionSiteInterface.prepareAssaultParty(numero_grupos, vectorTimestamp);
+            vt.update(clock);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -269,7 +270,7 @@ public class MasterThief extends Thread {
     private boolean checkEmptyRooms(VectorTimestamp vectorTimestamp) {
         boolean ret = false;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.checkEmptyRooms(vectorTimestamp);
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -285,7 +286,7 @@ public class MasterThief extends Thread {
     private boolean checkEmptyMuseum(VectorTimestamp vectorTimestamp) {
         boolean ret = false;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.checkEmptyMuseum(vectorTimestamp);
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -301,7 +302,7 @@ public class MasterThief extends Thread {
     private int checkGroups(VectorTimestamp vectorTimestamp) {
         int ret = -1;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.checkGroups(vectorTimestamp);
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -316,9 +317,9 @@ public class MasterThief extends Thread {
 
     private void startOperations(VectorTimestamp vectorTimestamp) {
         try {
-            vt.increment();
-            Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.startOperations(vectorTimestamp);
-            vt.update(tuple.getClock());
+            vectorTimestamp.increment();
+            VectorTimestamp clock = collectionSiteInterface.startOperations(vectorTimestamp);
+            vt.update(clock);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -329,7 +330,7 @@ public class MasterThief extends Thread {
     private int getNumberOfThieves(VectorTimestamp vectorTimestamp) {
         int ret = -1;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getNumberOfThieves(vectorTimestamp);
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -352,9 +353,9 @@ public class MasterThief extends Thread {
         }
     }
 
-    private void startLog() {
+    private void startLog(VectorTimestamp vectorTimestamp) {
         try {
-            this.generalRepository.iniciarLog();
+            this.generalRepository.startLog(vectorTimestamp);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -365,7 +366,7 @@ public class MasterThief extends Thread {
     private int getMasterThiefState(VectorTimestamp vectorTimestamp) {
         int state = -1;
         try {
-            vt.increment();
+            vectorTimestamp.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getMasterThiefState(id, vectorTimestamp);
             vt.update(tuple.getClock());
             state = tuple.getSecond();

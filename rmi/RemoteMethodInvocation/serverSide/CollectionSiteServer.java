@@ -2,6 +2,7 @@ package RemoteMethodInvocation.serverSide;
 
 import RemoteMethodInvocation.interfaces.*;
 import RemoteMethodInvocation.registry.RegistryConfig;
+import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -30,11 +31,6 @@ public class CollectionSiteServer {
         MuseumInterface museumInterface = null;
         ConcentrationSiteInterface concentrationSiteInterface = null;
         AssaultPartyManagerInterface assaultPartyManagerInterface = null;
-
-        /* instanciação e instalação do gestor de segurança */
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
 
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
@@ -96,6 +92,7 @@ public class CollectionSiteServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
+        GenericIO.writelnString ("Security manager was installed!");
 
 
         /* instanciação do objecto remoto que representa o Concentration Site e geração de um stub para ele */
@@ -105,7 +102,7 @@ public class CollectionSiteServer {
 
         try {
             collectionSiteInterface = (CollectionSiteInterface)
-                    UnicastRemoteObject.exportObject((Remote) collectionSite, RegistryConfig.RMI_COL_PORT);
+                    UnicastRemoteObject.exportObject( collectionSite, RegistryConfig.RMI_COL_PORT);
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o Collection Site: " + e.getMessage());
             e.printStackTrace();
@@ -143,7 +140,7 @@ public class CollectionSiteServer {
         }
 
         try {
-            reg.bind(nameEntryObject, (Remote) collectionSiteInterface);
+            reg.bind(nameEntryObject, collectionSiteInterface);
         } catch (RemoteException e) {
             System.out.println("Excepção no registo do Collection Site: " + e.getMessage());
             e.printStackTrace();

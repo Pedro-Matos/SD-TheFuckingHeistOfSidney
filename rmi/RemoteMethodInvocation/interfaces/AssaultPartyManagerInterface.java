@@ -27,7 +27,7 @@ public interface AssaultPartyManagerInterface extends Remote {
 
     public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-    public Tuple<VectorTimestamp, Integer> waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
 
 
