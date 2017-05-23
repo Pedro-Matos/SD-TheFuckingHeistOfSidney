@@ -43,11 +43,11 @@ public class Museum implements MuseumInterface {
         for (int i = 0; i < salas.length; i++) {
             Random r = new Random();
             salas[i][0] = r.nextInt((MAX_PAINTS+1)-MIN_PAINTS) + MIN_PAINTS;
-            setNrQuadrosSala(i, salas[i][0], local.clone());
+            setNrQuadrosSala(i, salas[i][0]);
             Random r2 = new Random();
 
             salas[i][1] = r2.nextInt((MAX_DIST+1)-MIN_DIST) + MIN_DIST;
-            setDistanciaSala(i, salas[i][1], local.clone());
+            setDistanciaSala(i, salas[i][1]);
         }
 
 
@@ -89,9 +89,9 @@ public class Museum implements MuseumInterface {
     }
 
 
-    private void setDistanciaSala(int i, int i1, VectorTimestamp vectorTimestamp) {
+    private void setDistanciaSala(int i, int i1) {
         try {
-            this.generalRepository.setDistanciaSala(i, i1, vectorTimestamp);
+            this.generalRepository.setDistanciaSala(i, i1, local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -99,9 +99,9 @@ public class Museum implements MuseumInterface {
         }
     }
 
-    private void setNrQuadrosSala(int i, int i1, VectorTimestamp vectorTimestamp) {
+    private void setNrQuadrosSala(int i, int i1) {
         try {
-            this.generalRepository.setNrQuadrosSala(i, i1, vectorTimestamp);
+            this.generalRepository.setNrQuadrosSala(i, i1,  local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();

@@ -69,12 +69,12 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param idGrupo group id
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Boolean> desfazerGrupo(int idGrupo, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp desfazerGrupo(int idGrupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
         grupo[idGrupo] = null;
-        return new Tuple<>(local.clone(), false);
+        return local.clone();
     }
 
     /**
@@ -84,14 +84,14 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param pos_grupo group position
      * @param vectorTimestamp
      */
-    public Tuple<VectorTimestamp, Integer> entrar(int ladraoID, int idGrupo, int pos_grupo, VectorTimestamp vectorTimestamp) {
+    public VectorTimestamp entrar(int ladraoID, int idGrupo, int pos_grupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
         grupo[idGrupo].entrar(ladraoID,pos_grupo, vectorTimestamp);
-        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].entrar(ladraoID,pos_grupo, vectorTimestamp);
+        VectorTimestamp clock = grupo[idGrupo].entrar(ladraoID,pos_grupo, vectorTimestamp);
 
-        return tuple;
+        return clock;
     }
 
     /**

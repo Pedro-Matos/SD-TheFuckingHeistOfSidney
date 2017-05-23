@@ -154,7 +154,7 @@ public class CollectionSite implements CollectionSiteInterface {
                     this.nrElemGrupo[grupo]++;
                     this.grupos[grupo][i] = ladraoID;
                     //break;
-                    entrar(ladraoID,grupo,i, local.clone());
+                    entrar(ladraoID,grupo,i);
                     return new Tuple<>(local.clone(), i);
                 }
             }
@@ -201,7 +201,7 @@ public class CollectionSite implements CollectionSiteInterface {
         local.update(vectorTimestamp);
 
         this.estadoChefe = DECIDING_WHAT_TO_DO;
-        setMasterThiefState(this.estadoChefe, local.clone());
+        setMasterThiefState(this.estadoChefe);
         return local.clone();
     }
 
@@ -230,11 +230,11 @@ public class CollectionSite implements CollectionSiteInterface {
             }
         }
 
-        if(idGrupo == 0) setAssaultParty1_room(j, local.clone());
-        if(idGrupo == 1) setAssaultParty2_room(j, local.clone());
+        if(idGrupo == 0) setAssaultParty1_room(j);
+        if(idGrupo == 1) setAssaultParty2_room(j);
 
 
-        boolean ret = formarGrupo(idGrupo, j, local.clone());
+        boolean ret = formarGrupo(idGrupo, j);
 
 
         return local.clone();
@@ -251,18 +251,18 @@ public class CollectionSite implements CollectionSiteInterface {
         local.update(vectorTimestamp);
 
 
-        int nrLadroes = getNumberOffThieves(local.clone());
+        int nrLadroes = getNumberOffThieves();
 
         int checkGrupos = this.checkGroups(local.clone()).getSecond();
 
         if (checkGrupos == -1 || nrLadroes < NUM_GROUP) {
             if (this.estadoChefe == ASSEMBLING_A_GROUP) {
                 this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-                setMasterThiefState(this.estadoChefe, local.clone());
+                setMasterThiefState(this.estadoChefe);
                 return local.clone();
             }
             this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-            setMasterThiefState(this.estadoChefe, local.clone());
+            setMasterThiefState(this.estadoChefe);
 
             try {
                 wait();
@@ -271,29 +271,12 @@ public class CollectionSite implements CollectionSiteInterface {
             }
         } else {
             this.estadoChefe = DECIDING_WHAT_TO_DO;
-            setMasterThiefState(this.estadoChefe, local.clone());
+            setMasterThiefState(this.estadoChefe);
 
         }
         return local.clone();
     }
 
-    private int getNumberOffThieves(VectorTimestamp vectorTimestamp) {
-        int ret = -1;
-
-        try {
-            local.increment();
-            Tuple<VectorTimestamp, Integer> tuple =
-                    this.concentrationSite.getNumberOfThieves(vectorTimestamp);
-            ret = tuple.getSecond();
-            local.update(tuple.getClock());
-        } catch (RemoteException e){
-            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        return ret;
-    }
 
     /**
      * Returns the number of elements in the group
@@ -326,20 +309,20 @@ public class CollectionSite implements CollectionSiteInterface {
         this.grupos[grupo][pos] = -1;
         if (--this.nrElemGrupo[grupo] == 0) {
             this.salaAssalto[sala] = -1;
-            desfazerGrupo(grupo, local.clone());
+            desfazerGrupo(grupo);
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                setMasterThiefState(this.estadoChefe, local.clone());
+                setMasterThiefState(this.estadoChefe);
             }
             notifyAll();
         }
 
         if(grupo == 0){
-            setAP1_reset(pos, ladraoID, local.clone());
+            setAP1_reset(pos, ladraoID);
         }
         else if (grupo == 1){
-            setAP2_reset(pos,ladraoID, local.clone());
+            setAP2_reset(pos,ladraoID);
         }
 
         return local.clone();
@@ -362,11 +345,11 @@ public class CollectionSite implements CollectionSiteInterface {
         this.grupos[grupo][pos] = -1;
         if (--this.nrElemGrupo[grupo] == 0) {
             this.salaAssalto[sala] = -1;
-            desfazerGrupo(grupo, local.clone());
+            desfazerGrupo(grupo);
             this.grupoOcup[grupo] = false;
             if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
                 this.estadoChefe = DECIDING_WHAT_TO_DO;
-                setMasterThiefState(this.estadoChefe, local.clone());
+                setMasterThiefState(this.estadoChefe);
             }
             notifyAll();
         }
@@ -416,7 +399,7 @@ public class CollectionSite implements CollectionSiteInterface {
         local.update(vectorTimestamp);
 
         this.estadoChefe = PRESENTING_THE_REPORT;
-        setMasterThiefState(this.estadoChefe, local.clone());
+        setMasterThiefState(this.estadoChefe);
         return local.clone();
     }
 
@@ -471,11 +454,11 @@ public class CollectionSite implements CollectionSiteInterface {
     }
 
 
-    private void entrar(int ladraoID, int grupo, int i, VectorTimestamp vectorTimestamp){
+    private void entrar(int ladraoID, int grupo, int i){
         try {
-            vectorTimestamp.increment();
-            Tuple<VectorTimestamp, Integer> tuple = this.gestorGrupos.entrar(ladraoID, grupo, i, vectorTimestamp);
-            local.update(tuple.getClock());
+            local.increment();
+            VectorTimestamp clock = this.gestorGrupos.entrar(ladraoID, grupo, i,  local.clone());
+            local.update(clock);
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -483,9 +466,9 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
-    private void setMasterThiefState(int stat, VectorTimestamp vectorTimestamp) {
+    private void setMasterThiefState(int stat) {
         try {
-            this.general.setMasterThiefState(stat, vectorTimestamp);
+            this.general.setMasterThiefState(stat,  local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -493,12 +476,12 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
-    private boolean formarGrupo(int idGrupo, int j, VectorTimestamp vectorTimestamp){
+    private boolean formarGrupo(int idGrupo, int j){
         boolean ret = false;
 
         try {
-            vectorTimestamp.increment();
-            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.formarGrupo(idGrupo, j, vectorTimestamp);
+            local.increment();
+            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.formarGrupo(idGrupo, j,  local.clone());
             ret = tuple.getSecond();
             local.update(tuple.getClock());
         } catch (RemoteException e){
@@ -511,9 +494,9 @@ public class CollectionSite implements CollectionSiteInterface {
     }
 
 
-    private void setAssaultParty1_room(int j, VectorTimestamp vectorTimestamp){
+    private void setAssaultParty1_room(int j){
         try {
-            this.general.setAssaultParty1_room(j, vectorTimestamp);
+            this.general.setAssaultParty1_room(j,  local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -521,9 +504,9 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
-    private void setAssaultParty2_room(int j, VectorTimestamp vectorTimestamp){
+    private void setAssaultParty2_room(int j){
         try {
-            this.general.setAssaultParty2_room(j, vectorTimestamp);
+            this.general.setAssaultParty2_room(j,  local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -531,11 +514,48 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
-    private void desfazerGrupo(int grupo, VectorTimestamp vectorTimestamp) {
+    private void desfazerGrupo(int grupo) {
 
         try {
-            vectorTimestamp.increment();
-            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.desfazerGrupo(grupo, vectorTimestamp);
+            local.increment();
+            VectorTimestamp clock = this.gestorGrupos.desfazerGrupo(grupo,  local.clone());
+            local.update(clock);
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    private void setAP1_reset(int pos, int ladraoID){
+        try {
+            this.general.setAP1_reset(pos, ladraoID,  local.clone());
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private void setAP2_reset(int pos, int ladraoID){
+        try {
+            this.general.setAP2_reset(pos, ladraoID,  local.clone());
+        } catch (RemoteException e){
+            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private int getNumberOffThieves() {
+        int ret = -1;
+
+        try {
+            local.increment();
+            Tuple<VectorTimestamp, Integer> tuple =
+                    this.concentrationSite.getNumberOfThieves( local.clone());
+            ret = tuple.getSecond();
             local.update(tuple.getClock());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
@@ -543,26 +563,7 @@ public class CollectionSite implements CollectionSiteInterface {
             System.exit(1);
         }
 
-    }
-
-    private void setAP1_reset(int pos, int ladraoID, VectorTimestamp vectorTimestamp){
-        try {
-            this.general.setAP1_reset(pos, ladraoID, vectorTimestamp);
-        } catch (RemoteException e){
-            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    private void setAP2_reset(int pos, int ladraoID, VectorTimestamp vectorTimestamp){
-        try {
-            this.general.setAP2_reset(pos, ladraoID, vectorTimestamp);
-        } catch (RemoteException e){
-            System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
-            e.printStackTrace();
-            System.exit(1);
-        }
+        return ret;
     }
 
 }

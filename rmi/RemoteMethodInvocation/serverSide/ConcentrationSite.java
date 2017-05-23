@@ -188,8 +188,8 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
             this.nrLadroes--;
             this.busyLadrao[id] = true;
             this.grupoLadrao[id] = grupo;
-            setMasterThiefState(ASSEMBLING_A_GROUP, local.clone());
-            setThiefSituation(id,IN_PARTY, local.clone());
+            setMasterThiefState(ASSEMBLING_A_GROUP);
+            setThiefSituation(id,IN_PARTY);
             notifyAll();
         }
 
@@ -258,8 +258,8 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         this.busyLadrao[ladraoID] = false;
         this.grupoLadrao[ladraoID] = -1;
         this.estadoLadrao[ladraoID] = OUTSIDE;
-        setThiefState(ladraoID,this.estadoLadrao[ladraoID], local.clone());
-        setThiefSituation(ladraoID,WAITING, local.clone());
+        setThiefState(ladraoID,this.estadoLadrao[ladraoID]);
+        setThiefSituation(ladraoID,WAITING);
         this.imReady(ladraoID, local.clone());
 
 
@@ -323,9 +323,9 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         return local.clone();
     }
 
-    private void setThiefSituation(int id, int inParty, VectorTimestamp vectorTimestamp) {
+    private void setThiefSituation(int id, int inParty) {
         try {
-            this.general.setThiefSituation(id, inParty, vectorTimestamp);
+            this.general.setThiefSituation(id, inParty,  local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -333,9 +333,9 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         }
     }
 
-    private void setMasterThiefState(int stat, VectorTimestamp vectorTimestamp) {
+    private void setMasterThiefState(int stat) {
         try {
-            this.general.setMasterThiefState(stat, vectorTimestamp);
+            this.general.setMasterThiefState(stat,  local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -343,9 +343,9 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         }
     }
 
-    private void setThiefState(int ladraoID, int i, VectorTimestamp clone) {
+    private void setThiefState(int ladraoID, int i) {
         try {
-            this.general.setThiefState(ladraoID, i, clone);
+            this.general.setThiefState(ladraoID, i,  local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();

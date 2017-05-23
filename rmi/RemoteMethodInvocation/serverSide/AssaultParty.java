@@ -103,7 +103,7 @@ public class AssaultParty {
      * @param pos_grupo group position
      * @param vectorTimestamp
      */
-    public synchronized Tuple<VectorTimestamp, Integer> entrar(int ladraoID, int pos_grupo, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp entrar(int ladraoID, int pos_grupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
@@ -114,14 +114,14 @@ public class AssaultParty {
         }
 
         if (id == 0) {
-            setAP1_pos_id_canvas(pos_grupo, ladraoID, 0, false, local.clone());
+            setAP1_pos_id_canvas(pos_grupo, ladraoID, 0, false);
 
         } else if (id == 1) {
-            setAP2_pos_id_canvas(pos_grupo, ladraoID, 0, false, local.clone());
+            setAP2_pos_id_canvas(pos_grupo, ladraoID, 0, false);
         }
 
         this.nrElementos++;
-        return new Tuple<>(local.clone(), -1);
+        return local.clone();
     }
 
 
@@ -160,7 +160,7 @@ public class AssaultParty {
             if (this.minhaVez[indiceNoGrupo]) {
 
 
-                setThiefState(ladraoID,CRAWLING_INWARDS, local.clone());
+                setThiefState(ladraoID,CRAWLING_INWARDS);
 
                 boolean repetir = true;
                 int[] partnersPos = new int[NUM_GROUP - 1];
@@ -203,20 +203,20 @@ public class AssaultParty {
                                 cheguei[indiceNoGrupo] = true;
                                 repetir = false;
                                 if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,getDistanciaSala, local.clone());
-                                    setThiefState(ladraoID,AT_A_ROOM, local.clone());
+                                    setAP1_pos(posgrupo,getDistanciaSala);
+                                    setThiefState(ladraoID,AT_A_ROOM);
                                 }
                                 else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,getDistanciaSala, local.clone());
-                                    setThiefState(ladraoID,AT_A_ROOM, local.clone());
+                                    setAP2_pos(posgrupo,getDistanciaSala);
+                                    setThiefState(ladraoID,AT_A_ROOM);
                                 }
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition + i;
                                 if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,myPosition + i, local.clone());
+                                    setAP1_pos(posgrupo,myPosition + i);
                                 }
                                 else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,myPosition + i, local.clone());
+                                    setAP2_pos(posgrupo,myPosition + i);
                                 }
                             }
 
@@ -288,7 +288,7 @@ public class AssaultParty {
                     }
 
                     if(myPosition == getDistanciaSala)
-                        setThiefState(ladraoID,CRAWLING_OUTWARDS, local.clone());
+                        setThiefState(ladraoID,CRAWLING_OUTWARDS);
 
                     Arrays.sort(partnersPos);
                     for (i = agilidade; i > 0; i--) {
@@ -315,19 +315,19 @@ public class AssaultParty {
                                 voltei[indiceNoGrupo] = true;
                                 repetir = false;
                                 if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,0, local.clone());
+                                    setAP1_pos(posgrupo,0);
                                 }
                                 else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,0, local.clone());
+                                    setAP2_pos(posgrupo,0);
                                 }
-                                setThiefState(ladraoID, OUTSIDE, local.clone());
+                                setThiefState(ladraoID, OUTSIDE);
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition - i;
                                 if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,myPosition - i, local.clone());
+                                    setAP1_pos(posgrupo,myPosition - i);
                                 }
                                 else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,myPosition - i, local.clone());
+                                    setAP2_pos(posgrupo,myPosition - i);
                                 }
                             }
                             break;
@@ -384,7 +384,7 @@ public class AssaultParty {
         local.update(vectorTimestamp);
 
         if (distanciaSala == -1) {
-            distanciaSala = getMuseumRoomDistance(nrSala, local.clone());
+            distanciaSala = getMuseumRoomDistance(nrSala);
         }
 
         return new Tuple<>(local.clone(), distanciaSala);
@@ -400,7 +400,7 @@ public class AssaultParty {
     public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp){
         local.update(vectorTimestamp);
 
-        boolean ret = rollACanvas(nrSala, local.clone());
+        boolean ret = rollACanvas(nrSala);
 
         return new Tuple<>(local.clone(), ret);
 
@@ -427,13 +427,13 @@ public class AssaultParty {
         return local.clone();
     }
 
-    private boolean rollACanvas(int nrSala, VectorTimestamp vectorTimestamp){
+    private boolean rollACanvas(int nrSala){
         boolean ret = false;
 
         try {
-            vectorTimestamp.increment();
+            local.increment();
             Tuple<VectorTimestamp, Boolean> tuple =
-                    this.museum.rollACanvas(nrSala, vectorTimestamp);
+                    this.museum.rollACanvas(nrSala, local.clone());
             ret = tuple.getSecond();
             local.update(tuple.getClock());
         } catch (RemoteException e){
@@ -444,13 +444,13 @@ public class AssaultParty {
         return ret;
     }
 
-    private int getMuseumRoomDistance(int nrSala, VectorTimestamp vectorTimestamp) {
+    private int getMuseumRoomDistance(int nrSala) {
         int ret = -1;
 
         try {
-            vectorTimestamp.increment();
+            local.increment();
             Tuple<VectorTimestamp, Integer> tuple =
-                    this.museum.getMuseumRoomDistance(nrSala, vectorTimestamp);
+                    this.museum.getMuseumRoomDistance(nrSala, local.clone());
             ret = tuple.getSecond();
             local.update(tuple.getClock());
         } catch (RemoteException e){
@@ -461,9 +461,9 @@ public class AssaultParty {
         return ret;
     }
 
-    private void setAP2_pos(int pos_grupo, int posicao, VectorTimestamp vectorTimestamp) {
+    private void setAP2_pos(int pos_grupo, int posicao) {
         try {
-            this.gen.setAP2_pos(pos_grupo, posicao, vectorTimestamp);
+            this.gen.setAP2_pos(pos_grupo, posicao, local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -471,9 +471,9 @@ public class AssaultParty {
         }
     }
 
-    private void setAP1_pos(int pos_grupo, int posicao, VectorTimestamp vectorTimestamp) {
+    private void setAP1_pos(int pos_grupo, int posicao) {
         try {
-            this.gen.setAP1_pos(pos_grupo, posicao, vectorTimestamp);
+            this.gen.setAP1_pos(pos_grupo, posicao, local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -481,9 +481,9 @@ public class AssaultParty {
         }
     }
 
-    private void setThiefState(int id, int stat, VectorTimestamp vectorTimestamp) {
+    private void setThiefState(int id, int stat) {
         try {
-            this.gen.setThiefState(id, stat, vectorTimestamp);
+            this.gen.setThiefState(id, stat, local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -491,9 +491,9 @@ public class AssaultParty {
         }
     }
 
-    private void setAP1_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b, VectorTimestamp vectorTimestamp) {
+    private void setAP1_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
-            this.gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, i, b, vectorTimestamp);
+            this.gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método " + e.getMessage() + "!");
             e.printStackTrace();
@@ -501,9 +501,9 @@ public class AssaultParty {
         }
     }
 
-    private void setAP2_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b, VectorTimestamp vectorTimestamp) {
+    private void setAP2_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
-            this.gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, i, b, vectorTimestamp);
+            this.gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());
         } catch (RemoteException e){
             System.err.println("Excepção na invocação remota de método " + e.getMessage() + "!");
             e.printStackTrace();
