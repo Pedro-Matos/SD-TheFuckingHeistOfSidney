@@ -1,17 +1,15 @@
 package clientSide.masterThief;
 
+import genclass.GenericIO;
 import interfaces.CollectionSiteInterface;
 import interfaces.ConcentrationSiteInterface;
 import interfaces.GeneralRepositoryInterface;
 import registry.RegistryConfig;
-import genclass.GenericIO;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by tiagoalexbastos on 19-05-2017.

@@ -13,6 +13,7 @@ import static support.Constantes.*;
 
 /**
  * Assault Party
+ *
  * @author Pedro Matos and Tiago Bastos
  */
 public class AssaultParty {
@@ -73,10 +74,9 @@ public class AssaultParty {
 
 
     /**
-     *
      * @param museum  Museum
-     * @param nrSala room id
-     * @param id thief id
+     * @param nrSala  room id
+     * @param id      thief id
      * @param general General Repository
      */
     public AssaultParty(MuseumInterface museum, int nrSala, int id, GeneralRepositoryInterface general) {
@@ -102,9 +102,11 @@ public class AssaultParty {
 
     /**
      * Enter the assault party
-     * @param ladraoID thief id
-     * @param pos_grupo group position
+     *
+     * @param ladraoID        thief id
+     * @param pos_grupo       group position
      * @param vectorTimestamp
+     * @return VectorTimestamp
      */
     public synchronized VectorTimestamp entrar(int ladraoID, int pos_grupo, VectorTimestamp vectorTimestamp) {
 
@@ -127,12 +129,12 @@ public class AssaultParty {
     }
 
 
-    public synchronized Tuple<VectorTimestamp, Integer> getPos(int ladraoID, VectorTimestamp vectorTimestamp){
+    public synchronized Tuple<VectorTimestamp, Integer> getPos(int ladraoID, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
-        for(int i = 0; i<nrElementos; i++){
-            if(this.posicao[1][i] == ladraoID){
+        for (int i = 0; i < nrElementos; i++) {
+            if (this.posicao[1][i] == ladraoID) {
                 return new Tuple<>(local.clone(), i);
             }
         }
@@ -141,10 +143,11 @@ public class AssaultParty {
 
     /**
      * crawl in
-     * @param ladraoID thief id
-     * @param agilidade thief agility
-     * @param idGrupo group id
-     * @param posgrupo position in the group
+     *
+     * @param ladraoID        thief id
+     * @param agilidade       thief agility
+     * @param idGrupo         group id
+     * @param posgrupo        position in the group
      * @param vectorTimestamp
      * @return final position
      */
@@ -163,7 +166,7 @@ public class AssaultParty {
             if (this.minhaVez[indiceNoGrupo]) {
 
 
-                setThiefState(ladraoID,CRAWLING_INWARDS);
+                setThiefState(ladraoID, CRAWLING_INWARDS);
 
                 boolean repetir = true;
                 int[] partnersPos = new int[NUM_GROUP - 1];
@@ -203,21 +206,19 @@ public class AssaultParty {
                                 naSala++;
                                 cheguei[indiceNoGrupo] = true;
                                 repetir = false;
-                                if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,getDistanciaSala);
-                                    setThiefState(ladraoID,AT_A_ROOM);
-                                }
-                                else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,getDistanciaSala);
-                                    setThiefState(ladraoID,AT_A_ROOM);
+                                if (idGrupo == 0) {
+                                    setAP1_pos(posgrupo, getDistanciaSala);
+                                    setThiefState(ladraoID, AT_A_ROOM);
+                                } else if (idGrupo == 1) {
+                                    setAP2_pos(posgrupo, getDistanciaSala);
+                                    setThiefState(ladraoID, AT_A_ROOM);
                                 }
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition + i;
-                                if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,myPosition + i);
-                                }
-                                else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,myPosition + i);
+                                if (idGrupo == 0) {
+                                    setAP1_pos(posgrupo, myPosition + i);
+                                } else if (idGrupo == 1) {
+                                    setAP2_pos(posgrupo, myPosition + i);
                                 }
                             }
 
@@ -254,14 +255,15 @@ public class AssaultParty {
 
     /**
      * Crawl out
-     * @param ladraoID thief id
-     * @param agilidade thief agility
-     * @param idGrupo group id
-     * @param posgrupo position in the group
+     *
+     * @param ladraoID        thief id
+     * @param agilidade       thief agility
+     * @param idGrupo         group id
+     * @param posgrupo        position in the group
      * @param vectorTimestamp
      * @return final position
      */
-    public synchronized Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp){
+    public synchronized Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
@@ -271,12 +273,12 @@ public class AssaultParty {
         // no clock
         int getDistanciaSala = this.getRoomDistance(local.clone()).getSecond();
 
-        if(naSala ==nrElementos){
+        if (naSala == nrElementos) {
             if (this.minhaVez[indiceNoGrupo]) {
 
                 boolean repetir = true;
                 int[] partnersPos = new int[NUM_GROUP - 1];
-                do{
+                do {
                     int myPosition = -1;
 
                     int i = 0;
@@ -290,8 +292,8 @@ public class AssaultParty {
 
                     }
 
-                    if(myPosition == getDistanciaSala)
-                        setThiefState(ladraoID,CRAWLING_OUTWARDS);
+                    if (myPosition == getDistanciaSala)
+                        setThiefState(ladraoID, CRAWLING_OUTWARDS);
 
                     Arrays.sort(partnersPos);
                     for (i = agilidade; i > 0; i--) {
@@ -301,7 +303,7 @@ public class AssaultParty {
                         int first = partnersPos[0];
                         int second = partnersPos[1];
 
-                        if ((first - minha   > DIST_THIEVES) || (first-minha == 0 && (minha != getDistanciaSala))) {
+                        if ((first - minha > DIST_THIEVES) || (first - minha == 0 && (minha != getDistanciaSala))) {
                             tooFarOrOcupada = true;
                         }
 
@@ -315,34 +317,31 @@ public class AssaultParty {
                                 noTerreiro++;
                                 voltei[indiceNoGrupo] = true;
                                 repetir = false;
-                                if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,0);
-                                }
-                                else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,0);
+                                if (idGrupo == 0) {
+                                    setAP1_pos(posgrupo, 0);
+                                } else if (idGrupo == 1) {
+                                    setAP2_pos(posgrupo, 0);
                                 }
                                 setThiefState(ladraoID, OUTSIDE);
                             } else {
                                 posicao[0][indiceNoGrupo] = myPosition - i;
-                                if(idGrupo == 0){
-                                    setAP1_pos(posgrupo,myPosition - i);
-                                }
-                                else if(idGrupo== 1){
-                                    setAP2_pos(posgrupo,myPosition - i);
+                                if (idGrupo == 0) {
+                                    setAP1_pos(posgrupo, myPosition - i);
+                                } else if (idGrupo == 1) {
+                                    setAP2_pos(posgrupo, myPosition - i);
                                 }
                             }
                             break;
-                        }
-                        else {
+                        } else {
                             if (i == 1) repetir = false;
                         }
                     }
-                }while(repetir);
+                } while (repetir);
 
                 this.minhaVez[indiceNoGrupo] = false;
                 int j = 0;
                 for (j = partnersPos.length - 1; j >= 0; j--) {
-                    if (partnersPos[j] < posicao[0][indiceNoGrupo]);
+                    if (partnersPos[j] < posicao[0][indiceNoGrupo]) ;
                     {
                         break;
                     }
@@ -362,10 +361,11 @@ public class AssaultParty {
 
     /**
      * Get distance
-     * @return distance
+     *
      * @param vectorTimestamp
+     * @return distance
      */
-    public Tuple<VectorTimestamp, Integer> getRoomDistance(VectorTimestamp vectorTimestamp){
+    public Tuple<VectorTimestamp, Integer> getRoomDistance(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
         if (distanciaSala == -1) {
@@ -379,10 +379,10 @@ public class AssaultParty {
     /**
      * Steals paiting
      *
-     * @return true if success
      * @param vectorTimestamp
+     * @return true if success
      */
-    public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp){
+    public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
         return new Tuple<>(local.clone(), rollACanvas(nrSala));
@@ -391,7 +391,8 @@ public class AssaultParty {
 
     /**
      * Waiting for it's turn
-     * @param id thief id
+     *
+     * @param id              thief id
      * @param vectorTimestamp
      */
     public synchronized VectorTimestamp waitMyTurn(int id, VectorTimestamp vectorTimestamp) {
@@ -412,6 +413,7 @@ public class AssaultParty {
 
     /**
      * Get position
+     *
      * @param ladraoID thief id
      * @return position
      */
@@ -427,14 +429,14 @@ public class AssaultParty {
         return j;
     }
 
-    private boolean rollACanvas(int nrSala){
+    private boolean rollACanvas(int nrSala) {
         boolean ret = false;
 
         try {
             Tuple<VectorTimestamp, Boolean> tuple =
                     this.museum.rollACanvas(nrSala, local.clone());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -449,7 +451,7 @@ public class AssaultParty {
             Tuple<VectorTimestamp, Integer> tuple =
                     this.museum.getMuseumRoomDistance(nrSala, local.clone());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -460,7 +462,7 @@ public class AssaultParty {
     private void setAP2_pos(int pos_grupo, int posicao) {
         try {
             this.gen.setAP2_pos(pos_grupo, posicao, local.clone());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -470,7 +472,7 @@ public class AssaultParty {
     private void setAP1_pos(int pos_grupo, int posicao) {
         try {
             this.gen.setAP1_pos(pos_grupo, posicao, local.clone());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -480,7 +482,7 @@ public class AssaultParty {
     private void setThiefState(int id, int stat) {
         try {
             this.gen.setThiefState(id, stat, local.clone());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -490,7 +492,7 @@ public class AssaultParty {
     private void setAP1_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
             this.gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -500,7 +502,7 @@ public class AssaultParty {
     private void setAP2_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
             this.gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);

@@ -1,10 +1,10 @@
 package serverSide.concentrationSite;
 
+import genclass.GenericIO;
 import interfaces.ConcentrationSiteInterface;
 import interfaces.GeneralRepositoryInterface;
 import interfaces.Register;
 import registry.RegistryConfig;
-import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -33,13 +33,13 @@ public class ConcentrationSiteServer {
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
             generalRepositoryInterface = (GeneralRepositoryInterface)
-                    registry.lookup (RegistryConfig.RMI_REGISTRY_GENREPO_NAME);
+                    registry.lookup(RegistryConfig.RMI_REGISTRY_GENREPO_NAME);
         } catch (RemoteException e) {
-            System.out.println("Excepção na localização do General Repository: " + e.getMessage () + "!");
+            System.out.println("Excepção na localização do General Repository: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
-            System.out.println("O General Repository não está registado: " + e.getMessage () + "!");
+            System.out.println("O General Repository não está registado: " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
@@ -48,7 +48,7 @@ public class ConcentrationSiteServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
-        GenericIO.writelnString ("Security manager was installed!");
+        GenericIO.writelnString("Security manager was installed!");
 
 
         /* instanciação do objecto remoto que representa o Concentration Site e geração de um stub para ele */
@@ -57,7 +57,7 @@ public class ConcentrationSiteServer {
 
         try {
             concentrationSiteInterface = (ConcentrationSiteInterface)
-                    UnicastRemoteObject.exportObject( concentrationSite, RegistryConfig.RMI_CONC_PORT);
+                    UnicastRemoteObject.exportObject(concentrationSite, RegistryConfig.RMI_CONC_PORT);
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o ConcentrationSite: " + e.getMessage());
             e.printStackTrace();

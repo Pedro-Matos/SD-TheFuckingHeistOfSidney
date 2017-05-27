@@ -1,77 +1,73 @@
 package support;
 
 /**
- *    This type of data define a FIFO memory derivated from a generic memory
+ * This type of data define a FIFO memory derivated from a generic memory
  */
 
-public class MemFIFO extends MemObject
-{
+public class MemFIFO extends MemObject {
     /**
-     *   Pointer to the first empty location.
+     * Pointer to the first empty location.
      */
 
     private int inPnt;
 
     /**
-     *   Pointer to the first occupied location.
+     * Pointer to the first occupied location.
      */
 
     private int outPnt;
 
     /**
-     *   Signaling FIFO empty state.
+     * Signaling FIFO empty state.
      */
 
     private boolean empty;
 
     /**
-     *   FIFO instantiation.
-     *   The instantiation only takes place if the FIFO size is meaningful (greater than zero).
-     *   No error is reported.
+     * FIFO instantiation.
+     * The instantiation only takes place if the FIFO size is meaningful (greater than zero).
+     * No error is reported.
      *
-     *     @param nElem FIFO size
+     * @param nElem FIFO size
      */
 
-    public MemFIFO (int nElem)
-    {
-        super (nElem);
+    public MemFIFO(int nElem) {
+        super(nElem);
         inPnt = outPnt = 0;
         empty = true;
     }
 
     /**
-     *   FIFO insertion.
-     *   A generic object is written into it.
-     *   If the FIFO is full, nothing happens. No error is reported.
+     * FIFO insertion.
+     * A generic object is written into it.
+     * If the FIFO is full, nothing happens. No error is reported.
      *
-     *    @param val generic object to be written
+     * @param val generic object to be written
      */
 
     @Override
-    public void write (Object val)
-    {
-        if ((inPnt != outPnt) || empty)
-        { mem[inPnt] = val;
+    public void write(Object val) {
+        if ((inPnt != outPnt) || empty) {
+            mem[inPnt] = val;
             inPnt = (inPnt + 1) % mem.length;
             empty = false;
         }
     }
 
     /**
-     *   FIFO retrieval.
-     *   A generic object is read from it.
-     *   If the FIFO is empty, <code>null</code> is returned. No error is reported.
+     * FIFO retrieval.
+     * A generic object is read from it.
+     * If the FIFO is empty, <code>null</code> is returned. No error is reported.
      *
-     *    @return first generic object that was written
+     * @return first generic object that was written
      */
 
     @Override
-    public Object read ()
-    {
+    public Object read() {
         Object val = null;                                    // default returned object
 
-        if (!empty)
-        { val = mem[outPnt];
+        if (!empty) {
+            val = mem[outPnt];
             outPnt = (outPnt + 1) % mem.length;
             empty = (inPnt == outPnt);
         }
@@ -79,25 +75,24 @@ public class MemFIFO extends MemObject
     }
 
     /**
-     *  Detection of Empty FIFO
-     *    @return true, se o FIFO estiver vazio
-     *            false, em caso contrario
+     * Detection of Empty FIFO
+     *
+     * @return true, se o FIFO estiver vazio
+     * false, em caso contrario
      */
 
-    public boolean empty ()
-    {
+    public boolean empty() {
         return (this.empty);
     }
 
     /**
-     *  Detection of full FIFO
+     * Detection of full FIFO
      *
-     *    @return true, se o FIFO estiver cheio
-     *            false, em caso contrario
+     * @return true, se o FIFO estiver cheio
+     * false, em caso contrario
      */
 
-    public boolean full ()
-    {
+    public boolean full() {
         return (!this.empty && (outPnt == inPnt));
     }
 

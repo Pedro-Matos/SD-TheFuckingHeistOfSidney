@@ -13,7 +13,9 @@ import static support.Constantes.*;
 
 /**
  * Represents the Master Thief
- * @author Pedro Matos and Tiago Bastos
+ *
+ * @author Pedro Matos
+ * @author Tiago Bastos
  */
 public class MasterThief extends Thread {
 
@@ -39,15 +41,19 @@ public class MasterThief extends Thread {
      */
     private String name;
 
+    /**
+     * Thief local VectorTimestamp
+     */
     private VectorTimestamp vt;
 
 
     /**
+     * Creates a Master Thief instance for runnning in a distributed enviroment
      *
-     * @param name Masther Thief's name
-     * @param generalRepository General Repository/log
-     * @param collectionSiteInterface Concentration Site
-     * @param concentrationSite CollectionSite
+     * @param name                    Masther Thief's name
+     * @param generalRepository       General Repository Interface
+     * @param collectionSiteInterface Concentration Site Interface
+     * @param concentrationSite       CollectionSite Interface
      */
     public MasterThief(String name, GeneralRepositoryInterface generalRepository, CollectionSiteInterface collectionSiteInterface,
                        ConcentrationSiteInterface concentrationSite) {
@@ -70,74 +76,74 @@ public class MasterThief extends Thread {
         int numero_grupos = -1;
         boolean heistOver = false;
 
-            while (!heistOver) {
+        while (!heistOver) {
 
-                //no clock
-                int stat = getMasterThiefState();
+            //no clock
+            int stat = getMasterThiefState();
 
 
-                switch (stat) {
-                    case PLANNING_THE_HEIST:
+            switch (stat) {
+                case PLANNING_THE_HEIST:
+                    // no clock
+                    startLog();
+                    // no clock
+                    setMasterThiefState(stat);
+
+                    if (getNumberOfThieves() == NUM_THIEVES) {
+                        startOperations();
+                    }
+
+                    break;
+                case DECIDING_WHAT_TO_DO:
+
+                    //no clock ??
+                    numero_grupos = checkGroups();
+                    //no clock ??
+                    boolean emptyMuseu = checkEmptyMuseum();
+                    //no clock ??
+                    boolean checkSalasLivres = checkEmptyRooms();
+                    if (numero_grupos != -1 && !emptyMuseu && checkSalasLivres)
+                        prepareAssaultParty(numero_grupos);
+                    else {
                         // no clock
-                        startLog();
-                        // no clock
-                        setMasterThiefState(stat);
-
-                        if (getNumberOfThieves() == NUM_THIEVES) {
-                            startOperations();
-                        }
-
-                        break;
-                    case DECIDING_WHAT_TO_DO:
-
-                        //no clock ??
-                        numero_grupos = checkGroups();
-                        //no clock ??
-                        boolean emptyMuseu = checkEmptyMuseum();
-                        //no clock ??
-                        boolean checkSalasLivres = checkEmptyRooms();
-                        if (numero_grupos != -1 && !emptyMuseu && checkSalasLivres)
-                            prepareAssaultParty(numero_grupos);
-                        else {
-                            // no clock
-                            emptyMuseu = checkEmptyMuseum();
-                            if (emptyMuseu)
-                                sumUpResults();
-                            else
-                                takeARest();
-
-                        }
-                        break;
-                    case ASSEMBLING_A_GROUP:
-
-                        waitForThieves();
-                        //no clock
-                        int nrElemGrupo = getNumberElemGroup(numero_grupos);
-
-                        if (nrElemGrupo == 0) {
-
-                            for (int i = 0; i < NUM_GROUP; i++) {
-                                //no clock
-                                int ladrao = callThief(numero_grupos);
-                                //no clock ??
-                                joinAssaultParty(ladrao, numero_grupos);
-                            }
+                        emptyMuseu = checkEmptyMuseum();
+                        if (emptyMuseu)
+                            sumUpResults();
+                        else
                             takeARest();
-                        }
-                        break;
-                    case WAITING_FOR_GROUP_ARRIVAL:
-                        takeARest();
-                        break;
-                    case PRESENTING_THE_REPORT:
-                        waitForThievesEnd();
 
-                        //no clock
-                        int nrQuadrosRoubados = getNumberOfStolenPaints();
-                        endReport(nrQuadrosRoubados);
-                        heistOver = true;
-                        break;
-                }
+                    }
+                    break;
+                case ASSEMBLING_A_GROUP:
+
+                    waitForThieves();
+                    //no clock
+                    int nrElemGrupo = getNumberElemGroup(numero_grupos);
+
+                    if (nrElemGrupo == 0) {
+
+                        for (int i = 0; i < NUM_GROUP; i++) {
+                            //no clock
+                            int ladrao = callThief(numero_grupos);
+                            //no clock ??
+                            joinAssaultParty(ladrao, numero_grupos);
+                        }
+                        takeARest();
+                    }
+                    break;
+                case WAITING_FOR_GROUP_ARRIVAL:
+                    takeARest();
+                    break;
+                case PRESENTING_THE_REPORT:
+                    waitForThievesEnd();
+
+                    //no clock
+                    int nrQuadrosRoubados = getNumberOfStolenPaints();
+                    endReport(nrQuadrosRoubados);
+                    heistOver = true;
+                    break;
             }
+        }
 
 
     }
@@ -145,7 +151,7 @@ public class MasterThief extends Thread {
     private void endReport(int nrQuadrosRoubados) {
         try {
             this.generalRepository.finalizarRelatorio(nrQuadrosRoubados, vt.clone());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -159,20 +165,21 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getNumberofStolenPaints(vt.clone());
             ret = tuple.getSecond();
 //            vt.update(tuple.getClock());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
 
-        return ret;    }
+        return ret;
+    }
 
     private void waitForThievesEnd() {
         try {
             vt.increment();
             VectorTimestamp clock = concentrationSite.waitForThievesEnd(vt.clone());
             vt.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -186,7 +193,7 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.joinAssaultParty(ladrao, numero_grupos, vt.clone());
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -202,13 +209,14 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.callThief(numero_grupos, vt.clone());
 //            vt.update(tuple.getClock());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
 
-        return ret;    }
+        return ret;
+    }
 
     private int getNumberElemGroup(int numero_grupos) {
         int ret = -1;
@@ -217,7 +225,7 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getNumberElemGroup(numero_grupos, vt.clone());
 //            vt.update(tuple.getClock());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -231,7 +239,7 @@ public class MasterThief extends Thread {
             vt.increment();
             VectorTimestamp clock = concentrationSite.waitForThieves(vt.clone());
             vt.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -243,7 +251,7 @@ public class MasterThief extends Thread {
             vt.increment();
             VectorTimestamp clock = collectionSiteInterface.takeARest(vt.clone());
             vt.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -255,7 +263,7 @@ public class MasterThief extends Thread {
             vt.increment();
             VectorTimestamp clock = collectionSiteInterface.sumUpResults(vt.clone());
             vt.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -267,7 +275,7 @@ public class MasterThief extends Thread {
             vt.increment();
             VectorTimestamp clock = collectionSiteInterface.prepareAssaultParty(numero_grupos, vt.clone());
             vt.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -281,7 +289,7 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.checkEmptyRooms(vt.clone());
 //            vt.update(tuple.getClock());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -297,7 +305,7 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.checkEmptyMuseum(vt.clone());
 //            vt.update(tuple.getClock());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -313,7 +321,7 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.checkGroups(vt.clone());
 //            vt.update(tuple.getClock());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -327,7 +335,7 @@ public class MasterThief extends Thread {
             vt.increment();
             VectorTimestamp clock = collectionSiteInterface.startOperations(vt.clone());
             vt.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -341,7 +349,7 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getNumberOfThieves(vt.clone());
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -350,20 +358,10 @@ public class MasterThief extends Thread {
         return ret;
     }
 
-    private void setMasterThiefState(int stat) {
-        try {
-            this.generalRepository.setMasterThiefState(stat, vt.clone());
-        } catch (RemoteException e){
-            System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
     private void startLog() {
         try {
             this.generalRepository.startLog(vt.clone());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -377,12 +375,22 @@ public class MasterThief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getMasterThiefState(id, vt.clone());
 //            vt.update(tuple.getClock());
             state = tuple.getSecond();
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
 
         return state;
+    }
+
+    private void setMasterThiefState(int stat) {
+        try {
+            this.generalRepository.setMasterThiefState(stat, vt.clone());
+        } catch (RemoteException e) {
+            System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }

@@ -1,11 +1,11 @@
 package serverSide.generalRepository;
 
+import genclass.GenericIO;
+import genclass.TextFile;
 import interfaces.*;
 import registry.RegistryConfig;
 import support.Constantes;
 import support.VectorTimestamp;
-import genclass.GenericIO;
-import genclass.TextFile;
 
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
@@ -13,8 +13,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static support.Constantes.*;
 
@@ -113,7 +111,9 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     private char[] assault_party2_thief_canvas = new char[NUM_GROUP];
 
-
+    /**
+     * Local Vector Timestamp
+     */
     private VectorTimestamp local;
 
 
@@ -121,7 +121,6 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * All information is in the initial state.
      * The changes will only occur by the use of sets functions.
      */
-
     public GeneralRepository() {
         distanciaSala = new int[NUM_ROOMS];
         nrQuadrosSala = new int[NUM_ROOMS];
@@ -154,9 +153,10 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
     /**
      * The first lines to be written in the file.
+     *
      * @param vectorTimestamp
      */
-
+    @Override
     public synchronized void startLog(VectorTimestamp vectorTimestamp) {
         if (!log.openForWriting(".", fileName2)) {
             GenericIO.writelnString("Operation " + fileName2 + " failed!");
@@ -165,8 +165,8 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
 
         log.writelnString("\t\t\t\t\t\t\t Heist to the Museum - Description of the internal state\n");
-        log.writelnString("MstT   Thief 1      Thief 2      Thief 3      Thief 4      Thief 5      Thief 6");
-        log.writelnString("Stat  Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD");
+        log.writelnString("MstT   Thief 1      Thief 2      Thief 3      Thief 4      Thief 5      Thief 6                VCk");
+        log.writelnString("Stat  Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    0   1   2   3   4   5   6");
         log.writelnString("\t\t\t\t   Assault Party 1                       Assault Party 2                       Museum");
         log.writelnString("           Elem 1     Elem 2     Elem 3          Elem 1     Elem 2     Elem 3   Room 1  Room 2  Room 3  Room 4  Room 5");
         log.writelnString("    RId  Id Pos Cv  Id Pos Cv  Id Pos Cv  RId  Id Pos Cv  Id Pos Cv  Id Pos Cv   NP DT   NP DT   NP DT   NP DT   NP DT");
@@ -207,7 +207,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param vectorTimestamp
      */
-
+    @Override
     public synchronized void add_log(VectorTimestamp vectorTimestamp) {
         if (!log.openForAppending(".", fileName2)) {
             GenericIO.writelnString("Operation " + fileName2 + " failed!");
@@ -257,7 +257,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param total           total of paitings
      * @param vectorTimestamp
      */
-
+    @Override
     public synchronized void finalizarRelatorio(int total, VectorTimestamp vectorTimestamp) {
         assault_party1_room = '-';
         assault_party2_room = '-';
@@ -285,6 +285,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param distancia       distance from the room to the CollectionSite
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setDistanciaSala(int nrSala, int distancia, VectorTimestamp vectorTimestamp) {
         this.distanciaSala[nrSala] = distancia;
     }
@@ -297,6 +298,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param nrQuadrosSala   number of paitings
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setNrQuadrosSala(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) {
         this.nrQuadrosSala[nrSala] = nrQuadrosSala;
         add_log(vectorTimestamp);
@@ -308,6 +310,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param state           Master Thief state
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setMasterThiefState(int state, VectorTimestamp vectorTimestamp) {
         this.masther_thief = state;
         //add_log();
@@ -320,6 +323,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param state           state of thief
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setThiefState(int id, int state, VectorTimestamp vectorTimestamp) {
 
         this.thief_state[id] = state;
@@ -333,6 +337,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param situation       situation of thief
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setThiefSituation(int id, int situation, VectorTimestamp vectorTimestamp) {
         this.thief_situation[id] = situation;
         //add_log();
@@ -345,6 +350,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param disp            agility of thief
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setThiefDisplacement(int id, int disp, VectorTimestamp vectorTimestamp) {
         this.thief_displacement[id] = disp;
         add_log(vectorTimestamp);
@@ -356,6 +362,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param room            id of room
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAssaultParty1_room(int room, VectorTimestamp vectorTimestamp) {
 
         room++;
@@ -369,6 +376,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param room            id of room
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAssaultParty2_room(int room, VectorTimestamp vectorTimestamp) {
         room++;
         this.assault_party2_room = Integer.toString(room).charAt(0);
@@ -382,6 +390,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param pos             thief position to the room
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP1_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
         assault_party1_thief_pos[pos_grupo] = Integer.toString(pos);
         add_log(vectorTimestamp);
@@ -394,6 +403,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param cv              paiting
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP1_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
         if (cv) {
             assault_party1_thief_canvas[pos_grupo] = '1';
@@ -412,6 +422,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param cv              paiting
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP1_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
         assault_party1_thief_pos[pos_grupo] = Integer.toString(pos);
         id++;
@@ -430,6 +441,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param id              thief's id
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP1_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {
         assault_party1_thief_pos[pos_grupo] = "-";
         assault_party1_thief_canvas[pos_grupo] = '-';
@@ -446,6 +458,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param pos             position to the room
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP2_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
         assault_party2_thief_pos[pos_grupo] = String.valueOf(pos);
         add_log(vectorTimestamp);
@@ -459,6 +472,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param cv              paiting
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP2_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
         if (cv) {
             assault_party2_thief_canvas[pos_grupo] = '1';
@@ -478,6 +492,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param cv              paiting
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP2_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
         assault_party2_thief_pos[pos_grupo] = Integer.toString(pos);
         id++;
@@ -497,6 +512,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param id              thief's id
      * @param vectorTimestamp
      */
+    @Override
     public synchronized void setAP2_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {
         assault_party2_thief_pos[pos_grupo] = "-";
         assault_party2_thief_canvas[pos_grupo] = '-';
@@ -506,15 +522,15 @@ public class GeneralRepository implements GeneralRepositoryInterface {
     }
 
     @Override
-    public void finished(){
+    public void finished() {
         numberEntitiesRunning--;
-        if (numberEntitiesRunning > 0){
+        if (numberEntitiesRunning > 0) {
             return;
         }
         terminateServers();
     }
 
-    public void terminateServers(){
+    private void terminateServers() {
         Register reg = null;
         Registry registry = null;
         String rmiRegHostName;
@@ -528,89 +544,69 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         } catch (RemoteException ex) {
             System.out.println("Erro na localização do registo");
             ex.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         String nameEntryBase = RegistryConfig.RMI_REGISTER_NAME;
         String nameEntryObject = RegistryConfig.RMI_REGISTRY_GENREPO_NAME;
 
         // shutdown Museum
-        try
-        {
-            MuseumInterface museum = (MuseumInterface) registry.lookup (RegistryConfig.RMI_REGISTRY_MUSEUM_NAME);
+        try {
+            MuseumInterface museum = (MuseumInterface) registry.lookup(RegistryConfig.RMI_REGISTRY_MUSEUM_NAME);
             museum.signalShutdown();
-        }
-        catch (RemoteException e)
-        {
-            System.out.println("Exception thrown while locating Museum: " + e.getMessage () + "!");
+        } catch (RemoteException e) {
+            System.out.println("Exception thrown while locating Museum: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
-        }
-        catch (NotBoundException e)
-        {
-            System.out.println("Museum is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        } catch (NotBoundException e) {
+            System.out.println("Museum is not registered: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         // shutdown concentration Site
-        try
-        {
+        try {
             ConcentrationSiteInterface concentrationSiteInterface = (ConcentrationSiteInterface)
-                    registry.lookup (RegistryConfig.RMI_REGISTRY_CONSITE_NAME);
+                    registry.lookup(RegistryConfig.RMI_REGISTRY_CONSITE_NAME);
             concentrationSiteInterface.signalShutdown();
-        }
-        catch (RemoteException e)
-        {
-            System.out.println("Exception thrown while locating concentration site: " + e.getMessage () + "!");
+        } catch (RemoteException e) {
+            System.out.println("Exception thrown while locating concentration site: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
-        }
-        catch (NotBoundException e)
-        {
-            System.out.println("concentration Site is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        } catch (NotBoundException e) {
+            System.out.println("concentration Site is not registered: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         // shutdown assault groups
-        try
-        {
+        try {
             AssaultPartyManagerInterface assaultPartyManagerInterface = (AssaultPartyManagerInterface)
-                    registry.lookup (RegistryConfig.RMI_REGISTRY_ASSGMAN_NAME);
+                    registry.lookup(RegistryConfig.RMI_REGISTRY_ASSGMAN_NAME);
             assaultPartyManagerInterface.signalShutdown();
-        }
-        catch (RemoteException e)
-        {
-            System.out.println("Exception thrown while locating assault group: " + e.getMessage () + "!");
+        } catch (RemoteException e) {
+            System.out.println("Exception thrown while locating assault group: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
-        }
-        catch (NotBoundException e)
-        {
-            System.out.println(" assault group  is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        } catch (NotBoundException e) {
+            System.out.println(" assault group  is not registered: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         //shutdown collection site
-        try
-        {
+        try {
             CollectionSiteInterface collectionSiteInterface = (CollectionSiteInterface)
-                    registry.lookup (RegistryConfig.RMI_REGISTRY_COLSITE_NAME);
+                    registry.lookup(RegistryConfig.RMI_REGISTRY_COLSITE_NAME);
             collectionSiteInterface.signalShutdown();
-        }
-        catch (RemoteException e)
-        {
-            System.out.println("Exception thrown while locating collection site: " + e.getMessage () + "!");
+        } catch (RemoteException e) {
+            System.out.println("Exception thrown while locating collection site: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
-        }
-        catch (NotBoundException e)
-        {
-            System.out.println("collection site is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        } catch (NotBoundException e) {
+            System.out.println("collection site is not registered: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         // shutdown log
@@ -620,11 +616,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         } catch (RemoteException e) {
             System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         try {
@@ -633,11 +629,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         } catch (RemoteException e) {
             System.out.println("Log registration exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("Log not bound exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         try {
@@ -645,7 +641,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             UnicastRemoteObject.unexportObject(this, true);
         } catch (NoSuchObjectException ex) {
             ex.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
 //        writeEnd();

@@ -1,11 +1,11 @@
 package serverSide.concentrationSite;
 
 import interfaces.ConcentrationSiteInterface;
+import interfaces.GeneralRepositoryInterface;
 import interfaces.Register;
 import registry.RegistryConfig;
 import support.Constantes;
 import support.MemFIFO;
-import interfaces.GeneralRepositoryInterface;
 import support.Tuple;
 import support.VectorTimestamp;
 
@@ -19,7 +19,9 @@ import java.rmi.server.UnicastRemoteObject;
 import static support.Constantes.*;
 
 /**
+ * Class that descibes the Collection Site
  * Monitor Concentration Site.
+ *
  * @author Pedro Matos and Tiago Bastos
  */
 public class ConcentrationSite implements ConcentrationSiteInterface {
@@ -57,12 +59,14 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     private int situacaoLadrao[] = new int[NUM_THIEVES];
 
-
+    /**
+     * Local Vector Timestamp
+     */
     private VectorTimestamp local;
 
 
     /**
-     * @param generalRepository General Repository
+     * @param generalRepository General Repository Interface
      */
     public ConcentrationSite(GeneralRepositoryInterface generalRepository) {
 
@@ -86,10 +90,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * Get for the thief's group
-     * @param id thief's id
+     *
+     * @param id              thief's id
      * @param vectorTimestamp
-     * @return thief's group
+     * @return clock and thief's group
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> getThiefGroup(int id, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -101,9 +107,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     /**
      * The thief uses this method when he is ready.
      * The thief is added to the FIFO
-     * @param ladraoID thief's id
+     *
+     * @param ladraoID        thief's id
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public synchronized VectorTimestamp imReady(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -132,9 +141,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * Get for the number of thiefs in the CollectionSite
-     * @return number of thiefs
+     *
      * @param vectorTimestamp
+     * @return clock and number of thieves
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> getNumberOfThieves(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -143,11 +154,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * Get for the thief state
-     * @param ladraoID thief id
+     *
+     * @param ladraoID        thief id
      * @param vectorTimestamp
-     * @return thief state
+     * @return clock and thief state
      */
-
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> getThiefState(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -157,10 +169,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * Thief uses this when he is waiting for orders
-     * @param ladraoID thief id
+     *
+     * @param ladraoID        thief id
      * @param vectorTimestamp
+     * @return clock
      */
-
+    @Override
     public synchronized VectorTimestamp amINeeded(int ladraoID, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -179,11 +193,13 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     }
 
     /**
-     *  Calls a thief from the FIFO and adds to the group
-     * @param grupo group id
+     * Calls a thief from the FIFO and adds to the group
+     *
+     * @param grupo           group id
      * @param vectorTimestamp
-     * @return id of thief, or -1 if FIFO is empty
+     * @return clock and id of thief, or -1 if FIFO is empty
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> callThief(int grupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -196,7 +212,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
             this.busyLadrao[id] = true;
             this.grupoLadrao[id] = grupo;
             setMasterThiefState(ASSEMBLING_A_GROUP);
-            setThiefSituation(id,IN_PARTY);
+            setThiefSituation(id, IN_PARTY);
             notifyAll();
         }
 
@@ -207,10 +223,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     /**
      * Verifies if the thief is busy
      *
-     * @param ladraoID thief id
+     * @param ladraoID        thief id
      * @param vectorTimestamp
-     * @return true if busy, false is free
+     * @return clock and  true if busy, false is free
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Boolean> getBusyThief(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
         return new Tuple<>(local.clone(), this.busyLadrao[ladraoID]);
@@ -218,9 +235,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * State changes to Crawl IN
-     * @param ladraoID thief id
+     *
+     * @param ladraoID        thief id
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public synchronized VectorTimestamp prepareExcursion(int ladraoID, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -231,9 +251,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * State changes to Crawl OUT
-     * @param ladraoID thief id
+     *
+     * @param ladraoID        thief id
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public synchronized VectorTimestamp reverseDirection(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -243,9 +266,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * State changes to At a Room
-     * @param ladraoID thief id
+     *
+     * @param ladraoID        thief id
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public synchronized VectorTimestamp atARoom(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -255,9 +281,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * Thief arrives at the CollectionSite
-     * @param ladraoID thief id
+     *
+     * @param ladraoID        thief id
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public synchronized VectorTimestamp flagArrival(int ladraoID, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -265,8 +294,8 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         this.busyLadrao[ladraoID] = false;
         this.grupoLadrao[ladraoID] = -1;
         this.estadoLadrao[ladraoID] = OUTSIDE;
-        setThiefState(ladraoID,this.estadoLadrao[ladraoID]);
-        setThiefSituation(ladraoID,WAITING);
+        setThiefState(ladraoID, this.estadoLadrao[ladraoID]);
+        setThiefSituation(ladraoID, WAITING);
         this.imReady(ladraoID, local.clone());
 
 
@@ -274,13 +303,14 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     }
 
 
-
     /**
      * GET for the agility
-     * @param ladraoID thief id
+     *
+     * @param ladraoID        thief id
      * @param vectorTimestamp
-     * @return thief agility
+     * @return clock and thief agility
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> getAgility(int ladraoID, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -290,8 +320,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * Waiting for the correct number of thiefs in order to create an assault party
+     *
      * @param vectorTimestamp
+     * @reutrn clock
      */
+    @Override
     public synchronized VectorTimestamp waitForThieves(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -310,8 +343,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     /**
      * Waits for all the thiefs in order to finish operation
+     *
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public synchronized VectorTimestamp waitForThievesEnd(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -330,6 +366,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         return local.clone();
     }
 
+    /**
+     * This function is used for the log to signal the AssaultPartyManager to shutdown.
+     *
+     * @throws RemoteException may throw during a execution of a remote method call
+     */
     @Override
     public void signalShutdown() throws RemoteException {
         Register reg = null;
@@ -346,7 +387,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         } catch (RemoteException ex) {
             System.out.println("Erro ao localizar o registo");
             ex.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         String nameEntryBase = RegistryConfig.RMI_REGISTER_NAME;
@@ -358,11 +399,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         } catch (RemoteException e) {
             System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
         try {
             // Unregister ourself
@@ -370,11 +411,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         } catch (RemoteException e) {
             System.out.println("Concentration registration exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("Concentration not bound exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         try {
@@ -382,7 +423,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
             UnicastRemoteObject.unexportObject(this, true);
         } catch (NoSuchObjectException ex) {
             ex.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         System.out.println("Concentration Site closed.");
@@ -390,8 +431,8 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     private void setThiefSituation(int id, int inParty) {
         try {
-            this.general.setThiefSituation(id, inParty,  local.clone());
-        } catch (RemoteException e){
+            this.general.setThiefSituation(id, inParty, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -400,8 +441,8 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     private void setMasterThiefState(int stat) {
         try {
-            this.general.setMasterThiefState(stat,  local.clone());
-        } catch (RemoteException e){
+            this.general.setMasterThiefState(stat, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -410,8 +451,8 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
     private void setThiefState(int ladraoID, int i) {
         try {
-            this.general.setThiefState(ladraoID, i,  local.clone());
-        } catch (RemoteException e){
+            this.general.setThiefState(ladraoID, i, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);

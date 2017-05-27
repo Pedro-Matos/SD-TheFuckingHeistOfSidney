@@ -24,7 +24,7 @@ public class VectorTimestamp implements Cloneable, Serializable {
     }
 
     public void update(VectorTimestamp vt) {
-        for(int i = 0; i < timestamps.length; i++)
+        for (int i = 0; i < timestamps.length; i++)
             timestamps[i] = Math.max(timestamps[i], vt.timestamps[i]);
     }
 

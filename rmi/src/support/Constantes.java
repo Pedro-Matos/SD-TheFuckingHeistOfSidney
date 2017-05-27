@@ -46,7 +46,7 @@ public class Constantes {
 
 
     /**
-     *  Distance between the thiefs in a line
+     * Distance between the thiefs in a line
      */
     public static final int DIST_THIEVES = 3;
 
@@ -108,7 +108,7 @@ public class Constantes {
      */
     public static final int PRESENTING_THE_REPORT = 4;
     /**
-     *Situation of Ordinary Thief - Waiting
+     * Situation of Ordinary Thief - Waiting
      */
     public static final int WAITING = 0;
     /**

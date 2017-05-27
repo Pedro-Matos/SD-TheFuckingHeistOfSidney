@@ -1,11 +1,11 @@
 package clientSide.thief;
 
+import genclass.GenericIO;
 import interfaces.AssaultPartyManagerInterface;
 import interfaces.CollectionSiteInterface;
 import interfaces.ConcentrationSiteInterface;
 import interfaces.GeneralRepositoryInterface;
 import registry.RegistryConfig;
-import genclass.GenericIO;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

@@ -16,9 +16,10 @@ import java.rmi.server.UnicastRemoteObject;
 import static support.Constantes.*;
 
 /**
- * Monitor Collection Site
+ * Class that descibes the Collection Site
  *
- * @author Pedro Matos and Tiago Bastos
+ * @author Pedro Matos
+ * @author Tiago Bastos
  */
 public class CollectionSite implements CollectionSiteInterface {
     /**
@@ -29,6 +30,10 @@ public class CollectionSite implements CollectionSiteInterface {
      * Assault partys manager
      */
     private final AssaultPartyManagerInterface gestorGrupos;
+    /**
+     * Number of groups
+     */
+    int countGrupos = 0;
     /**
      * Master Thief state
      */
@@ -53,30 +58,23 @@ public class CollectionSite implements CollectionSiteInterface {
      * Rooms occupied
      */
     private int[] salaAssalto = new int[NUM_ROOMS];
-
     /**
      * Groups occupied
      */
     private boolean grupoOcup[] = new boolean[2];
-
     /**
      * General Repository
      */
     private GeneralRepositoryInterface general;
-
-
+    /**
+     * Local Vector Timestamp
+     */
     private VectorTimestamp local;
 
-
     /**
-     * Number of groups
-     */
-    int countGrupos = 0;
-
-    /**
-     * @param concentrationSite CollectionSite
-     * @param gestorGrupos Manager of assault partys
-     * @param generalRepository General Repository
+     * @param concentrationSite CollectionSite Interface
+     * @param gestorGrupos      Manager of assault partys Interface
+     * @param generalRepository General Repository Interface
      */
     public CollectionSite(ConcentrationSiteInterface concentrationSite, AssaultPartyManagerInterface gestorGrupos,
                           GeneralRepositoryInterface generalRepository) {
@@ -115,9 +113,10 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Checks if the groups are done
      *
-     * @return -1 if they are or 0/1 if they aren't.
      * @param vectorTimestamp
+     * @return clock and int with the id of the group
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> checkGroups(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -137,11 +136,12 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Adds thief to an assault party
      *
-     * @param ladraoID thief id
-     * @param grupo group id
+     * @param ladraoID        thief id
+     * @param grupo           group id
      * @param vectorTimestamp
-     * @return Position in the group. -1 if the group is full
+     * @return clock and the Position in the group. -1 if the group is full
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> joinAssaultParty(int ladraoID, int grupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -154,7 +154,7 @@ public class CollectionSite implements CollectionSiteInterface {
                     this.nrElemGrupo[grupo]++;
                     this.grupos[grupo][i] = ladraoID;
                     //break;
-                    joinAssaultParty(ladraoID,grupo,i);
+                    joinAssaultParty(ladraoID, grupo, i);
                     return new Tuple<>(local.clone(), i);
                 }
             }
@@ -163,29 +163,14 @@ public class CollectionSite implements CollectionSiteInterface {
         return new Tuple<>(local.clone(), -1);
     }
 
-
-    /**
-     * Verifies if the group is full
-     *
-     * @param grupoID group id
-     * @return false if it isn't full; true if is
-     */
-    public synchronized boolean grupoCheio(int grupoID) {
-
-        if (this.nrElemGrupo[grupoID] != NUM_GROUP) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     /**
      * Verifies master thief state
      *
-     * @return master thief state
      * @param id
      * @param vectorTimestamp
+     * @return clock and the master thief state
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> getMasterThiefState(int id, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -194,8 +179,11 @@ public class CollectionSite implements CollectionSiteInterface {
 
     /**
      * Starts the assault
+     *
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public synchronized VectorTimestamp startOperations(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -206,13 +194,14 @@ public class CollectionSite implements CollectionSiteInterface {
     }
 
 
-
     /**
      * Creates assault party
+     *
      * @param idGrupo if of party
-     * @return true if formed, false if not.
+     * @return clock and true if formed, false if not.
      */
-    public synchronized VectorTimestamp prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp){
+    @Override
+    public synchronized VectorTimestamp prepareAssaultParty(int idGrupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
@@ -230,8 +219,8 @@ public class CollectionSite implements CollectionSiteInterface {
             }
         }
 
-        if(idGrupo == 0) setAssaultParty1_room(j);
-        if(idGrupo == 1) setAssaultParty2_room(j);
+        if (idGrupo == 0) setAssaultParty1_room(j);
+        if (idGrupo == 1) setAssaultParty2_room(j);
 
 
         createAssaultParty(idGrupo, j);
@@ -241,12 +230,14 @@ public class CollectionSite implements CollectionSiteInterface {
     }
 
 
-
     /**
      * Master is resting
+     *
      * @param vectorTimestamp
+     * @return clock
      */
-    public synchronized VectorTimestamp takeARest(VectorTimestamp vectorTimestamp){
+    @Override
+    public synchronized VectorTimestamp takeARest(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
@@ -280,10 +271,12 @@ public class CollectionSite implements CollectionSiteInterface {
 
     /**
      * Returns the number of elements in the group
-     * @param grupoID id of group
+     *
+     * @param grupoID         id of group
      * @param vectorTimestamp
-     * @return number of elements
+     * @return clock number of elements
      */
+    @Override
     public synchronized Tuple<VectorTimestamp, Integer> getNumberElemGroup(int grupoID, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -292,16 +285,18 @@ public class CollectionSite implements CollectionSiteInterface {
     }
 
 
-
     /**
      * Hand canvas to the thief and leave the group
-     * @param ladraoID thief id
-     * @param sala room id
-     * @param grupo group id
-     * @param pos position in group
+     *
+     * @param ladraoID        thief id
+     * @param sala            room id
+     * @param grupo           group id
+     * @param pos             position in group
      * @param vectorTimestamp
+     * @return clock
      */
-    public synchronized VectorTimestamp handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
+    @Override
+    public synchronized VectorTimestamp handACanvas(int ladraoID, int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
@@ -318,26 +313,27 @@ public class CollectionSite implements CollectionSiteInterface {
             notifyAll();
         }
 
-        if(grupo == 0){
+        if (grupo == 0) {
             setAP1_reset(pos, ladraoID);
-        }
-        else if (grupo == 1){
-            setAP2_reset(pos,ladraoID);
+        } else if (grupo == 1) {
+            setAP2_reset(pos, ladraoID);
         }
 
         return local.clone();
     }
 
 
-
     /**
      * Room is empty
-     * @param sala room id
-     * @param grupo group id
-     * @param pos position in the group
+     *
+     * @param sala            room id
+     * @param grupo           group id
+     * @param pos             position in the group
      * @param vectorTimestamp
+     * @return clock
      */
-    public synchronized VectorTimestamp flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp){
+    @Override
+    public synchronized VectorTimestamp flagEmptyRoom(int sala, int grupo, int pos, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
@@ -361,9 +357,11 @@ public class CollectionSite implements CollectionSiteInterface {
 
     /**
      * Verifies if there are paitings in the museum
-     * @return true if empty
+     *
      * @param vectorTimestamp
+     * @return clock and true if museum is empty
      */
+    @Override
     public Tuple<VectorTimestamp, Boolean> checkEmptyMuseum(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -377,8 +375,11 @@ public class CollectionSite implements CollectionSiteInterface {
 
     /**
      * Show the results of the assault
+     *
      * @param vectorTimestamp
+     * @return clock
      */
+    @Override
     public VectorTimestamp sumUpResults(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -391,10 +392,10 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Number of stollen paitings
      *
-     * @return Number of stollen paitings
      * @param vectorTimestamp
+     * @return clock and number of paintings
      */
-
+    @Override
     public Tuple<VectorTimestamp, Integer> getNumberofStolenPaints(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
         return new Tuple<>(local.clone(), this.quadrosRoubados);
@@ -403,9 +404,10 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Checks if there are rooms with paitings
      *
-     * @return true if there are rooms with paitings
      * @param vectorTimestamp
+     * @return clock and true if the rooms aren't empty
      */
+    @Override
     public Tuple<VectorTimestamp, Boolean> checkEmptyRooms(VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
@@ -423,10 +425,11 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Returns the room the group is assaulting
      *
-     * @param grupoID group id
+     * @param grupoID         group id
      * @param vectorTimestamp
-     * @return room id
+     * @return clock and room id
      */
+    @Override
     public Tuple<VectorTimestamp, Integer> getAssaultRoom(int grupoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
@@ -438,6 +441,9 @@ public class CollectionSite implements CollectionSiteInterface {
         return new Tuple<>(local.clone(), -1);
     }
 
+    /**
+     * This function is used for the log to signal the AssaultPartyManager to shutdown.
+     */
     @Override
     public void signalShutdown() throws RemoteException {
         Register reg = null;
@@ -454,7 +460,7 @@ public class CollectionSite implements CollectionSiteInterface {
         } catch (RemoteException ex) {
             System.out.println("Erro ao localizar o registo");
             ex.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         String nameEntryBase = RegistryConfig.RMI_REGISTER_NAME;
@@ -466,11 +472,11 @@ public class CollectionSite implements CollectionSiteInterface {
         } catch (RemoteException e) {
             System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
         try {
             // Unregister ourself
@@ -478,11 +484,11 @@ public class CollectionSite implements CollectionSiteInterface {
         } catch (RemoteException e) {
             System.out.println("Collection registration exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
             System.out.println("Collection not bound exception: " + e.getMessage());
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         try {
@@ -490,19 +496,19 @@ public class CollectionSite implements CollectionSiteInterface {
             UnicastRemoteObject.unexportObject(this, true);
         } catch (NoSuchObjectException ex) {
             ex.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         }
 
         System.out.println("Collection Site closed.");
     }
 
 
-    private void joinAssaultParty(int ladraoID, int grupo, int i){
+    private void joinAssaultParty(int ladraoID, int grupo, int i) {
         try {
             local.increment();
-            VectorTimestamp clock = this.gestorGrupos.joinAssaultParty(ladraoID, grupo, i,  local.clone());
+            VectorTimestamp clock = this.gestorGrupos.joinAssaultParty(ladraoID, grupo, i, local.clone());
             local.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -511,23 +517,32 @@ public class CollectionSite implements CollectionSiteInterface {
 
     private void setMasterThiefState(int stat) {
         try {
-            this.general.setMasterThiefState(stat,  local.clone());
-        } catch (RemoteException e){
+            this.general.setMasterThiefState(stat, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    private boolean createAssaultParty(int idGrupo, int j){
+    private synchronized boolean grupoCheio(int grupoID) {
+
+        if (this.nrElemGrupo[grupoID] != NUM_GROUP) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean createAssaultParty(int idGrupo, int j) {
         boolean ret = false;
 
         try {
             local.increment();
-            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.createAssaultParty(idGrupo, j,  local.clone());
+            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.createAssaultParty(idGrupo, j, local.clone());
             ret = tuple.getSecond();
             local.update(tuple.getClock());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -537,20 +552,20 @@ public class CollectionSite implements CollectionSiteInterface {
     }
 
 
-    private void setAssaultParty1_room(int j){
+    private void setAssaultParty1_room(int j) {
         try {
-            this.general.setAssaultParty1_room(j,  local.clone());
-        } catch (RemoteException e){
+            this.general.setAssaultParty1_room(j, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    private void setAssaultParty2_room(int j){
+    private void setAssaultParty2_room(int j) {
         try {
-            this.general.setAssaultParty2_room(j,  local.clone());
-        } catch (RemoteException e){
+            this.general.setAssaultParty2_room(j, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -561,9 +576,9 @@ public class CollectionSite implements CollectionSiteInterface {
 
         try {
             local.increment();
-            VectorTimestamp clock = this.gestorGrupos.destroyAssaultParty(grupo,  local.clone());
+            VectorTimestamp clock = this.gestorGrupos.destroyAssaultParty(grupo, local.clone());
             local.update(clock);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -571,20 +586,20 @@ public class CollectionSite implements CollectionSiteInterface {
 
     }
 
-    private void setAP1_reset(int pos, int ladraoID){
+    private void setAP1_reset(int pos, int ladraoID) {
         try {
-            this.general.setAP1_reset(pos, ladraoID,  local.clone());
-        } catch (RemoteException e){
+            this.general.setAP1_reset(pos, ladraoID, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    private void setAP2_reset(int pos, int ladraoID){
+    private void setAP2_reset(int pos, int ladraoID) {
         try {
-            this.general.setAP2_reset(pos, ladraoID,  local.clone());
-        } catch (RemoteException e){
+            this.general.setAP2_reset(pos, ladraoID, local.clone());
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
@@ -597,10 +612,10 @@ public class CollectionSite implements CollectionSiteInterface {
         try {
 //            local.increment();
             Tuple<VectorTimestamp, Integer> tuple =
-                    this.concentrationSite.getNumberOfThieves( local.clone());
+                    this.concentrationSite.getNumberOfThieves(local.clone());
             ret = tuple.getSecond();
 //            local.update(tuple.getClock());
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);

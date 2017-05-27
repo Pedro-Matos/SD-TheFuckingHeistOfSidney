@@ -1,11 +1,11 @@
 package serverSide.assaultParty;
 
+import genclass.GenericIO;
 import interfaces.AssaultPartyManagerInterface;
 import interfaces.GeneralRepositoryInterface;
 import interfaces.MuseumInterface;
 import interfaces.Register;
 import registry.RegistryConfig;
-import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -36,13 +36,13 @@ public class AssaultPartyManagerServer {
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
             generalRepositoryInterface = (GeneralRepositoryInterface)
-                    registry.lookup (RegistryConfig.RMI_REGISTRY_GENREPO_NAME);
+                    registry.lookup(RegistryConfig.RMI_REGISTRY_GENREPO_NAME);
         } catch (RemoteException e) {
-            System.out.println("Excepção na localização do General Repository: " + e.getMessage () + "!");
+            System.out.println("Excepção na localização do General Repository: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
-            System.out.println("O General Repository não está registado: " + e.getMessage () + "!");
+            System.out.println("O General Repository não está registado: " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
@@ -50,13 +50,13 @@ public class AssaultPartyManagerServer {
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
             museumInterface = (MuseumInterface)
-                    registry.lookup (RegistryConfig.RMI_REGISTRY_MUSEUM_NAME);
+                    registry.lookup(RegistryConfig.RMI_REGISTRY_MUSEUM_NAME);
         } catch (RemoteException e) {
-            System.out.println("Excepção na localização do Museum: " + e.getMessage () + "!");
+            System.out.println("Excepção na localização do Museum: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
-            System.out.println("O Museum não está registado: " + e.getMessage () + "!");
+            System.out.println("O Museum não está registado: " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
@@ -66,7 +66,7 @@ public class AssaultPartyManagerServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
-        GenericIO.writelnString ("Security manager was installed!");
+        GenericIO.writelnString("Security manager was installed!");
 
 
 

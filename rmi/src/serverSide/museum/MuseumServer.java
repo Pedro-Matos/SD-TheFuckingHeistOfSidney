@@ -1,10 +1,10 @@
 package serverSide.museum;
 
+import genclass.GenericIO;
 import interfaces.GeneralRepositoryInterface;
 import interfaces.MuseumInterface;
 import interfaces.Register;
 import registry.RegistryConfig;
-import genclass.GenericIO;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -33,13 +33,13 @@ public class MuseumServer {
         try {
             Registry registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
             generalRepositoryInterface = (GeneralRepositoryInterface)
-                    registry.lookup (RegistryConfig.RMI_REGISTRY_GENREPO_NAME);
+                    registry.lookup(RegistryConfig.RMI_REGISTRY_GENREPO_NAME);
         } catch (RemoteException e) {
-            System.out.println("Excepção na localização do General Repository: " + e.getMessage () + "!");
+            System.out.println("Excepção na localização do General Repository: " + e.getMessage() + "!");
             e.printStackTrace();
-            System.exit (1);
+            System.exit(1);
         } catch (NotBoundException e) {
-            System.out.println("O General Repository não está registado: " + e.getMessage () + "!");
+            System.out.println("O General Repository não está registado: " + e.getMessage() + "!");
             e.printStackTrace();
             System.exit(1);
         }
@@ -48,7 +48,7 @@ public class MuseumServer {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
-        GenericIO.writelnString ("Security manager was installed!");
+        GenericIO.writelnString("Security manager was installed!");
 
 
         /* instanciação do objecto remoto que representa o Museu e geração de um stub para ele */
