@@ -27,11 +27,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
     /**
      * Array with each room's distances to the CollectionSite
      */
-    private int[] distanciaSala;
+    private int[] roomDistance;
     /**
-     * Array with the number of paitings in each room
+     * Array with the number of paintings in each room
      */
-    private int[] nrQuadrosSala;
+    private int[] numberRoomPaintings;
     /**
      * String with the name of the text file
      */
@@ -122,13 +122,13 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * The changes will only occur by the use of sets functions.
      */
     public GeneralRepository() {
-        distanciaSala = new int[NUM_ROOMS];
-        nrQuadrosSala = new int[NUM_ROOMS];
+        roomDistance = new int[NUM_ROOMS];
+        numberRoomPaintings = new int[NUM_ROOMS];
         this.fileName2 = "Log.txt";
 
-        for (int i = 0; i < nrQuadrosSala.length; i++) {
-            distanciaSala[i] = -1;
-            nrQuadrosSala[i] = -1;
+        for (int i = 0; i < numberRoomPaintings.length; i++) {
+            roomDistance[i] = -1;
+            numberRoomPaintings[i] = -1;
         }
 
         for (int i = 0; i < thief_state.length; i++) {
@@ -154,7 +154,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
     /**
      * The first lines to be written in the file.
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void startLog(VectorTimestamp vectorTimestamp) {
@@ -185,11 +185,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
                 "   " + assault_party2_room + "    " + (assault_party2_thief_id[0]) + "  " + String.format("%2s", assault_party2_thief_pos[0]) + "  " + assault_party2_thief_canvas[0] +
                 "   " + (assault_party2_thief_id[1]) + "  " + String.format("%2s", assault_party2_thief_pos[1]) + "  " + assault_party2_thief_canvas[1] +
                 "   " + (assault_party2_thief_id[2]) + "  " + String.format("%2s", assault_party2_thief_pos[2]) + "  " + assault_party2_thief_canvas[2] +
-                "   " + String.format("%02d", nrQuadrosSala[0]) + " " + String.format("%02d", distanciaSala[0]) +
-                "   " + String.format("%02d", nrQuadrosSala[1]) + " " + String.format("%02d", distanciaSala[1]) +
-                "   " + String.format("%02d", nrQuadrosSala[2]) + " " + String.format("%02d", distanciaSala[2]) +
-                "   " + String.format("%02d", nrQuadrosSala[3]) + " " + String.format("%02d", distanciaSala[3]) +
-                "   " + String.format("%02d", nrQuadrosSala[4]) + " " + String.format("%02d", distanciaSala[4]);
+                "   " + String.format("%02d", numberRoomPaintings[0]) + " " + String.format("%02d", roomDistance[0]) +
+                "   " + String.format("%02d", numberRoomPaintings[1]) + " " + String.format("%02d", roomDistance[1]) +
+                "   " + String.format("%02d", numberRoomPaintings[2]) + " " + String.format("%02d", roomDistance[2]) +
+                "   " + String.format("%02d", numberRoomPaintings[3]) + " " + String.format("%02d", roomDistance[3]) +
+                "   " + String.format("%02d", numberRoomPaintings[4]) + " " + String.format("%02d", roomDistance[4]);
 
 
         log.writelnString(nova_1);
@@ -205,7 +205,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
     /**
      * Function that writes when a change occurs. It checks for repetitions and do not allow them.
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void add_log(VectorTimestamp vectorTimestamp) {
@@ -229,11 +229,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
                 "   " + assault_party2_room + "    " + (assault_party2_thief_id[0]) + "  " + String.format("%2s", assault_party2_thief_pos[0]) + "  " + assault_party2_thief_canvas[0] +
                 "   " + (assault_party2_thief_id[1]) + "  " + String.format("%2s", assault_party2_thief_pos[1]) + "  " + assault_party2_thief_canvas[1] +
                 "   " + (assault_party2_thief_id[2]) + "  " + String.format("%2s", assault_party2_thief_pos[2]) + "  " + assault_party2_thief_canvas[2] +
-                "   " + String.format("%02d", nrQuadrosSala[0]) + " " + String.format("%02d", distanciaSala[0]) +
-                "   " + String.format("%02d", nrQuadrosSala[1]) + " " + String.format("%02d", distanciaSala[1]) +
-                "   " + String.format("%02d", nrQuadrosSala[2]) + " " + String.format("%02d", distanciaSala[2]) +
-                "   " + String.format("%02d", nrQuadrosSala[3]) + " " + String.format("%02d", distanciaSala[3]) +
-                "   " + String.format("%02d", nrQuadrosSala[4]) + " " + String.format("%02d", distanciaSala[4]);
+                "   " + String.format("%02d", numberRoomPaintings[0]) + " " + String.format("%02d", roomDistance[0]) +
+                "   " + String.format("%02d", numberRoomPaintings[1]) + " " + String.format("%02d", roomDistance[1]) +
+                "   " + String.format("%02d", numberRoomPaintings[2]) + " " + String.format("%02d", roomDistance[2]) +
+                "   " + String.format("%02d", numberRoomPaintings[3]) + " " + String.format("%02d", roomDistance[3]) +
+                "   " + String.format("%02d", numberRoomPaintings[4]) + " " + String.format("%02d", roomDistance[4]);
 
 
         if (!last_1.equals(nova_1) || !last_2.equals(nova_2)) {
@@ -255,7 +255,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * Function called to finish the report. It shows the number of stollen paitings.
      *
      * @param total           total of paitings
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void finalizarRelatorio(int total, VectorTimestamp vectorTimestamp) {
@@ -283,11 +283,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param nrSala          id of room
      * @param distancia       distance from the room to the CollectionSite
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setDistanciaSala(int nrSala, int distancia, VectorTimestamp vectorTimestamp) {
-        this.distanciaSala[nrSala] = distancia;
+        this.roomDistance[nrSala] = distancia;
     }
 
 
@@ -296,11 +296,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param nrSala          id of room
      * @param nrQuadrosSala   number of paitings
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setNrQuadrosSala(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) {
-        this.nrQuadrosSala[nrSala] = nrQuadrosSala;
+        this.numberRoomPaintings[nrSala] = nrQuadrosSala;
         add_log(vectorTimestamp);
     }
 
@@ -308,7 +308,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * Set for Master Thief state
      *
      * @param state           Master Thief state
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setMasterThiefState(int state, VectorTimestamp vectorTimestamp) {
@@ -321,7 +321,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param id              id of thief
      * @param state           state of thief
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setThiefState(int id, int state, VectorTimestamp vectorTimestamp) {
@@ -335,7 +335,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param id              id of thief
      * @param situation       situation of thief
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setThiefSituation(int id, int situation, VectorTimestamp vectorTimestamp) {
@@ -348,7 +348,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param id              id of thief
      * @param disp            agility of thief
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setThiefDisplacement(int id, int disp, VectorTimestamp vectorTimestamp) {
@@ -360,7 +360,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * Set room for assault party n1
      *
      * @param room            id of room
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAssaultParty1_room(int room, VectorTimestamp vectorTimestamp) {
@@ -374,7 +374,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * Set room for assault party n2
      *
      * @param room            id of room
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAssaultParty2_room(int room, VectorTimestamp vectorTimestamp) {
@@ -388,7 +388,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param pos_grupo       thief position in group
      * @param pos             thief position to the room
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP1_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
@@ -401,13 +401,13 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param pos_grupo       thief position in group
      * @param cv              paiting
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP1_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
         if (cv) {
             assault_party1_thief_canvas[pos_grupo] = '1';
-            nrQuadrosSala[room]--;
+            numberRoomPaintings[room]--;
         } else assault_party1_thief_canvas[pos_grupo] = '0';
 
         add_log(vectorTimestamp);
@@ -420,7 +420,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param id              thief's id
      * @param pos             thief's position
      * @param cv              paiting
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP1_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
@@ -439,7 +439,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param pos_grupo       thief position in group
      * @param id              thief's id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP1_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {
@@ -456,7 +456,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param pos_grupo       thief position in group
      * @param pos             position to the room
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP2_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
@@ -470,13 +470,13 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param pos_grupo       thief position in group
      * @param cv              paiting
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP2_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
         if (cv) {
             assault_party2_thief_canvas[pos_grupo] = '1';
-            nrQuadrosSala[room]--;
+            numberRoomPaintings[room]--;
         } else assault_party2_thief_canvas[pos_grupo] = '0';
 
         add_log(vectorTimestamp);
@@ -490,7 +490,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param id              thief's id
      * @param pos             thief's position
      * @param cv              paiting
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP2_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
@@ -510,7 +510,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param pos_grupo       thief position in group
      * @param id              thief's id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      */
     @Override
     public synchronized void setAP2_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {

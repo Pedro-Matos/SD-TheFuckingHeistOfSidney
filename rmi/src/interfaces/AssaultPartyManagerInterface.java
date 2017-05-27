@@ -19,7 +19,7 @@ public interface AssaultPartyManagerInterface extends Remote {
      *
      * @param idGrupo         group id
      * @param nrSala          room id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and boolean if creation is successful
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -30,17 +30,17 @@ public interface AssaultPartyManagerInterface extends Remote {
      *
      * @param ladraoID        thief id
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and int with the position of the thief in the assault party
      * @throws RemoteException may throw during a execution of a remote method call
      */
-    public Tuple<VectorTimestamp, Integer> getPos(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getGroupPosition(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Destroys the group
      *
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -52,7 +52,7 @@ public interface AssaultPartyManagerInterface extends Remote {
      * @param ladraoID        thief id
      * @param idGrupo         group id
      * @param pos_grupo       group position
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -65,7 +65,7 @@ public interface AssaultPartyManagerInterface extends Remote {
      * @param agilidade       thief agility
      * @param idGrupo         group id
      * @param posgrupo        position in the group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and final position
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -78,7 +78,7 @@ public interface AssaultPartyManagerInterface extends Remote {
      * @param agilidade       thief agility
      * @param idGrupo         group id
      * @param posgrupo        position in the group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock final position
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -88,7 +88,7 @@ public interface AssaultPartyManagerInterface extends Remote {
      * Get distance of room
      *
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and respective room distance
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -98,7 +98,7 @@ public interface AssaultPartyManagerInterface extends Remote {
      * Steal paiting
      *
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if paiting was stolen
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -109,7 +109,7 @@ public interface AssaultPartyManagerInterface extends Remote {
      *
      * @param id              Thief id
      * @param idGrupo         Group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */

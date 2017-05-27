@@ -18,7 +18,7 @@ public interface MuseumInterface extends Remote {
      * Method to steal the paiting
      *
      * @param nr_sala         room id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if success
      * @throws RemoteException may throw during a execution of a remote method call
      */

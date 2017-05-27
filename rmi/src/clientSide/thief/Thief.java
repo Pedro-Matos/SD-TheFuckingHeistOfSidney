@@ -26,7 +26,7 @@ public class Thief extends Thread {
     /**
      * Assault Party's manager
      */
-    private AssaultPartyManagerInterface grupo;
+    private AssaultPartyManagerInterface group;
     /**
      * Concentration Site
      */
@@ -46,15 +46,15 @@ public class Thief extends Thread {
     /**
      * Thief Group
      */
-    private int meuGrupo;
+    private int myGroup;
     /**
      * Thief Agility
      */
-    private int agilidade;
+    private int agility;
     /**
      * Thief position in the group
      */
-    private int pos_grupo;
+    private int group_position;
 
     /**
      * Thief local VectorTimestamp
@@ -68,11 +68,11 @@ public class Thief extends Thread {
      * @param id                      Thief ID
      * @param name                    Thief name
      * @param generalRepository       General Repository Interface
-     * @param grupo                   Assault Party manager Interface
+     * @param group                   Assault Party manager Interface
      * @param collectionSiteInterface Concentration Site Interface
      * @param concentrationSite       CollectionSite Interface
      */
-    public Thief(int id, String name, GeneralRepositoryInterface generalRepository, AssaultPartyManagerInterface grupo,
+    public Thief(int id, String name, GeneralRepositoryInterface generalRepository, AssaultPartyManagerInterface group,
                  CollectionSiteInterface collectionSiteInterface, ConcentrationSiteInterface concentrationSite) {
 
         super(name);
@@ -81,18 +81,18 @@ public class Thief extends Thread {
 
         this.generalRepository = generalRepository;
         this.collectionSiteInterface = collectionSiteInterface;
-        this.grupo = grupo;
+        this.group = group;
         this.concentrationSite = concentrationSite;
 
 
-        this.meuGrupo = -1;
-        this.pos_grupo = -1;
+        this.myGroup = -1;
+        this.group_position = -1;
 
         vt = new VectorTimestamp(VECTOR_TIMESTAMP_SIZE, (id + 1));
 
         // clock ????
-        this.agilidade = getAgility(vt.clone());
-        setThiefDisplacement(this.id, this.agilidade, vt.clone());
+        this.agility = getAgility(vt.clone());
+        setThiefDisplacement(this.id, this.agility, vt.clone());
 
     }
 
@@ -117,16 +117,16 @@ public class Thief extends Thread {
                     // no clock
                     boolean getBusyLadrao = getBusyThief(this.id);
 
-                    if (!getBusyLadrao && this.meuGrupo == -1) {
+                    if (!getBusyLadrao && this.myGroup == -1) {
                         amINeeded(this.id);
                     } else {
 
-                        this.meuGrupo = getThiefGroup(this.id);
+                        this.myGroup = getThiefGroup(this.id);
 
                         // no clock
-                        this.pos_grupo = getGroupPosition(this.id, this.meuGrupo);
+                        this.group_position = getGroupPosition(this.id, this.myGroup);
 
-                        if (this.meuGrupo != -1 && this.pos_grupo != -1) {
+                        if (this.myGroup != -1 && this.group_position != -1) {
                             prepareExcursion(this.id);
                         }
 
@@ -136,13 +136,13 @@ public class Thief extends Thread {
 
                 case CRAWLING_INWARDS:
 
-                    waitMyTurn(this.id, this.meuGrupo);
+                    waitMyTurn(this.id, this.myGroup);
 
 
-                    posicao = crawlIn(this.id, this.agilidade, this.meuGrupo, this.pos_grupo);
+                    posicao = crawlIn(this.id, this.agility, this.myGroup, this.group_position);
 
                     // no clock
-                    int getDistanciaSala = getRoomDistance(this.meuGrupo);
+                    int getDistanciaSala = getRoomDistance(this.myGroup);
 
 
                     if (posicao == getDistanciaSala) {
@@ -152,15 +152,15 @@ public class Thief extends Thread {
 
                 case AT_A_ROOM:
 
-                    quadro = rollACanvas(this.meuGrupo);
+                    quadro = rollACanvas(this.myGroup);
 
                     // no clock
-                    int room = getAssaultRoom(this.meuGrupo);
+                    int room = getAssaultRoom(this.myGroup);
 
-                    if (this.meuGrupo == 0) {
-                        setAP1_canvas(this.pos_grupo, quadro, room);
-                    } else if (this.meuGrupo == 1) {
-                        setAP2_canvas(this.pos_grupo, quadro, room);
+                    if (this.myGroup == 0) {
+                        setAP1_canvas(this.group_position, quadro, room);
+                    } else if (this.myGroup == 1) {
+                        setAP2_canvas(this.group_position, quadro, room);
                     }
 
                     reverseDirection(this.id);
@@ -169,37 +169,37 @@ public class Thief extends Thread {
                 case CRAWLING_OUTWARDS:
 
                     if (posicao != 0) {
-                        waitMyTurn(this.id, this.meuGrupo);
-                        posicao = crawlOut(this.id, this.agilidade, this.meuGrupo, this.pos_grupo);
+                        waitMyTurn(this.id, this.myGroup);
+                        posicao = crawlOut(this.id, this.agility, this.myGroup, this.group_position);
                     }
 
-                    if (this.meuGrupo == 0) {
-                        setAP1_pos(this.pos_grupo, posicao);
-                    } else if (this.meuGrupo == 1) {
-                        setAP2_pos(this.pos_grupo, posicao);
+                    if (this.myGroup == 0) {
+                        setAP1_pos(this.group_position, posicao);
+                    } else if (this.myGroup == 1) {
+                        setAP2_pos(this.group_position, posicao);
                     }
 
                     if (posicao == 0) {
                         if (quadro) {
 
                             // no clock
-                            int getSalaAssalto = getAssaultRoom(this.meuGrupo);
+                            int getSalaAssalto = getAssaultRoom(this.myGroup);
                             // no clock
-                            int getPosGrupo = getGroupPosition(this.id, this.meuGrupo);
-                            handACanvas(this.id, getSalaAssalto, this.meuGrupo, getPosGrupo);
+                            int getPosGrupo = getGroupPosition(this.id, this.myGroup);
+                            handACanvas(this.id, getSalaAssalto, this.myGroup, getPosGrupo);
 
                         } else {
                             // no clock
-                            int getSalaAssalto = getAssaultRoom(this.meuGrupo);
+                            int getSalaAssalto = getAssaultRoom(this.myGroup);
                             // no clock
-                            int getPosGrupo = getGroupPosition(this.id, this.meuGrupo);
-                            flagEmptyRoom(getSalaAssalto, this.meuGrupo, getPosGrupo);
+                            int getPosGrupo = getGroupPosition(this.id, this.myGroup);
+                            flagEmptyRoom(getSalaAssalto, this.myGroup, getPosGrupo);
                         }
 
-                        if (this.meuGrupo == 0) setAP1_reset(this.pos_grupo, this.id);
-                        else if (this.meuGrupo == 1) setAP2_reset(this.pos_grupo, this.id);
+                        if (this.myGroup == 0) setAP1_reset(this.group_position, this.id);
+                        else if (this.myGroup == 1) setAP2_reset(this.group_position, this.id);
 
-                        this.meuGrupo = -1;
+                        this.myGroup = -1;
                         flagArrival(this.id);
                     }
 
@@ -299,7 +299,7 @@ public class Thief extends Thread {
         try {
             vt.increment();
             Tuple<VectorTimestamp, Integer> tuple =
-                    this.grupo.crawlOut(id, agilidade, meuGrupo, pos_grupo, vt.clone());
+                    this.group.crawlOut(id, agilidade, meuGrupo, pos_grupo, vt.clone());
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
         } catch (RemoteException e) {
@@ -364,7 +364,7 @@ public class Thief extends Thread {
         try {
             vt.increment();
             Tuple<VectorTimestamp, Boolean> tuple =
-                    this.grupo.rollACanvas(meuGrupo, vt.clone());
+                    this.group.rollACanvas(meuGrupo, vt.clone());
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
         } catch (RemoteException e) {
@@ -394,7 +394,7 @@ public class Thief extends Thread {
         try {
 //            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple =
-                    this.grupo.getRoomDistance(meuGrupo, vt.clone());
+                    this.group.getRoomDistance(meuGrupo, vt.clone());
             ret = tuple.getSecond();
 //            vt.update(tuple.getClock());
         } catch (RemoteException e) {
@@ -412,7 +412,7 @@ public class Thief extends Thread {
         try {
             vt.increment();
             Tuple<VectorTimestamp, Integer> tuple =
-                    this.grupo.crawlIn(id, agilidade, meuGrupo, pos_grupo, vt.clone());
+                    this.group.crawlIn(id, agilidade, meuGrupo, pos_grupo, vt.clone());
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
         } catch (RemoteException e) {
@@ -428,7 +428,7 @@ public class Thief extends Thread {
 
         try {
             vt.increment();
-            VectorTimestamp clock = this.grupo.waitMyTurn(id, meuGrupo, vt.clone());
+            VectorTimestamp clock = this.group.waitMyTurn(id, meuGrupo, vt.clone());
             vt.update(clock);
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
@@ -455,7 +455,7 @@ public class Thief extends Thread {
 
         try {
 //            vt.increment();
-            Tuple<VectorTimestamp, Integer> tuple = this.grupo.getPos(id, meuGrupo, vt.clone());
+            Tuple<VectorTimestamp, Integer> tuple = this.group.getGroupPosition(id, meuGrupo, vt.clone());
             ret = tuple.getSecond();
 //            vt.update(tuple.getClock());
         } catch (RemoteException e) {
@@ -558,7 +558,7 @@ public class Thief extends Thread {
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getAgility(id, vt.clone());
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
-            this.agilidade = tuple.getSecond();
+            this.agility = tuple.getSecond();
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();

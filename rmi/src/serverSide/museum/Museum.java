@@ -28,7 +28,7 @@ public class Museum implements MuseumInterface {
     /**
      * Rooms of the museum
      */
-    int[][] salas = new int[NUM_ROOMS][2];
+    int[][] rooms = new int[NUM_ROOMS][2];
     /**
      * General Repository
      */
@@ -49,14 +49,14 @@ public class Museum implements MuseumInterface {
         local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
 
 
-        for (int i = 0; i < salas.length; i++) {
+        for (int i = 0; i < rooms.length; i++) {
             Random r = new Random();
-            salas[i][0] = r.nextInt((MAX_PAINTS + 1) - MIN_PAINTS) + MIN_PAINTS;
-            setNrQuadrosSala(i, salas[i][0]);
+            rooms[i][0] = r.nextInt((MAX_PAINTS + 1) - MIN_PAINTS) + MIN_PAINTS;
+            setNrQuadrosSala(i, rooms[i][0]);
             Random r2 = new Random();
 
-            salas[i][1] = r2.nextInt((MAX_DIST + 1) - MIN_DIST) + MIN_DIST;
-            setDistanciaSala(i, salas[i][1]);
+            rooms[i][1] = r2.nextInt((MAX_DIST + 1) - MIN_DIST) + MIN_DIST;
+            setDistanciaSala(i, rooms[i][1]);
         }
 
 
@@ -67,16 +67,16 @@ public class Museum implements MuseumInterface {
      * Method to steal the paiting
      *
      * @param nr_sala         room id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if success
      */
     public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(int nr_sala, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
-        if (salas[nr_sala][0] > 0) {
-            salas[nr_sala][0]--;
-            //generalRepository.setNrQuadrosSala(nr_sala, salas[nr_sala][0]);
+        if (rooms[nr_sala][0] > 0) {
+            rooms[nr_sala][0]--;
+            //generalRepository.setNrQuadrosSala(nr_sala, rooms[nr_sala][0]);
             return new Tuple<>(local.clone(), true);
         } else {
             return new Tuple<>(local.clone(), false);
@@ -94,7 +94,7 @@ public class Museum implements MuseumInterface {
     public synchronized Tuple<VectorTimestamp, Integer> getMuseumRoomDistance(int nr_sala, VectorTimestamp clone) {
         local.update(clone);
 
-        return new Tuple<>(local.clone(), salas[nr_sala][1]);
+        return new Tuple<>(local.clone(), rooms[nr_sala][1]);
     }
 
     /**

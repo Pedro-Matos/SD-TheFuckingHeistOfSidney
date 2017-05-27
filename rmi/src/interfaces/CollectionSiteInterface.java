@@ -17,7 +17,7 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Checks if the groups are done
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and int with the id of the group
      * @throws RemoteException
      * @throws RemoteException may throw during a execution of a remote method call
@@ -29,7 +29,7 @@ public interface CollectionSiteInterface extends Remote {
      *
      * @param ladraoID        thief id
      * @param grupo           group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and the Position in the group. -1 if the group is full
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -39,7 +39,7 @@ public interface CollectionSiteInterface extends Remote {
      * Verifies master thief state
      *
      * @param id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and the master thief state
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -48,7 +48,7 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Starts the assault
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -66,7 +66,7 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Master is resting
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -76,7 +76,7 @@ public interface CollectionSiteInterface extends Remote {
      * Returns the number of elements in the group
      *
      * @param grupoID         id of group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock number of elements
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -89,7 +89,7 @@ public interface CollectionSiteInterface extends Remote {
      * @param sala            room id
      * @param grupo           group id
      * @param pos             position in group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -101,7 +101,7 @@ public interface CollectionSiteInterface extends Remote {
      * @param sala            room id
      * @param grupo           group id
      * @param pos             position in the group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -110,7 +110,7 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Verifies if there are paitings in the museum
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if museum is empty
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -119,7 +119,7 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Show the results of the assault
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -128,7 +128,7 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Number of stollen paitings
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and number of paintings
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -137,7 +137,7 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Checks if there are rooms with paitings
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if the rooms aren't empty
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -147,7 +147,7 @@ public interface CollectionSiteInterface extends Remote {
      * Returns the room the group is assaulting
      *
      * @param grupoID         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and room id
      * @throws RemoteException may throw during a execution of a remote method call
      */

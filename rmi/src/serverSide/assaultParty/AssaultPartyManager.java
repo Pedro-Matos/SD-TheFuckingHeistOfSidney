@@ -27,7 +27,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
     /**
      * Assault Groups
      */
-    private AssaultParty grupo[] = new AssaultParty[2];
+    private AssaultParty group[] = new AssaultParty[2];
     /**
      * Museum
      */
@@ -58,15 +58,15 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      *
      * @param idGrupo         group id
      * @param nrSala          room id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and boolean if creation is successful
      */
     @Override
     public synchronized Tuple<VectorTimestamp, Boolean> createAssaultParty(int idGrupo, int nrSala, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        if (grupo[idGrupo] == null) {
-            grupo[idGrupo] = new AssaultParty(museum, nrSala, idGrupo, general);
+        if (group[idGrupo] == null) {
+            group[idGrupo] = new AssaultParty(museum, nrSala, idGrupo, general);
             return new Tuple<>(local.clone(), true);
         }
 
@@ -79,17 +79,15 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      *
      * @param ladraoID        thief id
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and int with the position of the thief in the assault party
      */
     @Override
-    public Tuple<VectorTimestamp, Integer> getPos(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp) {
+    public Tuple<VectorTimestamp, Integer> getGroupPosition(int ladraoID, int idGrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
 
-        Tuple<VectorTimestamp, Integer> tuple = grupo[idGrupo].getPos(ladraoID, local.clone());
-
-        return tuple;
+        return group[idGrupo].getGroupPosition(ladraoID, local.clone());
     }
 
 
@@ -97,7 +95,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * Destroys the group
      *
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -105,7 +103,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
 
         local.update(vectorTimestamp);
 
-        grupo[idGrupo] = null;
+        group[idGrupo] = null;
         return local.clone();
     }
 
@@ -115,7 +113,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param ladraoID        thief id
      * @param idGrupo         group id
      * @param pos_grupo       group position
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -123,7 +121,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
 
         local.update(vectorTimestamp);
 
-        return grupo[idGrupo].entrar(ladraoID, pos_grupo, vectorTimestamp);
+        return group[idGrupo].joinAssaultParty(ladraoID, pos_grupo, vectorTimestamp);
 
     }
 
@@ -134,14 +132,14 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param agilidade       thief agility
      * @param idGrupo         group id
      * @param posgrupo        position in the group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and final position
      */
     @Override
     public Tuple<VectorTimestamp, Integer> crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return grupo[idGrupo].crawlIn(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
+        return group[idGrupo].crawlIn(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
     }
 
     /**
@@ -151,14 +149,14 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * @param agilidade       thief agility
      * @param idGrupo         group id
      * @param posgrupo        position in the group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock final position
      */
     @Override
     public Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return grupo[idGrupo].crawlOut(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
+        return group[idGrupo].crawlOut(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
     }
 
 
@@ -166,28 +164,28 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      * Get distance of room
      *
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and respective room distance
      */
     @Override
     public Tuple<VectorTimestamp, Integer> getRoomDistance(int idGrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return grupo[idGrupo].getRoomDistance(local.clone());
+        return group[idGrupo].getRoomDistance(local.clone());
     }
 
     /**
      * Steal paiting
      *
      * @param idGrupo         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if paiting was stolen
      */
     @Override
     public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return grupo[idGrupo].rollACanvas(local.clone());
+        return group[idGrupo].rollACanvas(local.clone());
     }
 
     /**
@@ -195,14 +193,14 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      *
      * @param id              Thief id
      * @param idGrupo         Group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
     public VectorTimestamp waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return grupo[idGrupo].waitMyTurn(id, local.clone());
+        return group[idGrupo].waitMyTurn(id, local.clone());
     }
 
     /**

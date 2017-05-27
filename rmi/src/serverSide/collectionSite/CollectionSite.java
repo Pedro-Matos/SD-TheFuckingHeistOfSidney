@@ -29,39 +29,39 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Assault partys manager
      */
-    private final AssaultPartyManagerInterface gestorGrupos;
+    private final AssaultPartyManagerInterface groupManager;
     /**
      * Number of groups
      */
-    int countGrupos = 0;
+    private int countGroups = 0;
     /**
      * Master Thief state
      */
-    private int estadoChefe;
+    private int masterThiefState;
     /**
      * Empty rooms
      */
-    private boolean[] salaVazia = new boolean[NUM_ROOMS];
+    private boolean[] emptyRooms = new boolean[NUM_ROOMS];
     /**
      * Assault Partys
      */
-    private int[][] grupos = new int[2][NUM_GROUP];
+    private int[][] groups = new int[2][NUM_GROUP];
     /**
      * Nr of elements in the groups
      */
-    private int[] nrElemGrupo = new int[2];
+    private int[] numberElemGroup = new int[2];
     /**
-     * Total of stollen paintings
+     * Total of stolen paintings
      */
-    private int quadrosRoubados;
+    private int stolenPaintings;
     /**
      * Rooms occupied
      */
-    private int[] salaAssalto = new int[NUM_ROOMS];
+    private int[] assaultRoom = new int[NUM_ROOMS];
     /**
      * Groups occupied
      */
-    private boolean grupoOcup[] = new boolean[2];
+    private boolean groupsOccu[] = new boolean[2];
     /**
      * General Repository
      */
@@ -79,31 +79,31 @@ public class CollectionSite implements CollectionSiteInterface {
     public CollectionSite(ConcentrationSiteInterface concentrationSite, AssaultPartyManagerInterface gestorGrupos,
                           GeneralRepositoryInterface generalRepository) {
         this.concentrationSite = concentrationSite;
-        this.gestorGrupos = gestorGrupos;
+        this.groupManager = gestorGrupos;
 
         // Estado inicial do chefe
-        estadoChefe = PLANNING_THE_HEIST;
+        masterThiefState = PLANNING_THE_HEIST;
 
 
-        nrElemGrupo[0] = 0;
-        nrElemGrupo[1] = 0;
-        countGrupos = 0;
-        grupoOcup[0] = false;
-        grupoOcup[1] = false;
+        numberElemGroup[0] = 0;
+        numberElemGroup[1] = 0;
+        countGroups = 0;
+        groupsOccu[0] = false;
+        groupsOccu[1] = false;
 
         this.general = generalRepository;
 
         for (int i = 0; i < NUM_GROUP; i++) {
-            grupos[0][i] = -1;
-            grupos[1][i] = -1;
+            groups[0][i] = -1;
+            groups[1][i] = -1;
         }
 
         for (int i = 0; i < NUM_ROOMS; i++) {
-            this.salaVazia[i] = false;
-            this.salaAssalto[i] = -1;
+            this.emptyRooms[i] = false;
+            this.assaultRoom[i] = -1;
         }
 
-        this.quadrosRoubados = 0;
+        this.stolenPaintings = 0;
 
         local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
 
@@ -113,7 +113,7 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Checks if the groups are done
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and int with the id of the group
      */
     @Override
@@ -121,10 +121,10 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        if (!this.grupoOcup[0]) {
+        if (!this.groupsOccu[0]) {
 
             return new Tuple<>(local.clone(), 0);
-        } else if (!this.grupoOcup[1]) {
+        } else if (!this.groupsOccu[1]) {
 
             return new Tuple<>(local.clone(), 1);
         } else {
@@ -138,7 +138,7 @@ public class CollectionSite implements CollectionSiteInterface {
      *
      * @param ladraoID        thief id
      * @param grupo           group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and the Position in the group. -1 if the group is full
      */
     @Override
@@ -150,9 +150,9 @@ public class CollectionSite implements CollectionSiteInterface {
 
         if (!cond) {
             for (int i = 0; i < NUM_GROUP; i++) {
-                if (this.grupos[grupo][i] == -1) {
-                    this.nrElemGrupo[grupo]++;
-                    this.grupos[grupo][i] = ladraoID;
+                if (this.groups[grupo][i] == -1) {
+                    this.numberElemGroup[grupo]++;
+                    this.groups[grupo][i] = ladraoID;
                     //break;
                     joinAssaultParty(ladraoID, grupo, i);
                     return new Tuple<>(local.clone(), i);
@@ -167,20 +167,20 @@ public class CollectionSite implements CollectionSiteInterface {
      * Verifies master thief state
      *
      * @param id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and the master thief state
      */
     @Override
     public synchronized Tuple<VectorTimestamp, Integer> getMasterThiefState(int id, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), this.estadoChefe);
+        return new Tuple<>(local.clone(), this.masterThiefState);
     }
 
     /**
      * Starts the assault
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -188,8 +188,8 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        this.estadoChefe = DECIDING_WHAT_TO_DO;
-        setMasterThiefState(this.estadoChefe);
+        this.masterThiefState = DECIDING_WHAT_TO_DO;
+        setMasterThiefState(this.masterThiefState);
         return local.clone();
     }
 
@@ -205,16 +205,16 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        this.grupoOcup[idGrupo] = true;
-        this.countGrupos++;
-        this.estadoChefe = ASSEMBLING_A_GROUP;
-        //general.setMasterThiefState(this.estadoChefe);
+        this.groupsOccu[idGrupo] = true;
+        this.countGroups++;
+        this.masterThiefState = ASSEMBLING_A_GROUP;
+        //general.setMasterThiefState(this.masterThiefState);
 
         int j;
         for (j = 0; j < NUM_ROOMS; j++) {
 
-            if (this.salaAssalto[j] == -1 && !this.salaVazia[j]) {
-                this.salaAssalto[j] = idGrupo;
+            if (this.assaultRoom[j] == -1 && !this.emptyRooms[j]) {
+                this.assaultRoom[j] = idGrupo;
                 break;
             }
         }
@@ -233,7 +233,7 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Master is resting
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -247,13 +247,13 @@ public class CollectionSite implements CollectionSiteInterface {
         int checkGrupos = this.checkGroups(local.clone()).getSecond();
 
         if (checkGrupos == -1 || nrLadroes < NUM_GROUP) {
-            if (this.estadoChefe == ASSEMBLING_A_GROUP) {
-                this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-                setMasterThiefState(this.estadoChefe);
+            if (this.masterThiefState == ASSEMBLING_A_GROUP) {
+                this.masterThiefState = WAITING_FOR_GROUP_ARRIVAL;
+                setMasterThiefState(this.masterThiefState);
                 return local.clone();
             }
-            this.estadoChefe = WAITING_FOR_GROUP_ARRIVAL;
-            setMasterThiefState(this.estadoChefe);
+            this.masterThiefState = WAITING_FOR_GROUP_ARRIVAL;
+            setMasterThiefState(this.masterThiefState);
 
             try {
                 wait();
@@ -261,8 +261,8 @@ public class CollectionSite implements CollectionSiteInterface {
                 System.out.println(ex.getMessage());
             }
         } else {
-            this.estadoChefe = DECIDING_WHAT_TO_DO;
-            setMasterThiefState(this.estadoChefe);
+            this.masterThiefState = DECIDING_WHAT_TO_DO;
+            setMasterThiefState(this.masterThiefState);
 
         }
         return local.clone();
@@ -273,7 +273,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * Returns the number of elements in the group
      *
      * @param grupoID         id of group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock number of elements
      */
     @Override
@@ -281,7 +281,7 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), this.nrElemGrupo[grupoID]);
+        return new Tuple<>(local.clone(), this.numberElemGroup[grupoID]);
     }
 
 
@@ -292,7 +292,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * @param sala            room id
      * @param grupo           group id
      * @param pos             position in group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -300,15 +300,15 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        this.quadrosRoubados++;
-        this.grupos[grupo][pos] = -1;
-        if (--this.nrElemGrupo[grupo] == 0) {
-            this.salaAssalto[sala] = -1;
+        this.stolenPaintings++;
+        this.groups[grupo][pos] = -1;
+        if (--this.numberElemGroup[grupo] == 0) {
+            this.assaultRoom[sala] = -1;
             destroyAssaultParty(grupo);
-            this.grupoOcup[grupo] = false;
-            if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
-                this.estadoChefe = DECIDING_WHAT_TO_DO;
-                setMasterThiefState(this.estadoChefe);
+            this.groupsOccu[grupo] = false;
+            if (this.masterThiefState == WAITING_FOR_GROUP_ARRIVAL) {
+                this.masterThiefState = DECIDING_WHAT_TO_DO;
+                setMasterThiefState(this.masterThiefState);
             }
             notifyAll();
         }
@@ -329,7 +329,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * @param sala            room id
      * @param grupo           group id
      * @param pos             position in the group
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -337,15 +337,15 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        this.salaVazia[sala] = true;
-        this.grupos[grupo][pos] = -1;
-        if (--this.nrElemGrupo[grupo] == 0) {
-            this.salaAssalto[sala] = -1;
+        this.emptyRooms[sala] = true;
+        this.groups[grupo][pos] = -1;
+        if (--this.numberElemGroup[grupo] == 0) {
+            this.assaultRoom[sala] = -1;
             destroyAssaultParty(grupo);
-            this.grupoOcup[grupo] = false;
-            if (this.estadoChefe == WAITING_FOR_GROUP_ARRIVAL) {
-                this.estadoChefe = DECIDING_WHAT_TO_DO;
-                setMasterThiefState(this.estadoChefe);
+            this.groupsOccu[grupo] = false;
+            if (this.masterThiefState == WAITING_FOR_GROUP_ARRIVAL) {
+                this.masterThiefState = DECIDING_WHAT_TO_DO;
+                setMasterThiefState(this.masterThiefState);
             }
             notifyAll();
         }
@@ -358,15 +358,15 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Verifies if there are paitings in the museum
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if museum is empty
      */
     @Override
     public Tuple<VectorTimestamp, Boolean> checkEmptyMuseum(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        for (int i = 0; i < salaVazia.length; i++) {
-            if (!salaVazia[i]) {
+        for (int i = 0; i < emptyRooms.length; i++) {
+            if (!emptyRooms[i]) {
                 return new Tuple<>(local.clone(), false);
             }
         }
@@ -376,7 +376,7 @@ public class CollectionSite implements CollectionSiteInterface {
     /**
      * Show the results of the assault
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -384,27 +384,27 @@ public class CollectionSite implements CollectionSiteInterface {
 
         local.update(vectorTimestamp);
 
-        this.estadoChefe = PRESENTING_THE_REPORT;
-        setMasterThiefState(this.estadoChefe);
+        this.masterThiefState = PRESENTING_THE_REPORT;
+        setMasterThiefState(this.masterThiefState);
         return local.clone();
     }
 
     /**
      * Number of stollen paitings
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and number of paintings
      */
     @Override
     public Tuple<VectorTimestamp, Integer> getNumberofStolenPaints(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
-        return new Tuple<>(local.clone(), this.quadrosRoubados);
+        return new Tuple<>(local.clone(), this.stolenPaintings);
     }
 
     /**
      * Checks if there are rooms with paitings
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and true if the rooms aren't empty
      */
     @Override
@@ -413,7 +413,7 @@ public class CollectionSite implements CollectionSiteInterface {
         local.update(vectorTimestamp);
 
         for (int i = 0; i < NUM_ROOMS; i++) {
-            if (!salaVazia[i] && salaAssalto[i] == -1) {
+            if (!emptyRooms[i] && assaultRoom[i] == -1) {
                 //salasLivres = true;
                 return new Tuple<>(local.clone(), true);
             }
@@ -426,7 +426,7 @@ public class CollectionSite implements CollectionSiteInterface {
      * Returns the room the group is assaulting
      *
      * @param grupoID         group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and room id
      */
     @Override
@@ -434,7 +434,7 @@ public class CollectionSite implements CollectionSiteInterface {
         local.update(vectorTimestamp);
 
         for (int i = 0; i < NUM_ROOMS; i++) {
-            if (this.salaAssalto[i] == grupoID) {
+            if (this.assaultRoom[i] == grupoID) {
                 return new Tuple<>(local.clone(), i);
             }
         }
@@ -506,7 +506,7 @@ public class CollectionSite implements CollectionSiteInterface {
     private void joinAssaultParty(int ladraoID, int grupo, int i) {
         try {
             local.increment();
-            VectorTimestamp clock = this.gestorGrupos.joinAssaultParty(ladraoID, grupo, i, local.clone());
+            VectorTimestamp clock = this.groupManager.joinAssaultParty(ladraoID, grupo, i, local.clone());
             local.update(clock);
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
@@ -527,7 +527,7 @@ public class CollectionSite implements CollectionSiteInterface {
 
     private synchronized boolean grupoCheio(int grupoID) {
 
-        if (this.nrElemGrupo[grupoID] != NUM_GROUP) {
+        if (this.numberElemGroup[grupoID] != NUM_GROUP) {
             return false;
         } else {
             return true;
@@ -539,7 +539,7 @@ public class CollectionSite implements CollectionSiteInterface {
 
         try {
             local.increment();
-            Tuple<VectorTimestamp, Boolean> tuple = this.gestorGrupos.createAssaultParty(idGrupo, j, local.clone());
+            Tuple<VectorTimestamp, Boolean> tuple = this.groupManager.createAssaultParty(idGrupo, j, local.clone());
             ret = tuple.getSecond();
             local.update(tuple.getClock());
         } catch (RemoteException e) {
@@ -576,7 +576,7 @@ public class CollectionSite implements CollectionSiteInterface {
 
         try {
             local.increment();
-            VectorTimestamp clock = this.gestorGrupos.destroyAssaultParty(grupo, local.clone());
+            VectorTimestamp clock = this.groupManager.destroyAssaultParty(grupo, local.clone());
             local.update(clock);
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");

@@ -18,7 +18,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * Get for the thief's group
      *
      * @param id              thief's id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and thief's group
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -29,7 +29,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * The thief is added to the FIFO
      *
      * @param ladraoID        thief's id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -38,7 +38,7 @@ public interface ConcentrationSiteInterface extends Remote {
     /**
      * Get for the number of thiefs in the CollectionSite
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and number of thieves
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -48,7 +48,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * Get for the thief state
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and thief state
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -58,7 +58,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * Thief uses this when he is waiting for orders
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -68,7 +68,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * Calls a thief from the FIFO and adds to the group
      *
      * @param grupo           group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and id of thief, or -1 if FIFO is empty
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -78,7 +78,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * Verifies if the thief is busy
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and  true if busy, false is free
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -88,7 +88,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * State changes to Crawl IN
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -98,7 +98,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * State changes to Crawl OUT
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -108,7 +108,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * State changes to At a Room
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -118,7 +118,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * Thief arrives at the CollectionSite
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -128,7 +128,7 @@ public interface ConcentrationSiteInterface extends Remote {
      * GET for the agility
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and thief agility
      * @throws RemoteException may throw during a execution of a remote method call
      */
@@ -139,7 +139,7 @@ public interface ConcentrationSiteInterface extends Remote {
     /**
      * Waiting for the correct number of thiefs in order to create an assault party
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
      * @reutrn clock
      */
@@ -148,7 +148,7 @@ public interface ConcentrationSiteInterface extends Remote {
     /**
      * Waits for all the thiefs in order to finish operation
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
      */

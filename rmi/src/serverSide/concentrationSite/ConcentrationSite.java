@@ -33,23 +33,23 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     /**
      * State of thief's
      */
-    private int[] estadoLadrao = new int[NUM_THIEVES];
+    private int[] thiefState = new int[NUM_THIEVES];
     /**
      * Flag if the thief is busy
      */
-    private boolean[] busyLadrao = new boolean[NUM_THIEVES];
+    private boolean[] busyThief = new boolean[NUM_THIEVES];
     /**
      * Number of thiefs in the CollectionSite
      */
-    private int nrLadroes;
+    private int numberofThieves;
     /**
      * Agility of each thief
      */
-    private int agilidadeLadroes[] = new int[NUM_THIEVES];
+    private int thievesAgility[] = new int[NUM_THIEVES];
     /**
      * Group of each thief
      */
-    private int grupoLadrao[] = new int[NUM_THIEVES];
+    private int thiefGroup[] = new int[NUM_THIEVES];
     /**
      * General Repository
      */
@@ -57,7 +57,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     /**
      * Thief's situation
      */
-    private int situacaoLadrao[] = new int[NUM_THIEVES];
+    private int thiefSituation[] = new int[NUM_THIEVES];
 
     /**
      * Local Vector Timestamp
@@ -70,14 +70,14 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     public ConcentrationSite(GeneralRepositoryInterface generalRepository) {
 
-        this.nrLadroes = 0;
+        this.numberofThieves = 0;
 
         for (int i = 0; i < NUM_THIEVES; i++) {
-            estadoLadrao[i] = OUTSIDE;
-            this.busyLadrao[i] = false;
-            grupoLadrao[i] = -1;
-            agilidadeLadroes[i] = ((int) (Math.random() * (MAX_AGIL - 1))) + MIN_AGIL;
-            this.situacaoLadrao[i] = WAITING;
+            thiefState[i] = OUTSIDE;
+            this.busyThief[i] = false;
+            thiefGroup[i] = -1;
+            thievesAgility[i] = ((int) (Math.random() * (MAX_AGIL - 1))) + MIN_AGIL;
+            this.thiefSituation[i] = WAITING;
         }
 
         fifo = new MemFIFO(NUM_THIEVES);
@@ -92,7 +92,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * Get for the thief's group
      *
      * @param id              thief's id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and thief's group
      */
     @Override
@@ -100,7 +100,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), grupoLadrao[id]);
+        return new Tuple<>(local.clone(), thiefGroup[id]);
 
     }
 
@@ -109,7 +109,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * The thief is added to the FIFO
      *
      * @param ladraoID        thief's id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -117,15 +117,15 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         local.update(vectorTimestamp);
 
         if (!fifo.full()) {
-            this.busyLadrao[ladraoID] = false;
+            this.busyThief[ladraoID] = false;
             fifo.write(ladraoID);
-            this.nrLadroes++;
-            this.grupoLadrao[ladraoID] = -1;
+            this.numberofThieves++;
+            this.thiefGroup[ladraoID] = -1;
         } else {
             System.out.println("ERRO!!");
         }
 
-        if (this.nrLadroes >= NUM_GROUP) {
+        if (this.numberofThieves >= NUM_GROUP) {
 
             notifyAll();
         } else {
@@ -142,28 +142,28 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     /**
      * Get for the number of thiefs in the CollectionSite
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and number of thieves
      */
     @Override
     public synchronized Tuple<VectorTimestamp, Integer> getNumberOfThieves(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), this.nrLadroes);
+        return new Tuple<>(local.clone(), this.numberofThieves);
     }
 
     /**
      * Get for the thief state
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and thief state
      */
     @Override
     public synchronized Tuple<VectorTimestamp, Integer> getThiefState(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), this.estadoLadrao[ladraoID]);
+        return new Tuple<>(local.clone(), this.thiefState[ladraoID]);
 
     }
 
@@ -171,7 +171,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * Thief uses this when he is waiting for orders
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -180,7 +180,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         local.update(vectorTimestamp);
 
         notifyAll();
-        while (!this.busyLadrao[ladraoID] && this.estadoLadrao[ladraoID] != HEIST_END) {
+        while (!this.busyThief[ladraoID] && this.thiefState[ladraoID] != HEIST_END) {
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -196,7 +196,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * Calls a thief from the FIFO and adds to the group
      *
      * @param grupo           group id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and id of thief, or -1 if FIFO is empty
      */
     @Override
@@ -208,9 +208,9 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
         if (!fifo.empty()) {
             id = (Integer) fifo.read();
-            this.nrLadroes--;
-            this.busyLadrao[id] = true;
-            this.grupoLadrao[id] = grupo;
+            this.numberofThieves--;
+            this.busyThief[id] = true;
+            this.thiefGroup[id] = grupo;
             setMasterThiefState(ASSEMBLING_A_GROUP);
             setThiefSituation(id, IN_PARTY);
             notifyAll();
@@ -224,20 +224,20 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * Verifies if the thief is busy
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and  true if busy, false is free
      */
     @Override
     public synchronized Tuple<VectorTimestamp, Boolean> getBusyThief(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
-        return new Tuple<>(local.clone(), this.busyLadrao[ladraoID]);
+        return new Tuple<>(local.clone(), this.busyThief[ladraoID]);
     }
 
     /**
      * State changes to Crawl IN
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -245,7 +245,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
         local.update(vectorTimestamp);
 
-        this.estadoLadrao[ladraoID] = CRAWLING_INWARDS;
+        this.thiefState[ladraoID] = CRAWLING_INWARDS;
         return local.clone();
     }
 
@@ -253,14 +253,14 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * State changes to Crawl OUT
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
     public synchronized VectorTimestamp reverseDirection(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        this.estadoLadrao[ladraoID] = CRAWLING_OUTWARDS;
+        this.thiefState[ladraoID] = CRAWLING_OUTWARDS;
         return local.clone();
     }
 
@@ -268,14 +268,14 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * State changes to At a Room
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
     public synchronized VectorTimestamp atARoom(int ladraoID, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        this.estadoLadrao[ladraoID] = AT_A_ROOM;
+        this.thiefState[ladraoID] = AT_A_ROOM;
         return local.clone();
     }
 
@@ -283,7 +283,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * Thief arrives at the CollectionSite
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -291,10 +291,10 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
         local.update(vectorTimestamp);
 
-        this.busyLadrao[ladraoID] = false;
-        this.grupoLadrao[ladraoID] = -1;
-        this.estadoLadrao[ladraoID] = OUTSIDE;
-        setThiefState(ladraoID, this.estadoLadrao[ladraoID]);
+        this.busyThief[ladraoID] = false;
+        this.thiefGroup[ladraoID] = -1;
+        this.thiefState[ladraoID] = OUTSIDE;
+        setThiefState(ladraoID, this.thiefState[ladraoID]);
         setThiefSituation(ladraoID, WAITING);
         this.imReady(ladraoID, local.clone());
 
@@ -307,7 +307,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * GET for the agility
      *
      * @param ladraoID        thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock and thief agility
      */
     @Override
@@ -315,13 +315,13 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), agilidadeLadroes[ladraoID]);
+        return new Tuple<>(local.clone(), thievesAgility[ladraoID]);
     }
 
     /**
      * Waiting for the correct number of thiefs in order to create an assault party
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @reutrn clock
      */
     @Override
@@ -329,7 +329,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
         local.update(vectorTimestamp);
 
-        while (this.nrLadroes < NUM_GROUP) {
+        while (this.numberofThieves < NUM_GROUP) {
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -344,7 +344,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
     /**
      * Waits for all the thiefs in order to finish operation
      *
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
      * @return clock
      */
     @Override
@@ -352,7 +352,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
 
         local.update(vectorTimestamp);
 
-        while (this.nrLadroes < NUM_THIEVES) {
+        while (this.numberofThieves < NUM_THIEVES) {
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -360,7 +360,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
             }
         }
         for (int i = 0; i < NUM_THIEVES; i++) {
-            estadoLadrao[i] = HEIST_END;
+            thiefState[i] = HEIST_END;
         }
         notifyAll();
         return local.clone();

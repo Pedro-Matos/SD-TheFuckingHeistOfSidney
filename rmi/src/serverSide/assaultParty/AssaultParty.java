@@ -14,7 +14,8 @@ import static support.Constantes.*;
 /**
  * Assault Party
  *
- * @author Pedro Matos and Tiago Bastos
+ * @author Pedro Matos
+ * @author Tiago Bastos
  */
 public class AssaultParty {
 
@@ -30,71 +31,73 @@ public class AssaultParty {
     /**
      * Thief's positions
      */
-    private int[][] posicao = new int[2][NUM_GROUP];  // 1- linha posicao 2- linha IDLadrao
+    private int[][] position = new int[2][NUM_GROUP];  // 1- linha position 2- linha IDLadrao
     /**
      * Next thief to crawl
      */
-    private boolean[] minhaVez = new boolean[NUM_GROUP];
+    private boolean[] myTurn = new boolean[NUM_GROUP];
     /**
      * Number of thiefs at the room
      */
-    private int naSala;
+    private int atRoom;
     /**
      * Number of thiefs in the CollectionSite
      */
-    private int noTerreiro;
+    private int atCollection;
     /**
      * Number of thiefs in the assault party
      */
-    private int nrElementos;
+    private int numberElements;
     /**
      * Thiefs in the room
      */
-    private boolean[] cheguei = new boolean[NUM_GROUP];
+    private boolean[] arrived = new boolean[NUM_GROUP];
     /**
      * Thiefs in the CollectionSite
      */
-    private boolean[] voltei = new boolean[NUM_GROUP];
+    private boolean[] imBack = new boolean[NUM_GROUP];
     /**
      * Room id
      */
-    private int nrSala;
+    private int roomNumber;
     /**
      * Room distance
      */
-    private int distanciaSala = -1;
+    private int roomDistance = -1;
 
     /**
      * Group id
      */
     private int id = -1;
 
-
+    /**
+     * Local Vector Timestamp
+     */
     private VectorTimestamp local;
 
 
     /**
      * @param museum  Museum
-     * @param nrSala  room id
+     * @param roomNumber  room id
      * @param id      thief id
      * @param general General Repository
      */
-    public AssaultParty(MuseumInterface museum, int nrSala, int id, GeneralRepositoryInterface general) {
+    public AssaultParty(MuseumInterface museum, int roomNumber, int id, GeneralRepositoryInterface general) {
 
         this.gen = general;
         this.museum = museum;
         this.id = id;
-        this.nrElementos = 0;
-        this.naSala = 0;
-        this.noTerreiro = 0;
-        this.nrSala = nrSala;
+        this.numberElements = 0;
+        this.atRoom = 0;
+        this.atCollection = 0;
+        this.roomNumber = roomNumber;
 
         for (int i = 0; i < NUM_GROUP; i++) {
-            this.posicao[0][i] = 0;
-            this.posicao[1][i] = -1;
-            this.minhaVez[i] = false;
-            this.cheguei[i] = false;
-            this.voltei[i] = false;
+            this.position[0][i] = 0;
+            this.position[1][i] = -1;
+            this.myTurn[i] = false;
+            this.arrived[i] = false;
+            this.imBack[i] = false;
         }
 
         local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
@@ -105,16 +108,16 @@ public class AssaultParty {
      *
      * @param ladraoID        thief id
      * @param pos_grupo       group position
-     * @param vectorTimestamp
-     * @return VectorTimestamp
+     * @param vectorTimestamp clock
+     * @return VectorTimestamp clock
      */
-    public synchronized VectorTimestamp entrar(int ladraoID, int pos_grupo, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp joinAssaultParty(int ladraoID, int pos_grupo, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
-        this.posicao[1][nrElementos] = ladraoID;
-        if (nrElementos == NUM_GROUP - 1) {
-            this.minhaVez[nrElementos] = true;
+        this.position[1][numberElements] = ladraoID;
+        if (numberElements == NUM_GROUP - 1) {
+            this.myTurn[numberElements] = true;
         }
 
         if (id == 0) {
@@ -124,17 +127,23 @@ public class AssaultParty {
             setAP2_pos_id_canvas(pos_grupo, ladraoID, 0, false);
         }
 
-        this.nrElementos++;
+        this.numberElements++;
         return local.clone();
     }
 
-
-    public synchronized Tuple<VectorTimestamp, Integer> getPos(int ladraoID, VectorTimestamp vectorTimestamp) {
+    /**
+     * Method that returns the thief position inside the Assault Party
+     *
+     * @param ladraoID        thief id
+     * @param vectorTimestamp clock
+     * @return clock and int with the position of the thief in the assault party
+     */
+    public synchronized Tuple<VectorTimestamp, Integer> getGroupPosition(int ladraoID, VectorTimestamp vectorTimestamp) {
 
         local.update(vectorTimestamp);
 
-        for (int i = 0; i < nrElementos; i++) {
-            if (this.posicao[1][i] == ladraoID) {
+        for (int i = 0; i < numberElements; i++) {
+            if (this.position[1][i] == ladraoID) {
                 return new Tuple<>(local.clone(), i);
             }
         }
@@ -148,8 +157,8 @@ public class AssaultParty {
      * @param agilidade       thief agility
      * @param idGrupo         group id
      * @param posgrupo        position in the group
-     * @param vectorTimestamp
-     * @return final position
+     * @param vectorTimestamp clock
+     * @return clock and final position
      */
     public synchronized Tuple<VectorTimestamp, Integer> crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
 
@@ -161,9 +170,9 @@ public class AssaultParty {
         int getDistanciaSala = this.getRoomDistance(local.clone()).getSecond();
 
 
-        if (this.naSala != nrElementos) {
+        if (this.atRoom != numberElements) {
 
-            if (this.minhaVez[indiceNoGrupo]) {
+            if (this.myTurn[indiceNoGrupo]) {
 
 
                 setThiefState(ladraoID, CRAWLING_INWARDS);
@@ -176,10 +185,10 @@ public class AssaultParty {
                     int i = 0;
                     for (int k = 0; k < NUM_GROUP; k++) {
 
-                        if (posicao[1][k] != ladraoID) {
-                            partnersPos[i++] = posicao[0][k];
+                        if (position[1][k] != ladraoID) {
+                            partnersPos[i++] = position[0][k];
                         } else {
-                            myPosition = posicao[0][k];
+                            myPosition = position[0][k];
                         }
 
                     }
@@ -202,9 +211,9 @@ public class AssaultParty {
 
                         if (!tooFarOrOcupada) {
                             if (myPosition + i >= getDistanciaSala) {
-                                posicao[0][indiceNoGrupo] = getDistanciaSala;
-                                naSala++;
-                                cheguei[indiceNoGrupo] = true;
+                                position[0][indiceNoGrupo] = getDistanciaSala;
+                                atRoom++;
+                                arrived[indiceNoGrupo] = true;
                                 repetir = false;
                                 if (idGrupo == 0) {
                                     setAP1_pos(posgrupo, getDistanciaSala);
@@ -214,7 +223,7 @@ public class AssaultParty {
                                     setThiefState(ladraoID, AT_A_ROOM);
                                 }
                             } else {
-                                posicao[0][indiceNoGrupo] = myPosition + i;
+                                position[0][indiceNoGrupo] = myPosition + i;
                                 if (idGrupo == 0) {
                                     setAP1_pos(posgrupo, myPosition + i);
                                 } else if (idGrupo == 1) {
@@ -229,17 +238,17 @@ public class AssaultParty {
                     }
                 } while (repetir);
 
-                this.minhaVez[indiceNoGrupo] = false;
+                this.myTurn[indiceNoGrupo] = false;
                 int j = 0;
                 for (j = 0; j < partnersPos.length; j++) {
-                    if (partnersPos[j] > posicao[0][indiceNoGrupo]) ;
+                    if (partnersPos[j] > position[0][indiceNoGrupo]) ;
                     {
                         break;
                     }
                 }
-                for (int k = 0; k < nrElementos; k++) {
-                    if (posicao[0][k] == partnersPos[j]) {
-                        this.minhaVez[k] = true;
+                for (int k = 0; k < numberElements; k++) {
+                    if (position[0][k] == partnersPos[j]) {
+                        this.myTurn[k] = true;
                     }
                 }
 
@@ -248,20 +257,20 @@ public class AssaultParty {
         }
         notifyAll();
 
-        return new Tuple<>(local.clone(), this.posicao[0][indiceNoGrupo]);
+        return new Tuple<>(local.clone(), this.position[0][indiceNoGrupo]);
 
     }
 
 
     /**
-     * Crawl out
+     * crawl out
      *
      * @param ladraoID        thief id
      * @param agilidade       thief agility
      * @param idGrupo         group id
      * @param posgrupo        position in the group
-     * @param vectorTimestamp
-     * @return final position
+     * @param vectorTimestamp clock
+     * @return clock and final position
      */
     public synchronized Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
 
@@ -273,8 +282,8 @@ public class AssaultParty {
         // no clock
         int getDistanciaSala = this.getRoomDistance(local.clone()).getSecond();
 
-        if (naSala == nrElementos) {
-            if (this.minhaVez[indiceNoGrupo]) {
+        if (atRoom == numberElements) {
+            if (this.myTurn[indiceNoGrupo]) {
 
                 boolean repetir = true;
                 int[] partnersPos = new int[NUM_GROUP - 1];
@@ -284,10 +293,10 @@ public class AssaultParty {
                     int i = 0;
                     for (int k = 0; k < NUM_GROUP; k++) {
 
-                        if (posicao[1][k] != ladraoID) {
-                            partnersPos[i++] = posicao[0][k];
+                        if (position[1][k] != ladraoID) {
+                            partnersPos[i++] = position[0][k];
                         } else {
-                            myPosition = posicao[0][k];
+                            myPosition = position[0][k];
                         }
 
                     }
@@ -313,9 +322,9 @@ public class AssaultParty {
 
                         if ((!tooFarOrOcupada)) {
                             if (myPosition - i <= 0) {
-                                posicao[0][indiceNoGrupo] = 0;
-                                noTerreiro++;
-                                voltei[indiceNoGrupo] = true;
+                                position[0][indiceNoGrupo] = 0;
+                                atCollection++;
+                                imBack[indiceNoGrupo] = true;
                                 repetir = false;
                                 if (idGrupo == 0) {
                                     setAP1_pos(posgrupo, 0);
@@ -324,7 +333,7 @@ public class AssaultParty {
                                 }
                                 setThiefState(ladraoID, OUTSIDE);
                             } else {
-                                posicao[0][indiceNoGrupo] = myPosition - i;
+                                position[0][indiceNoGrupo] = myPosition - i;
                                 if (idGrupo == 0) {
                                     setAP1_pos(posgrupo, myPosition - i);
                                 } else if (idGrupo == 1) {
@@ -338,54 +347,54 @@ public class AssaultParty {
                     }
                 } while (repetir);
 
-                this.minhaVez[indiceNoGrupo] = false;
+                this.myTurn[indiceNoGrupo] = false;
                 int j = 0;
                 for (j = partnersPos.length - 1; j >= 0; j--) {
-                    if (partnersPos[j] < posicao[0][indiceNoGrupo]) ;
+                    if (partnersPos[j] < position[0][indiceNoGrupo]) ;
                     {
                         break;
                     }
 
                 }
-                for (int k = 0; k < nrElementos; k++) {
-                    if (posicao[0][k] == partnersPos[j]) {
-                        this.minhaVez[k] = true;
+                for (int k = 0; k < numberElements; k++) {
+                    if (position[0][k] == partnersPos[j]) {
+                        this.myTurn[k] = true;
                     }
                 }
             }
         }
         notifyAll();
-        return new Tuple<>(local.clone(), this.posicao[0][indiceNoGrupo]);
+        return new Tuple<>(local.clone(), this.position[0][indiceNoGrupo]);
     }
 
 
     /**
      * Get distance
      *
-     * @param vectorTimestamp
-     * @return distance
+     * @param vectorTimestamp clock
+     * @return clock and distance
      */
     public Tuple<VectorTimestamp, Integer> getRoomDistance(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        if (distanciaSala == -1) {
-            distanciaSala = getMuseumRoomDistance(nrSala);
+        if (roomDistance == -1) {
+            roomDistance = getMuseumRoomDistance(roomNumber);
         }
 
-        return new Tuple<>(local.clone(), distanciaSala);
+        return new Tuple<>(local.clone(), roomDistance);
     }
 
 
     /**
      * Steals paiting
      *
-     * @param vectorTimestamp
-     * @return true if success
+     * @param vectorTimestamp clock
+     * @return clock and true if success
      */
     public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), rollACanvas(nrSala));
+        return new Tuple<>(local.clone(), rollACanvas(roomNumber));
 
     }
 
@@ -393,14 +402,15 @@ public class AssaultParty {
      * Waiting for it's turn
      *
      * @param id              thief id
-     * @param vectorTimestamp
+     * @param vectorTimestamp clock
+     * @return clock
      */
     public synchronized VectorTimestamp waitMyTurn(int id, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
         notifyAll();
         int pos = this.getPosicao(id);
-        while (!minhaVez[pos]) {
+        while (!myTurn[pos]) {
 
             try {
                 wait();
@@ -411,17 +421,12 @@ public class AssaultParty {
         return local.clone();
     }
 
-    /**
-     * Get position
-     *
-     * @param ladraoID thief id
-     * @return position
-     */
+
     private synchronized int getPosicao(int ladraoID) {
         int j = -1;
 
         for (int i = 0; i < NUM_GROUP; i++) {
-            if (this.posicao[1][i] == ladraoID) {
+            if (this.position[1][i] == ladraoID) {
                 j = i;
                 break;
             }
