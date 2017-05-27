@@ -39,4 +39,5 @@ public interface ConcentrationSiteInterface extends Remote {
 
     public VectorTimestamp waitForThievesEnd(VectorTimestamp vectorTimestamp) throws RemoteException;
 
+    public void signalShutdown() throws RemoteException;
 }

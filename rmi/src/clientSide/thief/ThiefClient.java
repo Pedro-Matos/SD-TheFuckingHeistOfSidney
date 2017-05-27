@@ -108,16 +108,29 @@ public class ThiefClient {
             String thiefName = "Thief - " + i;
             thief[i] = new Thief(i, thiefName, generalRepositoryInterface, assaultPartyManagerInterface,
                     collectionSiteInterface, concentrationSiteInterface);
+            GenericIO.writelnString("O Thief " + i + " iniciou o seu trabalho");
             thief[i].start();
         }
 
         for (int i = 0; i < NUM_THIEVES; i++) {
             try {
                 thief[i].join();
-            } catch (InterruptedException e) {
                 GenericIO.writelnString("O Thief " + i + " terminou o seu trabalho");
+            } catch (InterruptedException e) {
+                GenericIO.writelnString("O Thief " + i + " terminou o seu trabalho - exeption");
             }
         }
+
+        try {
+            generalRepositoryInterface.finished();
+        } catch (RemoteException ex) {
+            GenericIO.writelnString("Error closing all!");
+            ex.printStackTrace();
+            System.exit(1);
+        }
+
+        GenericIO.writelnString("All Ordinary ThievesDone!");
+
 
     }
 

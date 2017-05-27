@@ -1,10 +1,20 @@
 package serverSide.generalRepository;
 
-import interfaces.GeneralRepositoryInterface;
+import interfaces.*;
+import registry.RegistryConfig;
 import support.Constantes;
 import support.VectorTimestamp;
 import genclass.GenericIO;
 import genclass.TextFile;
+
+import java.rmi.NoSuchObjectException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static support.Constantes.*;
 
@@ -36,6 +46,8 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * String with the states to check for repetitions
      */
     private String last_1 = "";
+
+    private int numberEntitiesRunning = 2;
     /**
      * String with the positions to check for repetitions
      */
@@ -491,6 +503,154 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         assault_party2_thief_id[pos_grupo] = '-';
         thief_situation[id] = WAITING;
         add_log(vectorTimestamp);
+    }
+
+    @Override
+    public void finished(){
+        numberEntitiesRunning--;
+        if (numberEntitiesRunning > 0){
+            return;
+        }
+        terminateServers();
+    }
+
+    public void terminateServers(){
+        Register reg = null;
+        Registry registry = null;
+        String rmiRegHostName;
+        int rmiRegPortNumb;
+
+        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+
+        try {
+            registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
+        } catch (RemoteException ex) {
+            System.out.println("Erro na localização do registo");
+            ex.printStackTrace();
+            System.exit (1);
+        }
+
+        String nameEntryBase = RegistryConfig.RMI_REGISTER_NAME;
+        String nameEntryObject = RegistryConfig.RMI_REGISTRY_GENREPO_NAME;
+
+        // shutdown Museum
+        try
+        {
+            MuseumInterface museum = (MuseumInterface) registry.lookup (RegistryConfig.RMI_REGISTRY_MUSEUM_NAME);
+            museum.signalShutdown();
+        }
+        catch (RemoteException e)
+        {
+            System.out.println("Exception thrown while locating Museum: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        {
+            System.out.println("Museum is not registered: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        // shutdown concentration Site
+        try
+        {
+            ConcentrationSiteInterface concentrationSiteInterface = (ConcentrationSiteInterface)
+                    registry.lookup (RegistryConfig.RMI_REGISTRY_CONSITE_NAME);
+            concentrationSiteInterface.signalShutdown();
+        }
+        catch (RemoteException e)
+        {
+            System.out.println("Exception thrown while locating concentration site: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        {
+            System.out.println("concentration Site is not registered: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        // shutdown assault groups
+        try
+        {
+            AssaultPartyManagerInterface assaultPartyManagerInterface = (AssaultPartyManagerInterface)
+                    registry.lookup (RegistryConfig.RMI_REGISTRY_ASSGMAN_NAME);
+            assaultPartyManagerInterface.signalShutdown();
+        }
+        catch (RemoteException e)
+        {
+            System.out.println("Exception thrown while locating assault group: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        {
+            System.out.println(" assault group  is not registered: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        //shutdown collection site
+        try
+        {
+            CollectionSiteInterface collectionSiteInterface = (CollectionSiteInterface)
+                    registry.lookup (RegistryConfig.RMI_REGISTRY_COLSITE_NAME);
+            collectionSiteInterface.signalShutdown();
+        }
+        catch (RemoteException e)
+        {
+            System.out.println("Exception thrown while locating collection site: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        {
+            System.out.println("collection site is not registered: " + e.getMessage () + "!");
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        // shutdown log
+
+        try {
+            reg = (Register) registry.lookup(nameEntryBase);
+        } catch (RemoteException e) {
+            System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        } catch (NotBoundException e) {
+            System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        try {
+            // Unregister ourself
+            reg.unbind(nameEntryObject);
+        } catch (RemoteException e) {
+            System.out.println("Log registration exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        } catch (NotBoundException e) {
+            System.out.println("Log not bound exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        try {
+            // Unexport; this will also remove us from the RMI runtime
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException ex) {
+            ex.printStackTrace();
+            System.exit (1);
+        }
+
+//        writeEnd();
+
+        System.out.println("Log closed.");
     }
 
 }

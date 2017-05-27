@@ -29,6 +29,5 @@ public interface AssaultPartyManagerInterface extends Remote {
 
     public VectorTimestamp waitMyTurn(int id, int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
 
-
-
+    public void signalShutdown() throws RemoteException;
 }

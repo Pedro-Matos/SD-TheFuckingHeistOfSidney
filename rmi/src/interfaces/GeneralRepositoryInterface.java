@@ -48,4 +48,5 @@ public interface GeneralRepositoryInterface extends Remote {
 
     public void setAP2_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
+    public void finished() throws RemoteException;
 }

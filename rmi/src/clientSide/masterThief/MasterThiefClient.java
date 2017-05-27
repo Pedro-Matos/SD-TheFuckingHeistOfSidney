@@ -10,6 +10,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by tiagoalexbastos on 19-05-2017.
@@ -92,9 +94,20 @@ public class MasterThiefClient {
 
         try {
             master.join();
-        } catch (InterruptedException e) {
             GenericIO.writelnString("O MasterThief terminou o seu trabalho");
+        } catch (InterruptedException e) {
+            GenericIO.writelnString("O MasterThief terminou o seu trabalho - exeption");
         }
+
+        try {
+            generalRepositoryInterface.finished();
+        } catch (RemoteException ex) {
+            GenericIO.writelnString("Error closing all!");
+            ex.printStackTrace();
+            System.exit(1);
+        }
+
+        GenericIO.writelnString("Master Thief Done!");
 
     }
 }

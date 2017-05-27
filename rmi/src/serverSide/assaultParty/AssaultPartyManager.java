@@ -3,9 +3,20 @@ package serverSide.assaultParty;
 import interfaces.AssaultPartyManagerInterface;
 import interfaces.GeneralRepositoryInterface;
 import interfaces.MuseumInterface;
+import interfaces.Register;
+import registry.RegistryConfig;
 import support.Constantes;
 import support.Tuple;
 import support.VectorTimestamp;
+
+import java.rmi.NoSuchObjectException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Pedro Matos and Tiago Bastos
@@ -162,5 +173,63 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
         return grupo[idGrupo].waitMyTurn(id, local.clone());
     }
 
-    
+    @Override
+    public void signalShutdown() throws RemoteException {
+        Register reg = null;
+        Registry registry = null;
+
+        String rmiRegHostName;
+        int rmiRegPortNumb;
+
+        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+
+        try {
+            registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
+        } catch (RemoteException ex) {
+            System.out.println("Erro ao localizar o registo");
+            ex.printStackTrace();
+            System.exit (1);
+        }
+
+        String nameEntryBase = RegistryConfig.RMI_REGISTER_NAME;
+        String nameEntryObject = RegistryConfig.RMI_REGISTRY_ASSGMAN_NAME;
+
+
+        try {
+            reg = (Register) registry.lookup(nameEntryBase);
+        } catch (RemoteException e) {
+            System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        } catch (NotBoundException e) {
+            System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        }
+        try {
+            // Unregister ourself
+            reg.unbind(nameEntryObject);
+        } catch (RemoteException e) {
+            System.out.println("Assault Group registration exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        } catch (NotBoundException e) {
+            System.out.println("Assault Group not bound exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        try {
+            // Unexport; this will also remove us from the RMI runtime
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException ex) {
+            ex.printStackTrace();
+            System.exit (1);
+        }
+
+        System.out.println("AssaultGroupManager closed.");
+    }
+
+
 }

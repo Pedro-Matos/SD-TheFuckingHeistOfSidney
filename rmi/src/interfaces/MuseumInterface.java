@@ -15,4 +15,5 @@ public interface MuseumInterface extends Remote {
 
     public Tuple<VectorTimestamp, Integer> getMuseumRoomDistance(int nr_sala, VectorTimestamp clone) throws RemoteException;
 
+    public void signalShutdown() throws RemoteException;
 }

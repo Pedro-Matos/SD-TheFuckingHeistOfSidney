@@ -1,13 +1,20 @@
 package serverSide.concentrationSite;
 
 import interfaces.ConcentrationSiteInterface;
+import interfaces.Register;
+import registry.RegistryConfig;
 import support.Constantes;
 import support.MemFIFO;
 import interfaces.GeneralRepositoryInterface;
 import support.Tuple;
 import support.VectorTimestamp;
 
+import java.rmi.NoSuchObjectException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 import static support.Constantes.*;
 
@@ -321,6 +328,64 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         }
         notifyAll();
         return local.clone();
+    }
+
+    @Override
+    public void signalShutdown() throws RemoteException {
+        Register reg = null;
+        Registry registry = null;
+
+        String rmiRegHostName;
+        int rmiRegPortNumb;
+
+        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+
+        try {
+            registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
+        } catch (RemoteException ex) {
+            System.out.println("Erro ao localizar o registo");
+            ex.printStackTrace();
+            System.exit (1);
+        }
+
+        String nameEntryBase = RegistryConfig.RMI_REGISTER_NAME;
+        String nameEntryObject = RegistryConfig.RMI_REGISTRY_CONSITE_NAME;
+
+
+        try {
+            reg = (Register) registry.lookup(nameEntryBase);
+        } catch (RemoteException e) {
+            System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        } catch (NotBoundException e) {
+            System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        }
+        try {
+            // Unregister ourself
+            reg.unbind(nameEntryObject);
+        } catch (RemoteException e) {
+            System.out.println("Concentration registration exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        } catch (NotBoundException e) {
+            System.out.println("Concentration not bound exception: " + e.getMessage());
+            e.printStackTrace();
+            System.exit (1);
+        }
+
+        try {
+            // Unexport; this will also remove us from the RMI runtime
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException ex) {
+            ex.printStackTrace();
+            System.exit (1);
+        }
+
+        System.out.println("Concentration Site closed.");
     }
 
     private void setThiefSituation(int id, int inParty) {
