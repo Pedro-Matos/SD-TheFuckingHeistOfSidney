@@ -64,11 +64,20 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     private VectorTimestamp local;
 
+    private String rmiRegHostName;
+
+    private int rmiRegPortNumb;
+
 
     /**
      * @param generalRepository General Repository Interface
+     * @param rmiRegHostName
+     * @param rmiRegPortNumb
      */
-    public ConcentrationSite(GeneralRepositoryInterface generalRepository) {
+    public ConcentrationSite(GeneralRepositoryInterface generalRepository, String rmiRegHostName, int rmiRegPortNumb) {
+
+        this.rmiRegHostName = rmiRegHostName;
+        this.rmiRegPortNumb = rmiRegPortNumb;
 
         this.numberofThieves = 0;
 
@@ -379,8 +388,8 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         String rmiRegHostName;
         int rmiRegPortNumb;
 
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        rmiRegHostName = this.rmiRegHostName;
+        rmiRegPortNumb = this.rmiRegPortNumb;
 
         try {
             registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);

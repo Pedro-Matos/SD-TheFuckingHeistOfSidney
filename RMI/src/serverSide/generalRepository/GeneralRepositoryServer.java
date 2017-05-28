@@ -19,11 +19,10 @@ public class GeneralRepositoryServer {
 
     public static void main(String args[]) {
         /* obtenção da localização do serviço de registo RMI */
-        String rmiRegHostName;
-        int rmiRegPortNumb;
-
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+//        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+//        int rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        String rmiRegHostName = args[0];
+        int rmiRegPortNumb = Integer.parseInt(args[1]);
 
 
         /* instanciação e instalação do gestor de segurança */
@@ -33,7 +32,7 @@ public class GeneralRepositoryServer {
         GenericIO.writelnString("Security manager was installed!");
 
         // Instanciçãoo do RefereeSite
-        GeneralRepository generalRepository = new GeneralRepository();
+        GeneralRepository generalRepository = new GeneralRepository(rmiRegHostName, rmiRegPortNumb);
         GeneralRepositoryInterface generalRepositoryInterface = null;
 
         try {

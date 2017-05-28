@@ -13,6 +13,7 @@ cp interfaces/*.class one_machine_Deploy/dir_GeneralRepository/interfaces/
 cp interfaces/*.class one_machine_Deploy/dir_Museum/interfaces/
 cp interfaces/*.class one_machine_Deploy/dir_MasterThief/interfaces/
 cp interfaces/*.class one_machine_Deploy/dir_Thief/interfaces/
+cp interfaces/*.class one_machine_Deploy/interfaces/
 
 
 echo "Copying registry .class files ... "
@@ -37,6 +38,7 @@ cp support/*.class one_machine_Deploy/dir_AssaultParty/support/
 cp support/*.class one_machine_Deploy/dir_CollectionSite/support/
 cp support/*.class one_machine_Deploy/dir_MasterThief/support/
 cp support/*.class one_machine_Deploy/dir_Thief/support/
+cp support/*.class one_machine_Deploy/support/
 echo "done..."
 
 zip -q -r one_machine_Deploy.zip one_machine_Deploy

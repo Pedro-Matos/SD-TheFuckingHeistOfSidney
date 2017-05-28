@@ -19,11 +19,10 @@ public class CollectionSiteServer {
     public static void main(String[] args) {
 
         /* obtenção da localização do serviço de registo RMI */
-        String rmiRegHostName;
-        int rmiRegPortNumb;
-
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+//        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+//        int rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        String rmiRegHostName = args[0];
+        int rmiRegPortNumb = Integer.parseInt(args[1]);
 
         /* localização por nome do objecto remoto no serviço de registos RMI */
         GeneralRepositoryInterface generalRepositoryInterface = null;
@@ -81,7 +80,7 @@ public class CollectionSiteServer {
 
         /* instanciação do objecto remoto que representa o Concentration Site e geração de um stub para ele */
         CollectionSite collectionSite = new CollectionSite(concentrationSiteInterface,
-                assaultPartyManagerInterface, generalRepositoryInterface);
+                assaultPartyManagerInterface, generalRepositoryInterface, rmiRegHostName, rmiRegPortNumb);
         CollectionSiteInterface collectionSiteInterface = null;
 
         try {

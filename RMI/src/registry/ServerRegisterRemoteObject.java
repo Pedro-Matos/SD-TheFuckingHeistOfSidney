@@ -18,9 +18,10 @@ public class ServerRegisterRemoteObject {
 
     public static void main(String[] args) {
     /* get location of the registry service */
-        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        int rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
-
+//        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+//        int rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        String rmiRegHostName = args[0];
+        int rmiRegPortNumb = Integer.parseInt(args[1]);
     /* create and install the security manager */
 
         if (System.getSecurityManager() == null)

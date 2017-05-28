@@ -71,13 +71,23 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private VectorTimestamp local;
 
+    private String rmiRegHostName;
+
+    private int rmiRegPortNumb;
+
     /**
      * @param concentrationSite CollectionSite Interface
      * @param gestorGrupos      Manager of assault partys Interface
      * @param generalRepository General Repository Interface
+     * @param rmiRegHostName
+     * @param rmiRegPortNumb
      */
     public CollectionSite(ConcentrationSiteInterface concentrationSite, AssaultPartyManagerInterface gestorGrupos,
-                          GeneralRepositoryInterface generalRepository) {
+                          GeneralRepositoryInterface generalRepository, String rmiRegHostName, int rmiRegPortNumb) {
+
+        this.rmiRegHostName = rmiRegHostName;
+        this.rmiRegPortNumb = rmiRegPortNumb;
+
         this.concentrationSite = concentrationSite;
         this.groupManager = gestorGrupos;
 
@@ -452,8 +462,8 @@ public class CollectionSite implements CollectionSiteInterface {
         String rmiRegHostName;
         int rmiRegPortNumb;
 
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        rmiRegHostName = this.rmiRegHostName;
+        rmiRegPortNumb = this.rmiRegPortNumb;
 
         try {
             registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);

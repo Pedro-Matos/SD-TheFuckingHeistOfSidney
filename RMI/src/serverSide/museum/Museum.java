@@ -39,11 +39,19 @@ public class Museum implements MuseumInterface {
      */
     private VectorTimestamp local;
 
+    private String rmiRegHostName;
+
+    private int rmiRegPortNumb;
 
     /**
      * @param generalRepository General Repository interface
+     * @param rmiRegHostName
+     * @param rmiRegPortNumb
      */
-    public Museum(GeneralRepositoryInterface generalRepository) {
+    public Museum(GeneralRepositoryInterface generalRepository, String rmiRegHostName, int rmiRegPortNumb) {
+
+        this.rmiRegHostName = rmiRegHostName;
+        this.rmiRegPortNumb = rmiRegPortNumb;
 
         this.generalRepository = generalRepository;
         local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
@@ -110,8 +118,8 @@ public class Museum implements MuseumInterface {
         String rmiRegHostName;
         int rmiRegPortNumb;
 
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        rmiRegHostName = this.rmiRegHostName;
+        rmiRegPortNumb = this.rmiRegPortNumb;
 
         try {
             registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);

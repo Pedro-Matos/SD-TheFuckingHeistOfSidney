@@ -22,11 +22,10 @@ public class AssaultPartyManagerServer {
     public static void main(String[] args) {
 
         /* obtenção da localização do serviço de registo RMI */
-        String rmiRegHostName;
-        int rmiRegPortNumb;
-
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+//        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+//        int rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        String rmiRegHostName = args[0];
+        int rmiRegPortNumb = Integer.parseInt(args[1]);
 
         /* localização por nome do objecto remoto no serviço de registos RMI */
         GeneralRepositoryInterface generalRepositoryInterface = null;
@@ -71,7 +70,7 @@ public class AssaultPartyManagerServer {
 
 
         /* instanciação do objecto remoto que representa o Concentration Site e geração de um stub para ele */
-        AssaultPartyManager assaultPartyManager = new AssaultPartyManager(museumInterface, generalRepositoryInterface);
+        AssaultPartyManager assaultPartyManager = new AssaultPartyManager(museumInterface, generalRepositoryInterface, rmiRegHostName, rmiRegPortNumb);
         AssaultPartyManagerInterface assaultPartyManagerInterface = null;
 
         try {

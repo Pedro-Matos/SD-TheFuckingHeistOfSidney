@@ -42,11 +42,22 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      */
     private VectorTimestamp local;
 
+
+    private String rmiRegHostName;
+
+    private int rmiRegPortNumb;
+
+
     /**
      * @param museum  Museum Interface
      * @param general General Repository Interface
+     * @param rmiRegHostName
+     * @param rmiRegPortNumb
      */
-    public AssaultPartyManager(MuseumInterface museum, GeneralRepositoryInterface general) {
+    public AssaultPartyManager(MuseumInterface museum, GeneralRepositoryInterface general, String rmiRegHostName, int rmiRegPortNumb) {
+
+        this.rmiRegHostName = rmiRegHostName;
+        this.rmiRegPortNumb = rmiRegPortNumb;
         this.museum = museum;
         this.general = general;
 
@@ -216,8 +227,8 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
         String rmiRegHostName;
         int rmiRegPortNumb;
 
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        rmiRegHostName = this.rmiRegHostName;
+        rmiRegPortNumb = this.rmiRegPortNumb;
 
         try {
             registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);

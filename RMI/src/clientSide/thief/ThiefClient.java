@@ -22,8 +22,10 @@ public class ThiefClient {
     public static void main(String[] args) {
 
         // Initialise RMI configurations
-        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        int rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+//        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
+//        int rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        String rmiRegHostName = args[0];
+        int rmiRegPortNumb = Integer.parseInt(args[1]);
         Registry registry = null;
 
         // Initialise RMI invocations

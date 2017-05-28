@@ -116,12 +116,20 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     private VectorTimestamp local;
 
+    private String rmiRegHostName;
+
+    private int rmiRegPortNumb;
+
 
     /**
      * All information is in the initial state.
      * The changes will only occur by the use of sets functions.
+     * @param rmiRegHostName
+     * @param rmiRegPortNumb
      */
-    public GeneralRepository() {
+    public GeneralRepository(String rmiRegHostName, int rmiRegPortNumb) {
+        this.rmiRegHostName = rmiRegHostName;
+        this.rmiRegPortNumb = rmiRegPortNumb;
         roomDistance = new int[NUM_ROOMS];
         numberRoomPaintings = new int[NUM_ROOMS];
         this.fileName2 = "Log.txt";
@@ -536,8 +544,8 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         String rmiRegHostName;
         int rmiRegPortNumb;
 
-        rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;
-        rmiRegPortNumb = RegistryConfig.RMI_REGISTRY_PORT;
+        rmiRegHostName = this.rmiRegHostName;
+        rmiRegPortNumb = this.rmiRegPortNumb;
 
         try {
             registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
