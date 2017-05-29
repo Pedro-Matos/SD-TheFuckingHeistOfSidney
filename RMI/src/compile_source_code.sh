@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 echo "compiling source code..."
 
-rm -r one_machine_Deploy.zip
-
 javac -cp \* support/*.java interfaces/*.java registry/*.java serverSide/generalRepository/*.java serverSide/museum/*.java serverSide/concentrationSite/*.java serverSide/assaultParty/*.java serverSide/collectionSite/*.java clientSide/thief/*.java clientSide/masterThief/*.java
 echo "Copying Interfaces .class files ... "
 cp interfaces/Register.class one_machine_Deploy/dir_registry/interfaces/
@@ -40,5 +38,3 @@ cp support/*.class one_machine_Deploy/dir_MasterThief/support/
 cp support/*.class one_machine_Deploy/dir_Thief/support/
 cp support/*.class one_machine_Deploy/support/
 echo "done..."
-
-zip -q -r one_machine_Deploy.zip one_machine_Deploy
