@@ -24,5 +24,4 @@ sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$AssaultPartyH
 sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ColectionHostName "cd ~/heist/ ; rm -rf *"
 sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ThievesHostName "cd ~/heist/ ; rm -rf *"
 sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MasterThiefHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$GeneralRepositoryHostName "cd ~/heist/ ; rm -rf *"
-echo " "
+echo "Cleaning done! all .class & folders deleted!"
