@@ -2,7 +2,6 @@ package serverSide.assaultParty;
 
 import interfaces.GeneralRepositoryInterface;
 import interfaces.MuseumInterface;
-import support.Constantes;
 import support.Tuple;
 import support.VectorTimestamp;
 
@@ -100,7 +99,7 @@ public class AssaultParty {
             this.imBack[i] = false;
         }
 
-        local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
+        local = new VectorTimestamp(VECTOR_TIMESTAMP_SIZE, 0);
     }
 
     /**
@@ -441,6 +440,7 @@ public class AssaultParty {
             Tuple<VectorTimestamp, Boolean> tuple =
                     this.museum.rollACanvas(nrSala, local.clone());
             ret = tuple.getSecond();
+            local.update(tuple.getClock());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -456,6 +456,7 @@ public class AssaultParty {
             Tuple<VectorTimestamp, Integer> tuple =
                     this.museum.getMuseumRoomDistance(nrSala, local.clone());
             ret = tuple.getSecond();
+            local.update(tuple.getClock());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();

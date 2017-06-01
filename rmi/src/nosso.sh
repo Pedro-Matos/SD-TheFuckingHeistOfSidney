@@ -2,6 +2,9 @@
 registryPortNum=22460
 localhost=localhost
 
+sh clean_class_zip.sh
+sh compile_source_code.sh
+
 echo "running... "
 sh set_rmiregistry_alt.sh 22460 &
 sleep 2

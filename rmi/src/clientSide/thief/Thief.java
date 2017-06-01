@@ -91,8 +91,8 @@ public class Thief extends Thread {
         vt = new VectorTimestamp(VECTOR_TIMESTAMP_SIZE, (id + 1));
 
         // clock ????
-        this.agility = getAgility(vt.clone());
-        setThiefDisplacement(this.id, this.agility, vt.clone());
+        this.agility = getAgility();
+        setThiefDisplacement(this.id, this.agility);
 
     }
 
@@ -346,10 +346,10 @@ public class Thief extends Thread {
     private int getAssaultRoom(int meuGrupo) {
         int ret = -1;
         try {
-//            vt.increment();
+            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getAssaultRoom(meuGrupo, vt.clone());
             ret = tuple.getSecond();
-//            vt.update(tuple.getClock());
+            vt.update(tuple.getClock());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -362,6 +362,7 @@ public class Thief extends Thread {
     private boolean rollACanvas(int meuGrupo) {
         boolean ret = false;
         try {
+            vt.increment();
             vt.increment();
             Tuple<VectorTimestamp, Boolean> tuple =
                     this.group.rollACanvas(meuGrupo, vt.clone());
@@ -392,11 +393,12 @@ public class Thief extends Thread {
         int ret = -1;
 
         try {
-//            vt.increment();
+            vt.increment();
+            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple =
                     this.group.getRoomDistance(meuGrupo, vt.clone());
             ret = tuple.getSecond();
-//            vt.update(tuple.getClock());
+            vt.update(tuple.getClock());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -427,7 +429,7 @@ public class Thief extends Thread {
     private void waitMyTurn(int id, int meuGrupo) {
 
         try {
-            vt.increment();
+//            vt.increment();
             VectorTimestamp clock = this.group.waitMyTurn(id, meuGrupo, vt.clone());
             vt.update(clock);
         } catch (RemoteException e) {
@@ -454,10 +456,10 @@ public class Thief extends Thread {
         int ret = -1;
 
         try {
-//            vt.increment();
+            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = this.group.getGroupPosition(id, meuGrupo, vt.clone());
             ret = tuple.getSecond();
-//            vt.update(tuple.getClock());
+            vt.update(tuple.getClock());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -470,7 +472,7 @@ public class Thief extends Thread {
     private int getThiefGroup(int id) {
         int ret = -1;
         try {
-            vt.increment();
+//            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getThiefGroup(id, vt.clone());
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
@@ -486,7 +488,7 @@ public class Thief extends Thread {
     private void amINeeded(int id) {
 
         try {
-            vt.increment();
+//            vt.increment();
             VectorTimestamp clock = concentrationSite.amINeeded(id, vt.clone());
             vt.update(clock);
         } catch (RemoteException e) {
@@ -503,7 +505,7 @@ public class Thief extends Thread {
 //            vt.increment();
             Tuple<VectorTimestamp, Boolean> tuple = concentrationSite.getBusyThief(id, vt.clone());
             ret = tuple.getSecond();
-//            vt.update(tuple.getClock());
+            vt.update(tuple.getClock());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -528,7 +530,7 @@ public class Thief extends Thread {
         try {
 //            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getThiefState(id, vt.clone());
-//            vt.update(tuple.getClock());
+            vt.update(tuple.getClock());
             state = tuple.getSecond();
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
@@ -551,7 +553,7 @@ public class Thief extends Thread {
         }
     }
 
-    private int getAgility(VectorTimestamp vectorTimestamp) {
+    private int getAgility() {
         int ret = -1;
         try {
             vt.increment();
@@ -569,7 +571,7 @@ public class Thief extends Thread {
     }
 
 
-    private void setThiefDisplacement(int id, int agilidade, VectorTimestamp vectorTimestamp) {
+    private void setThiefDisplacement(int id, int agilidade) {
         try {
             this.generalRepository.setThiefDisplacement(id, agilidade, vt.clone());
         } catch (RemoteException e) {

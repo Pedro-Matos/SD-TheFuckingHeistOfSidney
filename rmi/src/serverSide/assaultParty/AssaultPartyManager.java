@@ -132,7 +132,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
 
         local.update(vectorTimestamp);
 
-        return group[idGrupo].joinAssaultParty(ladraoID, pos_grupo, vectorTimestamp);
+        return group[idGrupo].joinAssaultParty(ladraoID, pos_grupo, local.clone());
 
     }
 
@@ -150,7 +150,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
     public Tuple<VectorTimestamp, Integer> crawlIn(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return group[idGrupo].crawlIn(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
+        return group[idGrupo].crawlIn(ladraoID, agilidade, idGrupo, posgrupo, local.clone());
     }
 
     /**
@@ -167,7 +167,7 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
     public Tuple<VectorTimestamp, Integer> crawlOut(int ladraoID, int agilidade, int idGrupo, int posgrupo, VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
-        return group[idGrupo].crawlOut(ladraoID, agilidade, idGrupo, posgrupo, vectorTimestamp);
+        return group[idGrupo].crawlOut(ladraoID, agilidade, idGrupo, posgrupo, local.clone());
     }
 
 

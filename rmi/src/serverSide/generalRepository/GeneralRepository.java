@@ -5,14 +5,22 @@ import genclass.TextFile;
 import interfaces.*;
 import registry.RegistryConfig;
 import support.Constantes;
+import support.LineUpdate;
 import support.VectorTimestamp;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static support.Constantes.*;
 
@@ -120,6 +128,12 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
     private int rmiRegPortNumb;
 
+    private final List<LineUpdate> updates;
+
+    private PrintWriter printer;
+
+
+
 
     /**
      * All information is in the initial state.
@@ -155,8 +169,14 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             assault_party2_thief_canvas[i] = '-';
         }
 
-        local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
+        try {
+            printer = new PrintWriter("LogOrdenado.txt");
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
 
+        local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
+        updates = new ArrayList<>();
     }
 
     /**
@@ -171,7 +191,6 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             System.exit(1);
         }
 
-
         log.writelnString("\t\t\t\t\t\t\t Heist to the Museum - Description of the internal state\n");
         log.writelnString("MstT   Thief 1      Thief 2      Thief 3      Thief 4      Thief 5      Thief 6                VCk");
         log.writelnString("Stat  Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    0   1   2   3   4   5   6");
@@ -184,7 +203,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
                 "    " + thief_word[thief_state[2]] + " " + thief_situation_word[thief_situation[2]] + "  " + thief_displacement[2] +
                 "    " + thief_word[thief_state[3]] + " " + thief_situation_word[thief_situation[3]] + "  " + thief_displacement[3] +
                 "    " + thief_word[thief_state[4]] + " " + thief_situation_word[thief_situation[4]] + "  " + thief_displacement[4] +
-                "    " + thief_word[thief_state[5]] + " " + thief_situation_word[thief_situation[5]] + "  " + thief_displacement[5];
+                "    " + thief_word[thief_state[5]] + " " + thief_situation_word[thief_situation[5]] + "  " + thief_displacement[5] + "   " + printVectorTimeStamp(vectorTimestamp)+ "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK";
 
 
         String nova_2 = "     " + assault_party1_room + "    " + (assault_party1_thief_id[0]) + "  " + String.format("%2s", assault_party1_thief_pos[0]) + "  " + assault_party1_thief_canvas[0] +
@@ -244,11 +263,13 @@ public class GeneralRepository implements GeneralRepositoryInterface {
                 "   " + String.format("%02d", numberRoomPaintings[4]) + " " + String.format("%02d", roomDistance[4]);
 
 
+
         if (!last_1.equals(nova_1) || !last_2.equals(nova_2)) {
-            log.writelnString(nova_1);
+            log.writelnString(nova_1 + "   " + printVectorTimeStamp(vectorTimestamp) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
             log.writelnString(nova_2);
             last_1 = nova_1;
             last_2 = nova_2;
+            updates.add(new LineUpdate(last_1 + "   " + printVectorTimeStamp(vectorTimestamp) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + "\n" + last_2, vectorTimestamp));
         }
 
 
@@ -282,6 +303,13 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             GenericIO.writelnString("Operation " + fileName2 + " failed!");
             System.exit(1);
         }
+
+
+        for(LineUpdate up : updates)
+            printer.print(up.getLine() + "\n");
+
+        printer.flush();
+        printer.close();
 
     }
 
@@ -656,5 +684,18 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
         System.out.println("Log closed.");
     }
+
+    private String printVectorTimeStamp(VectorTimestamp vt) {
+        StringBuilder strb = new StringBuilder();
+        Formatter formatter = new Formatter(strb);
+
+        int[] vtArray = vt.toIntArray();
+
+        for(int i = 0; i < vtArray.length; i++)
+            formatter.format("%3d ", vtArray[i]);
+
+        return strb.toString();
+    }
+
 
 }

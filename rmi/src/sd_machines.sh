@@ -12,6 +12,7 @@ ThievesHostName=l040101-ws08.ua.pt
 MasterThiefHostName=l040101-ws09.ua.pt
 registryPortNum=22460
 
+sh clean_class_zip.sh
 sh compile_source_code.sh
 
 echo "compressing source code..."
@@ -23,6 +24,7 @@ zip -qr dir_AssaultParty.zip deploy/dir_AssaultParty/
 zip -qr dir_CollectionSite.zip deploy/dir_CollectionSite/
 zip -qr dir_Thief.zip deploy/dir_Thief/
 zip -qr dir_MasterThief.zip deploy/dir_MasterThief/
+
 
 sleep 5
 
@@ -50,6 +52,8 @@ sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ThievesHostNa
 
 sshpass -p $password scp  dir_MasterThief.zip $username@$MasterThiefHostName:~/heist/
 sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MasterThiefHostName "cd ~/heist/ ; unzip -qq dir_MasterThief.zip & "
+
+sh rm -rf *.zip
 
 echo "Setting RMI repository.... "
 echo " "
@@ -116,21 +120,20 @@ echo " "
 
 
 
-sshpass -p $password  scp $username@$GeneralRepositoryHostName:~/heist/deploy/dir_GeneralRepository/Log.txt .
-echo 3
+#sshpass -p $password  scp $username@$GeneralRepositoryHostName:~/heist/deploy/dir_GeneralRepository/Log.txt .
 
-rm -rf *.zip
-echo "Cleaning..."
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$registryHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MuseumHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ConcentrationHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$AssaultPartyHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ColectionHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ThievesHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MasterThiefHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$GeneralRepositoryHostName "cd ~/heist/ ; rm -rf *"
-echo " "
-
-echo " "
-
-subl Log.txt
+#rm -rf *.zip
+#echo "Cleaning..."
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$registryHostName "cd ~/heist/ ; rm -rf *"
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MuseumHostName "cd ~/heist/ ; rm -rf *"
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ConcentrationHostName "cd ~/heist/ ; rm -rf *"
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$AssaultPartyHostName "cd ~/heist/ ; rm -rf *"
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ColectionHostName "cd ~/heist/ ; rm -rf *"
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ThievesHostName "cd ~/heist/ ; rm -rf *"
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MasterThiefHostName "cd ~/heist/ ; rm -rf *"
+#sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$GeneralRepositoryHostName "cd ~/heist/ ; rm -rf *"
+#echo " "
+#
+#echo " "
+#
+#subl Log.txt
