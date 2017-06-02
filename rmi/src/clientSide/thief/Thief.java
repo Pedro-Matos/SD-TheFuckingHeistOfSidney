@@ -8,6 +8,7 @@ import support.Tuple;
 import support.VectorTimestamp;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 import static support.Constantes.*;
 
@@ -138,13 +139,9 @@ public class Thief extends Thread {
 
                     waitMyTurn(this.id, this.myGroup);
 
-
                     posicao = crawlIn(this.id, this.agility, this.myGroup, this.group_position);
 
-                    // no clock
                     int getDistanciaSala = getRoomDistance(this.myGroup);
-
-
                     if (posicao == getDistanciaSala) {
                         atARoom(this.id);
                     }
@@ -158,7 +155,7 @@ public class Thief extends Thread {
                     int room = getAssaultRoom(this.myGroup);
 
                     if (this.myGroup == 0) {
-                        setAP1_canvas(this.group_position, quadro, room);
+                            setAP1_canvas(this.group_position, quadro, room);
                     } else if (this.myGroup == 1) {
                         setAP2_canvas(this.group_position, quadro, room);
                     }

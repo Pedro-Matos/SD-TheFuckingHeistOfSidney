@@ -1,5 +1,4 @@
 							 Heist to the Museum - Description of the internal state
-
 MstT   Thief 1      Thief 2      Thief 3      Thief 4      Thief 5      Thief 6                VCk
 Stat  Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    0   1   2   3   4   5   6
 				   Assault Party 1                       Assault Party 2                       Museum

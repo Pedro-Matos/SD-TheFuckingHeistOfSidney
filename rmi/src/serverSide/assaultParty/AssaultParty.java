@@ -165,9 +165,7 @@ public class AssaultParty {
 
         int indiceNoGrupo = this.getPosicao(ladraoID);
 
-        // no clock
         int getDistanciaSala = this.getRoomDistance(local.clone()).getSecond();
-
 
         if (this.atRoom != numberElements) {
 

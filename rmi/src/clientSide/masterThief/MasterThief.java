@@ -7,6 +7,7 @@ import support.Tuple;
 import support.VectorTimestamp;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 import static support.Constantes.*;
 
@@ -96,8 +97,9 @@ public class MasterThief extends Thread {
                     numero_grupos = checkGroups();
                     boolean emptyMuseu = checkEmptyMuseum();
                     boolean checkSalasLivres = checkEmptyRooms();
-                    if (numero_grupos != -1 && !emptyMuseu && checkSalasLivres)
+                    if (numero_grupos != -1 && !emptyMuseu && checkSalasLivres){
                         prepareAssaultParty(numero_grupos);
+                    }
                     else {
                         emptyMuseu = checkEmptyMuseum();
                         if (emptyMuseu)
@@ -276,7 +278,6 @@ public class MasterThief extends Thread {
     private boolean checkEmptyRooms() {
         boolean ret = false;
         try {
-//            vt.increment();
             Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.checkEmptyRooms(vt.clone());
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -289,10 +290,9 @@ public class MasterThief extends Thread {
         return ret;
     }
 
-    protected boolean checkEmptyMuseum() {
+    private boolean checkEmptyMuseum() {
         boolean ret = false;
         try {
-//            vt.increment();
             Tuple<VectorTimestamp, Boolean> tuple = collectionSiteInterface.checkEmptyMuseum(vt.clone());
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -308,7 +308,6 @@ public class MasterThief extends Thread {
     private int checkGroups() {
         int ret = -1;
         try {
-//            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.checkGroups(vt.clone());
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -336,7 +335,6 @@ public class MasterThief extends Thread {
     private int getNumberOfThieves() {
         int ret = -1;
         try {
-//            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = concentrationSite.getNumberOfThieves(vt.clone());
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -362,7 +360,6 @@ public class MasterThief extends Thread {
     private int getMasterThiefState() {
         int state = -1;
         try {
-//            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getMasterThiefState(id, vt.clone());
             vt.update(tuple.getClock());
             state = tuple.getSecond();

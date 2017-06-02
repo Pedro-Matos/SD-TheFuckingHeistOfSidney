@@ -132,6 +132,9 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
     private PrintWriter printer;
 
+    private boolean ready = false;
+
+
 
 
 
@@ -197,6 +200,9 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         log.writelnString("\t\t\t\t   Assault Party 1                       Assault Party 2                       Museum");
         log.writelnString("           Elem 1     Elem 2     Elem 3          Elem 1     Elem 2     Elem 3   Room 1  Room 2  Room 3  Room 4  Room 5");
         log.writelnString("    RId  Id Pos Cv  Id Pos Cv  Id Pos Cv  RId  Id Pos Cv  Id Pos Cv  Id Pos Cv   NP DT   NP DT   NP DT   NP DT   NP DT");
+        printer.print("\t\t\t\t\t\t\t Heist to the Museum - Description of the internal state\n"+"MstT   Thief 1      Thief 2      Thief 3      Thief 4      Thief 5      Thief 6                VCk"+"\n"+
+                "Stat  Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    0   1   2   3   4   5   6"+"\n"+"\t\t\t\t   Assault Party 1                       Assault Party 2                       Museum"+"\n"+
+                "           Elem 1     Elem 2     Elem 3          Elem 1     Elem 2     Elem 3   Room 1  Room 2  Room 3  Room 4  Room 5"+"\n"+"    RId  Id Pos Cv  Id Pos Cv  Id Pos Cv  RId  Id Pos Cv  Id Pos Cv  Id Pos Cv   NP DT   NP DT   NP DT   NP DT   NP DT"+"\n");
         String nova_1 = master_thief_word[masther_thief] + "  "
                 + thief_word[thief_state[0]] + " " + thief_situation_word[thief_situation[0]] + "  " + thief_displacement[0] +
                 "    " + thief_word[thief_state[1]] + " " + thief_situation_word[thief_situation[1]] + "  " + thief_displacement[1] +
@@ -221,6 +227,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
         log.writelnString(nova_1);
         log.writelnString(nova_2);
+        printer.println(nova_1);
+        printer.println(nova_2);
+
+
+        ready = true;
 
 
         if (!log.close()) {
@@ -269,7 +280,8 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             log.writelnString(nova_2);
             last_1 = nova_1;
             last_2 = nova_2;
-            updates.add(new LineUpdate(last_1 + "   " + printVectorTimeStamp(vectorTimestamp) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + "\n" + last_2, vectorTimestamp));
+            if(ready)
+                updates.add(new LineUpdate(last_1 + "   " + printVectorTimeStamp(vectorTimestamp) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + "\n" + last_2, vectorTimestamp));
         }
 
 
@@ -288,6 +300,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     @Override
     public synchronized void finalizarRelatorio(int total, VectorTimestamp vectorTimestamp) {
+
         assault_party1_room = '-';
         assault_party2_room = '-';
         add_log(vectorTimestamp);
@@ -297,6 +310,9 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             System.exit(1);
         }
 
+        for(LineUpdate up : updates)
+            printer.print(up.getLine() + "\n");
+        printer.print("My friends, a total amount of " + total + " canvasses were collected!");
 
         log.writelnString("My friends, a total amount of " + total + " canvasses were collected!");
         if (!log.close()) {
@@ -305,8 +321,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         }
 
 
-        for(LineUpdate up : updates)
-            printer.print(up.getLine() + "\n");
+
 
         printer.flush();
         printer.close();

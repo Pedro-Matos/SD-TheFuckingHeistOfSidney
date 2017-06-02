@@ -2,7 +2,7 @@
 registryPortNum=22460
 localhost=localhost
 
-sh clean_class_zip.sh
+
 sh compile_source_code.sh
 
 echo "running... "
@@ -25,5 +25,10 @@ sleep 2
 sh scripts/runMaster.sh  &
 
 wait $PID_Logging
+
+find . -maxdepth 8 -type f -name "*.class" -delete
+
+rm -rf *.zip
+
 kill `lsof -t -i:22460`
 kill `lsof -t -i:22461`

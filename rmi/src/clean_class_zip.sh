@@ -14,14 +14,13 @@ registryPortNum=22460
 
 find . -maxdepth 8 -type f -name "*.class" -delete
 
-rm -rf *.zip
 echo "Cleaning..."
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$registryHostName "cd ~/heist_local/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$registryHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MuseumHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ConcentrationHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$AssaultPartyHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ColectionHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ThievesHostName "cd ~/heist/ ; rm -rf *"
-sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MasterThiefHostName "cd ~/heist/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$registryHostName "cd ~/Public/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MuseumHostName "cd ~/Public/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ConcentrationHostName "cd ~/Public/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$AssaultPartyHostName "cd ~/Public/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ColectionHostName "cd ~/Public/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$ThievesHostName "cd ~/Public/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MasterThiefHostName "cd ~/Public/ ; rm -rf *"
+sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$GeneralRepositoryHostName "cd ~/Public/ ; rm -rf *"
 echo "Cleaning done! all .class & folders deleted!"
