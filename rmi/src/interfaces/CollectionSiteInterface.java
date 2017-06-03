@@ -19,7 +19,6 @@ public interface CollectionSiteInterface extends Remote {
      *
      * @param vectorTimestamp clock
      * @return clock and int with the id of the group
-     * @throws RemoteException
      * @throws RemoteException may throw during a execution of a remote method call
      */
     public Tuple<VectorTimestamp, Integer> checkGroups(VectorTimestamp vectorTimestamp) throws RemoteException;
@@ -38,12 +37,11 @@ public interface CollectionSiteInterface extends Remote {
     /**
      * Verifies master thief state
      *
-     * @param id
      * @param vectorTimestamp clock
      * @return clock and the master thief state
      * @throws RemoteException may throw during a execution of a remote method call
      */
-    public Tuple<VectorTimestamp, Integer> getMasterThiefState(int id, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getMasterThiefState(VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Starts the assault
@@ -58,6 +56,7 @@ public interface CollectionSiteInterface extends Remote {
      * Creates assault party
      *
      * @param idGrupo if of party
+     * @param vectorTimestamp clock
      * @return clock and true if formed, false if not.
      * @throws RemoteException may throw during a execution of a remote method call
      */

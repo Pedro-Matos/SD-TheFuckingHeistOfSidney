@@ -14,6 +14,7 @@ registryPortNum=22460
 
 find . -maxdepth 8 -type f -name "*.class" -delete
 
+rm -rf *.tar.gz
 echo "Cleaning..."
 sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$registryHostName "cd ~/Public/ ; rm -rf *"
 sshpass -p $password ssh -o StrictHostKeyChecking=no -f $username@$MuseumHostName "cd ~/Public/ ; rm -rf *"

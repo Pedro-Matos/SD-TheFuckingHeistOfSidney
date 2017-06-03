@@ -28,7 +28,7 @@ public interface MuseumInterface extends Remote {
      * Distance of the room
      *
      * @param nr_sala room id
-     * @param clone
+     * @param clone clock
      * @return clock and distance
      * @throws RemoteException may throw during a execution of a remote method call
      */

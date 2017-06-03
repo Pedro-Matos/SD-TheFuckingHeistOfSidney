@@ -20,37 +20,52 @@ public class LineUpdate implements Comparable<LineUpdate>{
         return vt;
     }
 
-    @Override
     public int compareTo(LineUpdate update) {
-        int[] vt1 = this.vt.toIntArray();
-        int[] vt2 = update.vt.toIntArray();
+        int elem1[] = this.vt.toIntArray();
+        int elem2[] = update.vt.toIntArray();
 
-        boolean vt1_greater = false;
-        boolean vt2_greater = false;
-        boolean vts_equal = false;
+        // Check if my timestamp comes first
 
-        for(int i = 0; i < vt1.length; i++) {
-            if(vt1[i] > vt2[i])
-                vt1_greater = true;
+        boolean all_le = true;
 
-            if(vt1[i] <= vt2[i]) {
-                if(vt1[i] < vt2[i])
-                    vt2_greater = true;
-                else
-                    vts_equal = true;
+        for(int i = 0; i < elem1.length; i++) {
+            if (elem2[i] > elem1[i]) {
+                all_le = false;
+                break;
             }
         }
 
-        if(vt1_greater && vt2_greater)
-            return 0;
-        else if(vts_equal && !vt1_greater)
-            return 1;
-        else
-            return -1;
+        if (all_le) {
+            for(int i = 0; i < elem1.length; i++) {
+                if (elem1[i] < elem2[i]) return -1;
+            }
+        }
+
+        // Check if the other timestamp comes first
+
+        all_le = true;
+
+        for(int i = 0; i < elem1.length; i++) {
+            if (elem1[i] > elem2[i]) {
+                all_le = false;
+                break;
+            }
+        }
+
+        if (all_le) {
+            for(int i = 0; i < elem1.length; i++) {
+                if (elem2[i] < elem1[i]) return 1;
+            }
+        }
+
+        return 0;
+
     }
+
 
     @Override
     public String toString() {
         return line;
     }
+
 }

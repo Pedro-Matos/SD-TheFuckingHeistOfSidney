@@ -21,3 +21,12 @@ kill `lsof -t -i:22466`
 kill `lsof -t -i:22467`
 kill `lsof -t -i:22468`
 kill `lsof -t -i:22469`
+
+sshpass -p $password ssh $username@$registryHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"
+sshpass -p $password ssh $username@$GeneralRepositoryHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"
+sshpass -p $password ssh $username@$MuseumHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"
+sshpass -p $password ssh $username@$ConcentrationHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"
+sshpass -p $password ssh $username@$AssaultPartyHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"
+sshpass -p $password ssh $username@$ColectionHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"
+sshpass -p $password ssh $username@$ThievesHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"
+sshpass -p $password ssh $username@$MasterThiefHostName -o StrictHostKeyChecking=no "kill -13 \$(netstat -tlnp | awk '/:2246 */ {split(\$NF,a,\"/\"); print a[1]}')"

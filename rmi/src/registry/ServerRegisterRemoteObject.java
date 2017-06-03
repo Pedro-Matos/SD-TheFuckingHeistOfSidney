@@ -16,6 +16,10 @@ public class ServerRegisterRemoteObject {
      * Main task.
      */
 
+    /**
+     *
+     * @param args arguments
+     */
     public static void main(String[] args) {
     /* get location of the registry service */
 //        String rmiRegHostName = RegistryConfig.RMI_REGISTRY_HOSTNAME;

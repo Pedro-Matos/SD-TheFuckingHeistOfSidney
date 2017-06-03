@@ -125,11 +125,7 @@ wait $PID_Logging
 
 sshpass -p $password  scp $username@$GeneralRepositoryHostName:~/Public/deploy/dir_GeneralRepository/*.txt .
 
-rm -rf *.tar.gz
 sh clean_class_zip.sh
-
-echo " "
-
 echo " "
 
 subl Log.txt

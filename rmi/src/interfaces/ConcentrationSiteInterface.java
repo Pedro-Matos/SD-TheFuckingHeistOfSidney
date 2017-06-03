@@ -140,8 +140,8 @@ public interface ConcentrationSiteInterface extends Remote {
      * Waiting for the correct number of thiefs in order to create an assault party
      *
      * @param vectorTimestamp clock
+     * @return clock
      * @throws RemoteException may throw during a execution of a remote method call
-     * @reutrn clock
      */
     public VectorTimestamp waitForThieves(VectorTimestamp vectorTimestamp) throws RemoteException;
 

@@ -71,16 +71,22 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private VectorTimestamp local;
 
+    /**
+     * RMI Register host name
+     */
     private String rmiRegHostName;
 
+    /**
+     * RMI Register host name
+     */
     private int rmiRegPortNumb;
 
     /**
      * @param concentrationSite CollectionSite Interface
      * @param gestorGrupos      Manager of assault partys Interface
      * @param generalRepository General Repository Interface
-     * @param rmiRegHostName
-     * @param rmiRegPortNumb
+     * @param rmiRegHostName RMI Register host name
+     * @param rmiRegPortNumb RMI Register host port number
      */
     public CollectionSite(ConcentrationSiteInterface concentrationSite, AssaultPartyManagerInterface gestorGrupos,
                           GeneralRepositoryInterface generalRepository, String rmiRegHostName, int rmiRegPortNumb) {
@@ -175,13 +181,11 @@ public class CollectionSite implements CollectionSiteInterface {
 
     /**
      * Verifies master thief state
-     *
-     * @param id
      * @param vectorTimestamp clock
      * @return clock and the master thief state
      */
     @Override
-    public synchronized Tuple<VectorTimestamp, Integer> getMasterThiefState(int id, VectorTimestamp vectorTimestamp) {
+    public synchronized Tuple<VectorTimestamp, Integer> getMasterThiefState(VectorTimestamp vectorTimestamp) {
         local.update(vectorTimestamp);
 
         return new Tuple<>(local.clone(), this.masterThiefState);
@@ -229,12 +233,12 @@ public class CollectionSite implements CollectionSiteInterface {
             }
         }
 
+
+
         if (idGrupo == 0) setAssaultParty1_room(j);
         if (idGrupo == 1) setAssaultParty2_room(j);
 
-
         createAssaultParty(idGrupo, j);
-
 
         return local.clone();
     }
@@ -512,7 +516,12 @@ public class CollectionSite implements CollectionSiteInterface {
         System.out.println("Collection Site closed.");
     }
 
-
+    /**
+     * Function that put's a thief in an assault party
+     * @param ladraoID thief ID
+     * @param grupo grouph ID
+     * @param i i
+     */
     private void joinAssaultParty(int ladraoID, int grupo, int i) {
         try {
             VectorTimestamp clock = this.groupManager.joinAssaultParty(ladraoID, grupo, i, local.clone());
@@ -524,6 +533,10 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
+    /**
+     * Function that set's the Master Thief state
+     * @param stat Master Thief state
+     */
     private void setMasterThiefState(int stat) {
         try {
             this.general.setMasterThiefState(stat, local.clone());
@@ -534,6 +547,11 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
+    /**
+     * Function that checks if a group is full
+     * @param grupoID grupoID group ID
+     * @return is group full
+     */
     private synchronized boolean grupoCheio(int grupoID) {
 
         if (this.numberElemGroup[grupoID] != NUM_GROUP) {
@@ -543,6 +561,12 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
+    /**
+     * Function that creates the assault party
+     * @param idGrupo group ID
+     * @param j position
+     * @return success
+     */
     private boolean createAssaultParty(int idGrupo, int j) {
         boolean ret = false;
 
@@ -560,6 +584,10 @@ public class CollectionSite implements CollectionSiteInterface {
     }
 
 
+    /**
+     * Function that set's the room ID to the first assault party
+     * @param j room ID
+     */
     private void setAssaultParty1_room(int j) {
         try {
             this.general.setAssaultParty1_room(j, local.clone());
@@ -570,6 +598,10 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
+    /**
+     * Function that set's the room ID to the first assault party
+     * @param j room ID
+     */
     private void setAssaultParty2_room(int j) {
         try {
             this.general.setAssaultParty2_room(j, local.clone());
@@ -580,6 +612,10 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
+    /**
+     * Function that destroys the assault party
+     * @param grupo group ID
+     */
     private void destroyAssaultParty(int grupo) {
 
         try {
@@ -593,6 +629,11 @@ public class CollectionSite implements CollectionSiteInterface {
 
     }
 
+    /**
+     * Function that reset's info about Assault Party 2
+     * @param ladraoID thief ID
+     * @param pos position
+     */
     private void setAP1_reset(int pos, int ladraoID) {
         try {
             this.general.setAP1_reset(pos, ladraoID, local.clone());
@@ -603,6 +644,11 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
+    /**
+     * Function that reset's info about Assault Party 2
+     * @param ladraoID thief ID
+     * @param pos position
+     */
     private void setAP2_reset(int pos, int ladraoID) {
         try {
             this.general.setAP2_reset(pos, ladraoID, local.clone());
@@ -613,6 +659,10 @@ public class CollectionSite implements CollectionSiteInterface {
         }
     }
 
+    /**
+     * Function that get's the number of thieves
+     * @return number of thieves
+     */
     private int getNumberOffThieves() {
         int ret = -1;
 

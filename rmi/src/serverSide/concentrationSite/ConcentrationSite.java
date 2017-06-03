@@ -64,15 +64,21 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     private VectorTimestamp local;
 
+    /**
+     * RMI Register host name
+     */
     private String rmiRegHostName;
 
+    /**
+     * RMI Register host name
+     */
     private int rmiRegPortNumb;
 
 
     /**
      * @param generalRepository General Repository Interface
-     * @param rmiRegHostName
-     * @param rmiRegPortNumb
+     * @param rmiRegHostName RMI Register host name
+     * @param rmiRegPortNumb RMI Register port number
      */
     public ConcentrationSite(GeneralRepositoryInterface generalRepository, String rmiRegHostName, int rmiRegPortNumb) {
 
@@ -331,7 +337,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      * Waiting for the correct number of thiefs in order to create an assault party
      *
      * @param vectorTimestamp clock
-     * @reutrn clock
+     * @return clock
      */
     @Override
     public synchronized VectorTimestamp waitForThieves(VectorTimestamp vectorTimestamp) {
@@ -438,6 +444,11 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         System.out.println("Concentration Site closed.");
     }
 
+    /**
+     * Function that set's the Ordinary Thief Situation
+     * @param id Thief ID
+     * @param inParty Thief State
+     */
     private void setThiefSituation(int id, int inParty) {
         try {
             this.general.setThiefSituation(id, inParty, local.clone());
@@ -448,6 +459,10 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         }
     }
 
+    /**
+     * Function that set's the Master Thief state
+     * @param stat Master Thief state
+     */
     private void setMasterThiefState(int stat) {
         try {
             this.general.setMasterThiefState(stat, local.clone());
@@ -458,6 +473,12 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
         }
     }
 
+
+    /**
+     * Function that set's the Ordinary Thief State
+     * @param ladraoID Ordinary Thief ID
+     * @param i Ordinary Thief State
+     */
     private void setThiefState(int ladraoID, int i) {
         try {
             this.general.setThiefState(ladraoID, i, local.clone());

@@ -39,14 +39,20 @@ public class Museum implements MuseumInterface {
      */
     private VectorTimestamp local;
 
+    /**
+     * RMI Register host name
+     */
     private String rmiRegHostName;
 
+    /**
+     * RMI Register host name
+     */
     private int rmiRegPortNumb;
 
     /**
      * @param generalRepository General Repository interface
-     * @param rmiRegHostName
-     * @param rmiRegPortNumb
+     * @param rmiRegHostName RMI Register host name
+     * @param rmiRegPortNumb RMI Register port number
      */
     public Museum(GeneralRepositoryInterface generalRepository, String rmiRegHostName, int rmiRegPortNumb) {
 
@@ -60,11 +66,11 @@ public class Museum implements MuseumInterface {
         for (int i = 0; i < rooms.length; i++) {
             Random r = new Random();
             rooms[i][0] = r.nextInt((MAX_PAINTS + 1) - MIN_PAINTS) + MIN_PAINTS;
-            setNrQuadrosSala(i, rooms[i][0]);
+            setNumberofRoomPaintings(i, rooms[i][0]);
             Random r2 = new Random();
 
             rooms[i][1] = r2.nextInt((MAX_DIST + 1) - MIN_DIST) + MIN_DIST;
-            setDistanciaSala(i, rooms[i][1]);
+            setRoomDistance(i, rooms[i][1]);
         }
 
 
@@ -84,7 +90,7 @@ public class Museum implements MuseumInterface {
 
         if (rooms[nr_sala][0] > 0) {
             rooms[nr_sala][0]--;
-            //generalRepository.setNrQuadrosSala(nr_sala, rooms[nr_sala][0]);
+            //generalRepository.setNumberofRoomPaintings(nr_sala, rooms[nr_sala][0]);
             return new Tuple<>(local.clone(), true);
         } else {
             return new Tuple<>(local.clone(), false);
@@ -96,7 +102,7 @@ public class Museum implements MuseumInterface {
      * Distance of the room
      *
      * @param nr_sala room id
-     * @param clone
+     * @param clone clock
      * @return clock and distance
      */
     public synchronized Tuple<VectorTimestamp, Integer> getMuseumRoomDistance(int nr_sala, VectorTimestamp clone) {
@@ -169,9 +175,14 @@ public class Museum implements MuseumInterface {
     }
 
 
-    private void setDistanciaSala(int i, int i1) {
+    /**
+     * Function that set's the room distance
+     * @param i id of the room
+     * @param i1 distance to be applied
+     */
+    private void setRoomDistance(int i, int i1) {
         try {
-            this.generalRepository.setDistanciaSala(i, i1, local.clone());
+            this.generalRepository.setRoomDistance(i, i1, local.clone());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -179,9 +190,14 @@ public class Museum implements MuseumInterface {
         }
     }
 
-    private void setNrQuadrosSala(int i, int i1) {
+    /**
+     * Function that set's the number of paintings in a room
+     * @param i room id
+     * @param i1 number of paintings
+     */
+    private void setNumberofRoomPaintings(int i, int i1) {
         try {
-            this.generalRepository.setNrQuadrosSala(i, i1, local.clone());
+            this.generalRepository.setNumberofRoomPaintings(i, i1, local.clone());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();

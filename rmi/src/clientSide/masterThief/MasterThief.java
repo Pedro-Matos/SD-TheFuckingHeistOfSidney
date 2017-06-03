@@ -7,7 +7,6 @@ import support.Tuple;
 import support.VectorTimestamp;
 
 import java.rmi.RemoteException;
-import java.util.Arrays;
 
 import static support.Constantes.*;
 
@@ -71,6 +70,9 @@ public class MasterThief extends Thread {
         vt = new VectorTimestamp(VECTOR_TIMESTAMP_SIZE, 0);
     }
 
+    /**
+     * Master Thief Lifecycle
+     */
     @Override
     public void run() {
 
@@ -139,9 +141,13 @@ public class MasterThief extends Thread {
 
     }
 
+    /**
+     * End the log
+     * @param nrQuadrosRoubados total of stolen paintings
+     */
     private void endReport(int nrQuadrosRoubados) {
         try {
-            this.generalRepository.finalizarRelatorio(nrQuadrosRoubados, vt.clone());
+            this.generalRepository.endReport(nrQuadrosRoubados, vt.clone());
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -149,6 +155,10 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     * Get all the stolen paintings
+     * @return int with the value of stolen painting or no painting
+     */
     private int getNumberOfStolenPaints() {
         int ret = -1;
         try {
@@ -165,6 +175,9 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Function used when waiting for the thieves to finish
+     */
     private void waitForThievesEnd() {
         try {
             VectorTimestamp clock = concentrationSite.waitForThievesEnd(vt.clone());
@@ -176,6 +189,12 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     * Function used to place a thief inside a party
+     * @param ladrao id of the thief
+     * @param numero_grupos if of the group
+     * @return assault party number
+     */
     private int joinAssaultParty(int ladrao, int numero_grupos) {
         int ret = -1;
         try {
@@ -193,6 +212,11 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Function that calls a Thief to join a party
+     * @param numero_grupos id of the group
+     * @return the id of the thief
+     */
     private int callThief(int numero_grupos) {
         int ret = -1;
         try {
@@ -209,10 +233,14 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Get number of elements in the specified group
+     * @param numero_grupos id of the group
+     * @return int with the number of elements
+     */
     private int getNumberElemGroup(int numero_grupos) {
         int ret = -1;
         try {
-//            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getNumberElemGroup(numero_grupos, vt.clone());
             vt.update(tuple.getClock());
             ret = tuple.getSecond();
@@ -225,9 +253,12 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Function used when the Master Thief needs to be waiting for the thieves
+     */
     private void waitForThieves() {
         try {
-            vt.increment();
+//            vt.increment();
             VectorTimestamp clock = concentrationSite.waitForThieves(vt.clone());
             vt.update(clock);
         } catch (RemoteException e) {
@@ -237,6 +268,9 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     * Function that the Master Thief uses to take a rest
+     */
     private void takeARest() {
         try {
             vt.increment();
@@ -250,6 +284,9 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     * Function that shows the results of the heist: the number of stolen paintings.
+     */
     private void sumUpResults() {
         try {
             vt.increment();
@@ -262,6 +299,10 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     * Function that prepares one assault party
+     * @param numero_grupos is the number of the assault party
+     */
     private void prepareAssaultParty(int numero_grupos) {
         try {
             vt.increment();
@@ -275,6 +316,10 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     * Function that checks if the rooms are empty
+     * @return true if the rooms are empty
+     */
     private boolean checkEmptyRooms() {
         boolean ret = false;
         try {
@@ -290,6 +335,10 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Function that checks if the Museum is Empty
+     * @return boolean true if museum is empty; false if there are still paitings
+     */
     private boolean checkEmptyMuseum() {
         boolean ret = false;
         try {
@@ -305,6 +354,10 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Funcion that checks the number of groups
+     * @return number of groups
+     */
     private int checkGroups() {
         int ret = -1;
         try {
@@ -320,6 +373,9 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Funcion that indicates the start of operations
+     */
     private void startOperations() {
         try {
             vt.increment();
@@ -332,6 +388,10 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     *  Function that returns the number of thives in the concentration site
+     * @return Number of Thieves
+     */
     private int getNumberOfThieves() {
         int ret = -1;
         try {
@@ -347,6 +407,9 @@ public class MasterThief extends Thread {
         return ret;
     }
 
+    /**
+     * Start the log file
+     */
     private void startLog() {
         try {
             this.generalRepository.startLog(vt.clone());
@@ -357,10 +420,14 @@ public class MasterThief extends Thread {
         }
     }
 
+    /**
+     *  Function that gets the Master Thief state
+     * @return Master Thief State
+     */
     private int getMasterThiefState() {
         int state = -1;
         try {
-            Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getMasterThiefState(id, vt.clone());
+            Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.getMasterThiefState(vt.clone());
             vt.update(tuple.getClock());
             state = tuple.getSecond();
         } catch (RemoteException e) {
@@ -372,6 +439,10 @@ public class MasterThief extends Thread {
         return state;
     }
 
+    /**
+     * Set Master Thief State
+     * @param stat state of the master thief
+     */
     private void setMasterThiefState(int stat) {
         try {
             this.generalRepository.setMasterThiefState(stat, vt.clone());

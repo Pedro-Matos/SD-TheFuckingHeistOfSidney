@@ -15,7 +15,8 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
- * Created by tiagoalexbastos on 20-05-2017.
+ * @author Tiago Bastos
+ * @author Pedro Matos
  */
 public class AssaultPartyManagerServer {
 

@@ -17,6 +17,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
 import java.util.logging.Level;
@@ -124,14 +125,29 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      */
     private VectorTimestamp local;
 
+    /**
+     * RMI Register host name
+     */
     private String rmiRegHostName;
 
+    /**
+     * RMI Register host name
+     */
     private int rmiRegPortNumb;
 
+    /**
+     * Ordering List
+     */
     private final List<LineUpdate> updates;
 
+    /**
+     * Ordered Lof file printer
+     */
     private PrintWriter printer;
 
+    /**
+     * Ready to print
+     */
     private boolean ready = false;
 
 
@@ -141,8 +157,8 @@ public class GeneralRepository implements GeneralRepositoryInterface {
     /**
      * All information is in the initial state.
      * The changes will only occur by the use of sets functions.
-     * @param rmiRegHostName
-     * @param rmiRegPortNumb
+     * @param rmiRegHostName RMI Register host name
+     * @param rmiRegPortNumb RMI Register port number
      */
     public GeneralRepository(String rmiRegHostName, int rmiRegPortNumb) {
         this.rmiRegHostName = rmiRegHostName;
@@ -200,7 +216,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         log.writelnString("\t\t\t\t   Assault Party 1                       Assault Party 2                       Museum");
         log.writelnString("           Elem 1     Elem 2     Elem 3          Elem 1     Elem 2     Elem 3   Room 1  Room 2  Room 3  Room 4  Room 5");
         log.writelnString("    RId  Id Pos Cv  Id Pos Cv  Id Pos Cv  RId  Id Pos Cv  Id Pos Cv  Id Pos Cv   NP DT   NP DT   NP DT   NP DT   NP DT");
-        printer.print("\t\t\t\t\t\t\t Heist to the Museum - Description of the internal state\n"+"MstT   Thief 1      Thief 2      Thief 3      Thief 4      Thief 5      Thief 6                VCk"+"\n"+
+        printer.print("\t\t\t\t\t\t\t Heist to the Museum - Description of the internal state\n\n"+"MstT   Thief 1      Thief 2      Thief 3      Thief 4      Thief 5      Thief 6                VCk"+"\n"+
                 "Stat  Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    Stat S MD    0   1   2   3   4   5   6"+"\n"+"\t\t\t\t   Assault Party 1                       Assault Party 2                       Museum"+"\n"+
                 "           Elem 1     Elem 2     Elem 3          Elem 1     Elem 2     Elem 3   Room 1  Room 2  Room 3  Room 4  Room 5"+"\n"+"    RId  Id Pos Cv  Id Pos Cv  Id Pos Cv  RId  Id Pos Cv  Id Pos Cv  Id Pos Cv   NP DT   NP DT   NP DT   NP DT   NP DT"+"\n");
         String nova_1 = master_thief_word[masther_thief] + "  "
@@ -281,7 +297,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             last_1 = nova_1;
             last_2 = nova_2;
             if(ready)
-                updates.add(new LineUpdate(last_1 + "   " + printVectorTimeStamp(vectorTimestamp) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + "\n" + last_2, vectorTimestamp));
+                updates.add(new LineUpdate(last_1 + "   " + printVectorTimeStamp(vectorTimestamp.clone()) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + "\n" + last_2, vectorTimestamp.clone()));
         }
 
 
@@ -299,7 +315,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param vectorTimestamp clock
      */
     @Override
-    public synchronized void finalizarRelatorio(int total, VectorTimestamp vectorTimestamp) {
+    public synchronized void endReport(int total, VectorTimestamp vectorTimestamp) {
 
         assault_party1_room = '-';
         assault_party2_room = '-';
@@ -310,6 +326,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
             System.exit(1);
         }
 
+        Collections.sort(updates);
         for(LineUpdate up : updates)
             printer.print(up.getLine() + "\n");
         printer.print("My friends, a total amount of " + total + " canvasses were collected!");
@@ -337,7 +354,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param vectorTimestamp clock
      */
     @Override
-    public synchronized void setDistanciaSala(int nrSala, int distancia, VectorTimestamp vectorTimestamp) {
+    public synchronized void setRoomDistance(int nrSala, int distancia, VectorTimestamp vectorTimestamp) {
         this.roomDistance[nrSala] = distancia;
     }
 
@@ -350,7 +367,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param vectorTimestamp clock
      */
     @Override
-    public synchronized void setNrQuadrosSala(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) {
+    public synchronized void setNumberofRoomPaintings(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) {
         this.numberRoomPaintings[nrSala] = nrQuadrosSala;
         add_log(vectorTimestamp);
     }
@@ -697,7 +714,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
 //        writeEnd();
 
-        System.out.println("Log closed.");
+        System.out.println("General Repository closed.");
     }
 
     private String printVectorTimeStamp(VectorTimestamp vt) {

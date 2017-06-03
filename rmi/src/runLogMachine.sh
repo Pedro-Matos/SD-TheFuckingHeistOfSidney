@@ -8,5 +8,4 @@ registryHostName=l040101-ws01.ua.pt
 
 
 cd ~/Public/deploy/dir_GeneralRepository/
-rm -r *.txt
 sh serverSideGenRepo_com.sh $registryHostName $registryPortNum $url

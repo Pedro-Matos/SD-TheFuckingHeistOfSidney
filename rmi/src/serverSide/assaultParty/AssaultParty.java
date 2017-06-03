@@ -30,7 +30,7 @@ public class AssaultParty {
     /**
      * Thief's positions
      */
-    private int[][] position = new int[2][NUM_GROUP];  // 1- linha position 2- linha IDLadrao
+    private int[][] position = new int[2][NUM_GROUP];
     /**
      * Next thief to crawl
      */
@@ -418,7 +418,11 @@ public class AssaultParty {
         return local.clone();
     }
 
-
+    /**
+     * Roll a canvas remote invocation
+     * @param ladraoID thief ID
+     * @return group position
+     */
     private synchronized int getPosicao(int ladraoID) {
         int j = -1;
 
@@ -431,6 +435,11 @@ public class AssaultParty {
         return j;
     }
 
+    /**
+     * Roll a canvas remote invocation
+     * @param nrSala room ID
+     * @return success rolling or not
+     */
     private boolean rollACanvas(int nrSala) {
         boolean ret = false;
 
@@ -447,6 +456,11 @@ public class AssaultParty {
         return ret;
     }
 
+    /**
+     * Function that get's the museum room distance
+     * @param nrSala room ID
+     * @return room distance
+     */
     private int getMuseumRoomDistance(int nrSala) {
         int ret = -1;
 
@@ -463,6 +477,12 @@ public class AssaultParty {
         return ret;
     }
 
+
+    /**
+     * Function that set's the thief position
+     * @param pos_grupo thief position in the group
+     * @param posicao room distance
+     */
     private void setAP2_pos(int pos_grupo, int posicao) {
         try {
             this.gen.setAP2_pos(pos_grupo, posicao, local.clone());
@@ -473,6 +493,11 @@ public class AssaultParty {
         }
     }
 
+    /**
+     * Function that set's the thief position
+     * @param pos_grupo thief position in the group
+     * @param posicao room distance
+     */
     private void setAP1_pos(int pos_grupo, int posicao) {
         try {
             this.gen.setAP1_pos(pos_grupo, posicao, local.clone());
@@ -483,6 +508,11 @@ public class AssaultParty {
         }
     }
 
+    /**
+     * Function that set's the Ordinary Thief State
+     * @param id Ordinary Thief ID
+     * @param stat Ordinary Thief State
+     */
     private void setThiefState(int id, int stat) {
         try {
             this.gen.setThiefState(id, stat, local.clone());
@@ -493,6 +523,13 @@ public class AssaultParty {
         }
     }
 
+    /**
+     * Function that updates the Thief current situation (ID, position, Canvas)
+     * @param pos_grupo Thief position in group
+     * @param ladraoID thief ID
+     * @param i thief new position
+     * @param b canvas flag
+     */
     private void setAP1_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
             this.gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());
@@ -503,6 +540,13 @@ public class AssaultParty {
         }
     }
 
+    /**
+     * Function that updates the Thief current situation (ID, position, Canvas)
+     * @param pos_grupo Thief position in group
+     * @param ladraoID thief ID
+     * @param i thief new position
+     * @param b canvas flag
+     */
     private void setAP2_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
             this.gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());

@@ -42,17 +42,22 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      */
     private VectorTimestamp local;
 
-
+    /**
+     * RMI Register host name
+     */
     private String rmiRegHostName;
 
+    /**
+     * RMI Register host post number
+     */
     private int rmiRegPortNumb;
 
 
     /**
      * @param museum  Museum Interface
      * @param general General Repository Interface
-     * @param rmiRegHostName
-     * @param rmiRegPortNumb
+     * @param rmiRegHostName RMI Register host name
+     * @param rmiRegPortNumb RMI Register port number
      */
     public AssaultPartyManager(MuseumInterface museum, GeneralRepositoryInterface general, String rmiRegHostName, int rmiRegPortNumb) {
 
