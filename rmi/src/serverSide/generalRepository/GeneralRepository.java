@@ -224,7 +224,7 @@ public class GeneralRepository implements GeneralRepositoryInterface {
                 "    " + thief_word[thief_state[2]] + " " + thief_situation_word[thief_situation[2]] + "  " + thief_displacement[2] +
                 "    " + thief_word[thief_state[3]] + " " + thief_situation_word[thief_situation[3]] + "  " + thief_displacement[3] +
                 "    " + thief_word[thief_state[4]] + " " + thief_situation_word[thief_situation[4]] + "  " + thief_displacement[4] +
-                "    " + thief_word[thief_state[5]] + " " + thief_situation_word[thief_situation[5]] + "  " + thief_displacement[5] + "   " + printVectorTimeStamp(vectorTimestamp)+ "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK";
+                "    " + thief_word[thief_state[5]] + " " + thief_situation_word[thief_situation[5]] + "  " + thief_displacement[5] + "   " + printVectorTimeStamp(vectorTimestamp);
 
 
         String nova_2 = "     " + assault_party1_room + "    " + (assault_party1_thief_id[0]) + "  " + String.format("%2s", assault_party1_thief_pos[0]) + "  " + assault_party1_thief_canvas[0] +
@@ -291,12 +291,12 @@ public class GeneralRepository implements GeneralRepositoryInterface {
 
 
         if (!last_1.equals(nova_1) || !last_2.equals(nova_2)) {
-            log.writelnString(nova_1 + "   " + printVectorTimeStamp(vectorTimestamp) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+            log.writelnString(nova_1 + "   " + printVectorTimeStamp(vectorTimestamp));
             log.writelnString(nova_2);
             last_1 = nova_1;
             last_2 = nova_2;
             if(ready)
-                updates.add(new LineUpdate(last_1 + "   " + printVectorTimeStamp(vectorTimestamp.clone()) + "   CLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + "\n" + last_2, vectorTimestamp.clone()));
+                updates.add(new LineUpdate(last_1 + "   " + printVectorTimeStamp(vectorTimestamp.clone()) + "\n" + last_2, vectorTimestamp.clone()));
         }
 
 
