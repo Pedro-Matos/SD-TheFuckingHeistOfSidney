@@ -182,7 +182,7 @@ public class Museum implements MuseumInterface {
      */
     private void setRoomDistance(int i, int i1) {
         try {
-            this.generalRepository.setRoomDistance(i, i1, local.clone());
+            local.update(this.generalRepository.setRoomDistance(i, i1, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -197,7 +197,7 @@ public class Museum implements MuseumInterface {
      */
     private void setNumberofRoomPaintings(int i, int i1) {
         try {
-            this.generalRepository.setNumberofRoomPaintings(i, i1, local.clone());
+            local.update(this.generalRepository.setNumberofRoomPaintings(i, i1, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();

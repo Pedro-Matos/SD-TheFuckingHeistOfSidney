@@ -445,7 +445,7 @@ public class MasterThief extends Thread {
      */
     private void setMasterThiefState(int stat) {
         try {
-            this.generalRepository.setMasterThiefState(stat, vt.clone());
+            vt.update(this.generalRepository.setMasterThiefState(stat, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();

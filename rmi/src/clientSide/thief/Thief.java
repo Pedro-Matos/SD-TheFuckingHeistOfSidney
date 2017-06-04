@@ -219,7 +219,7 @@ public class Thief extends Thread {
      */
     private void setAP2_reset(int pos_grupo, int id) {
         try {
-            this.generalRepository.setAP2_reset(pos_grupo, id, vt.clone());
+            vt.update(this.generalRepository.setAP2_reset(pos_grupo, id, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -234,7 +234,7 @@ public class Thief extends Thread {
      */
     private void setAP1_reset(int pos_grupo, int id) {
         try {
-            this.generalRepository.setAP1_reset(pos_grupo, id, vt.clone());
+            vt.update(this.generalRepository.setAP1_reset(pos_grupo, id, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -306,7 +306,7 @@ public class Thief extends Thread {
      */
     private void setAP2_pos(int pos_grupo, int posicao) {
         try {
-            this.generalRepository.setAP2_pos(pos_grupo, posicao, vt.clone());
+            vt.update(this.generalRepository.setAP2_pos(pos_grupo, posicao, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -321,7 +321,7 @@ public class Thief extends Thread {
      */
     private void setAP1_pos(int pos_grupo, int posicao) {
         try {
-            this.generalRepository.setAP1_pos(pos_grupo, posicao, vt.clone());
+            vt.update(this.generalRepository.setAP1_pos(pos_grupo, posicao, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -379,7 +379,7 @@ public class Thief extends Thread {
      */
     private void setAP2_canvas(int pos_grupo, boolean quadro, int room) {
         try {
-            this.generalRepository.setAP2_canvas(pos_grupo, quadro, room, vt.clone());
+            vt.update(this.generalRepository.setAP2_canvas(pos_grupo, quadro, room, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -395,7 +395,7 @@ public class Thief extends Thread {
      */
     private void setAP1_canvas(int pos_grupo, boolean quadro, int room) {
         try {
-            this.generalRepository.setAP1_canvas(pos_grupo, quadro, room, vt.clone());
+            vt.update(this.generalRepository.setAP1_canvas(pos_grupo, quadro, room, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -631,7 +631,7 @@ public class Thief extends Thread {
 
     private void setThiefState(int id, int stat) {
         try {
-            this.generalRepository.setThiefState(id, stat, vt.clone());
+            vt.update(this.generalRepository.setThiefState(id, stat, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();
@@ -703,7 +703,7 @@ public class Thief extends Thread {
      */
     private void setThiefDisplacement(int id, int agilidade) {
         try {
-            this.generalRepository.setThiefDisplacement(id, agilidade, vt.clone());
+            vt.update(this.generalRepository.setThiefDisplacement(id, agilidade, vt.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + getName() + ": " + e.getMessage() + "!");
             e.printStackTrace();

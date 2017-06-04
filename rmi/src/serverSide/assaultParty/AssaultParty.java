@@ -485,7 +485,7 @@ public class AssaultParty {
      */
     private void setAP2_pos(int pos_grupo, int posicao) {
         try {
-            this.gen.setAP2_pos(pos_grupo, posicao, local.clone());
+            local.update(this.gen.setAP2_pos(pos_grupo, posicao, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -500,7 +500,7 @@ public class AssaultParty {
      */
     private void setAP1_pos(int pos_grupo, int posicao) {
         try {
-            this.gen.setAP1_pos(pos_grupo, posicao, local.clone());
+            local.update(this.gen.setAP1_pos(pos_grupo, posicao, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -515,7 +515,7 @@ public class AssaultParty {
      */
     private void setThiefState(int id, int stat) {
         try {
-            this.gen.setThiefState(id, stat, local.clone());
+            local.update(this.gen.setThiefState(id, stat, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -532,7 +532,7 @@ public class AssaultParty {
      */
     private void setAP1_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
-            this.gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());
+            local.update(this.gen.setAP1_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método " + e.getMessage() + "!");
             e.printStackTrace();
@@ -549,7 +549,7 @@ public class AssaultParty {
      */
     private void setAP2_pos_id_canvas(int pos_grupo, int ladraoID, int i, boolean b) {
         try {
-            this.gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone());
+            local.update(this.gen.setAP2_pos_id_canvas(pos_grupo, ladraoID, i, b, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método " + e.getMessage() + "!");
             e.printStackTrace();

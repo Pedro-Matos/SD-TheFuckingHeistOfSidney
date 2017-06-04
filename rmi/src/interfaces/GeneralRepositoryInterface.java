@@ -45,8 +45,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param distancia       distance from the room to the CollectionSite
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setRoomDistance(int nrSala, int distancia, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setRoomDistance(int nrSala, int distancia, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set for the number of paitings
@@ -55,8 +56,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param nrQuadrosSala   number of paitings
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setNumberofRoomPaintings(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setNumberofRoomPaintings(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set for Master Thief state
@@ -64,8 +66,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param state           Master Thief state
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setMasterThiefState(int state, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setMasterThiefState(int state, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set for Ordinary Thief state
@@ -74,8 +77,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param state           state of thief
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setThiefState(int id, int state, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setThiefState(int id, int state, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set for Ordinary Thief situation
@@ -84,8 +88,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param situation       situation of thief
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setThiefSituation(int id, int situation, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setThiefSituation(int id, int situation, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Ordinary Thief Agility
@@ -94,8 +99,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param disp            agility of thief
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setThiefDisplacement(int id, int disp, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setThiefDisplacement(int id, int disp, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set room for assault party n1
@@ -103,8 +109,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param room            id of room
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAssaultParty1_room(int room, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAssaultParty1_room(int room, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set room for assault party n2
@@ -112,8 +119,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param room            id of room
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAssaultParty2_room(int room, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAssaultParty2_room(int room, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set Ordinary Thief's position
@@ -122,8 +130,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param pos             thief position to the room
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP1_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP1_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set for the presence of paiting
@@ -133,8 +142,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param room            room id
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP1_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP1_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Multiple Set
@@ -145,8 +155,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param cv              paiting
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP1_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP1_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Reset
@@ -155,8 +166,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param id              thief's id
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP1_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP1_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set position
@@ -165,8 +177,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param pos             position to the room
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP2_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP2_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Set paiting
@@ -176,8 +189,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param vectorTimestamp clock
      * @param room              room id
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP2_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP2_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Multiple Set
@@ -188,8 +202,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param cv              paiting
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP2_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP2_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Reset
@@ -198,8 +213,9 @@ public interface GeneralRepositoryInterface extends Remote {
      * @param id              thief's id
      * @param vectorTimestamp clock
      * @throws RemoteException may throw during a execution of a remote method call
+     * @return clock
      */
-    public void setAP2_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public VectorTimestamp setAP2_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) throws RemoteException;
 
     /**
      * Function that flags the end of the program

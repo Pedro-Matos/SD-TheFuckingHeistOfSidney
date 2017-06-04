@@ -539,7 +539,7 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private void setMasterThiefState(int stat) {
         try {
-            this.general.setMasterThiefState(stat, local.clone());
+            local.update(this.general.setMasterThiefState(stat, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -590,7 +590,7 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private void setAssaultParty1_room(int j) {
         try {
-            this.general.setAssaultParty1_room(j, local.clone());
+            local.update(this.general.setAssaultParty1_room(j, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -604,7 +604,7 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private void setAssaultParty2_room(int j) {
         try {
-            this.general.setAssaultParty2_room(j, local.clone());
+            local.update(this.general.setAssaultParty2_room(j, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -636,7 +636,7 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private void setAP1_reset(int pos, int ladraoID) {
         try {
-            this.general.setAP1_reset(pos, ladraoID, local.clone());
+            local.update(this.general.setAP1_reset(pos, ladraoID, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -651,7 +651,7 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private void setAP2_reset(int pos, int ladraoID) {
         try {
-            this.general.setAP2_reset(pos, ladraoID, local.clone());
+            local.update(this.general.setAP2_reset(pos, ladraoID, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();

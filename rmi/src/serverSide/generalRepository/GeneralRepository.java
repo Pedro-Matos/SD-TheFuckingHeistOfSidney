@@ -16,12 +16,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Formatter;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.*;
 
 import static support.Constantes.*;
 
@@ -165,6 +160,10 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         this.rmiRegPortNumb = rmiRegPortNumb;
         roomDistance = new int[NUM_ROOMS];
         numberRoomPaintings = new int[NUM_ROOMS];
+
+        local = new VectorTimestamp(Constantes.VECTOR_TIMESTAMP_SIZE, 0);
+
+
         this.fileName2 = "Log.txt";
 
         for (int i = 0; i < numberRoomPaintings.length; i++) {
@@ -352,10 +351,13 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param nrSala          id of room
      * @param distancia       distance from the room to the CollectionSite
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setRoomDistance(int nrSala, int distancia, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setRoomDistance(int nrSala, int distancia, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         this.roomDistance[nrSala] = distancia;
+        return local.clone();
     }
 
 
@@ -365,11 +367,14 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param nrSala          id of room
      * @param nrQuadrosSala   number of paitings
      * @param vectorTimestamp clock
-     */
+     * @return clock
+     * */
     @Override
-    public synchronized void setNumberofRoomPaintings(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setNumberofRoomPaintings(int nrSala, int nrQuadrosSala, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         this.numberRoomPaintings[nrSala] = nrQuadrosSala;
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     /**
@@ -377,11 +382,14 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param state           Master Thief state
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setMasterThiefState(int state, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setMasterThiefState(int state, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         this.masther_thief = state;
         //add_log();
+        return local.clone();
     }
 
     /**
@@ -390,12 +398,14 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param id              id of thief
      * @param state           state of thief
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setThiefState(int id, int state, VectorTimestamp vectorTimestamp) {
-
+    public synchronized VectorTimestamp setThiefState(int id, int state, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         this.thief_state[id] = state;
         //add_log();
+        return local.clone();
     }
 
     /**
@@ -404,24 +414,29 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param id              id of thief
      * @param situation       situation of thief
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setThiefSituation(int id, int situation, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setThiefSituation(int id, int situation, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         this.thief_situation[id] = situation;
         //add_log();
+        return local.clone();
     }
 
     /**
      * Ordinary Thief Agility
-     *
-     * @param id              id of thief
+     *  @param id              id of thief
      * @param disp            agility of thief
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setThiefDisplacement(int id, int disp, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setThiefDisplacement(int id, int disp, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         this.thief_displacement[id] = disp;
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     /**
@@ -429,26 +444,29 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      *
      * @param room            id of room
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAssaultParty1_room(int room, VectorTimestamp vectorTimestamp) {
-
+    public synchronized VectorTimestamp setAssaultParty1_room(int room, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         room++;
         this.assault_party1_room = Integer.toString(room).charAt(0);
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     /**
      * Set room for assault party n2
-     *
-     * @param room            id of room
+     *  @param room            id of room
      * @param vectorTimestamp clock
      */
     @Override
-    public synchronized void setAssaultParty2_room(int room, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAssaultParty2_room(int room, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         room++;
         this.assault_party2_room = Integer.toString(room).charAt(0);
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     /**
@@ -457,11 +475,14 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param pos_grupo       thief position in group
      * @param pos             thief position to the room
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP1_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP1_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         assault_party1_thief_pos[pos_grupo] = Integer.toString(pos);
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     /**
@@ -470,15 +491,18 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param pos_grupo       thief position in group
      * @param cv              paiting
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP1_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP1_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         if (cv) {
             assault_party1_thief_canvas[pos_grupo] = '1';
             numberRoomPaintings[room]--;
         } else assault_party1_thief_canvas[pos_grupo] = '0';
 
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     /**
@@ -489,9 +513,11 @@ public class GeneralRepository implements GeneralRepositoryInterface {
      * @param pos             thief's position
      * @param cv              paiting
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP1_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP1_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         assault_party1_thief_pos[pos_grupo] = Integer.toString(pos);
         id++;
         assault_party1_thief_id[pos_grupo] = Integer.toString(id).charAt(0);
@@ -499,69 +525,79 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         if (cv) assault_party1_thief_canvas[pos_grupo] = '1';
         else assault_party1_thief_canvas[pos_grupo] = '0';
 
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     /**
      * Reset
-     *
-     * @param pos_grupo       thief position in group
+     *  @param pos_grupo       thief position in group
      * @param id              thief's id
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP1_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP1_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         assault_party1_thief_pos[pos_grupo] = "-";
         assault_party1_thief_canvas[pos_grupo] = '-';
         assault_party1_thief_id[pos_grupo] = '-';
         thief_situation[id] = WAITING;
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
 
     /**
      * Set position
-     *
-     * @param pos_grupo       thief position in group
+     *  @param pos_grupo       thief position in group
      * @param pos             position to the room
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP2_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP2_pos(int pos_grupo, int pos, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         assault_party2_thief_pos[pos_grupo] = String.valueOf(pos);
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
 
     /**
      * Set paiting
-     *
-     * @param pos_grupo       thief position in group
+     *  @param pos_grupo       thief position in group
      * @param cv              paiting
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP2_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP2_canvas(int pos_grupo, boolean cv, int room, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
         if (cv) {
             assault_party2_thief_canvas[pos_grupo] = '1';
             numberRoomPaintings[room]--;
         } else assault_party2_thief_canvas[pos_grupo] = '0';
 
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
 
     /**
      * Multiple Set
-     *
-     * @param pos_grupo       thief position in group
+     *  @param pos_grupo       thief position in group
      * @param id              thief's id
      * @param pos             thief's position
      * @param cv              paiting
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP2_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP2_pos_id_canvas(int pos_grupo, int id, int pos, boolean cv, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
+
         assault_party2_thief_pos[pos_grupo] = Integer.toString(pos);
         id++;
         assault_party2_thief_id[pos_grupo] = Integer.toString(id).charAt(0);
@@ -569,24 +605,27 @@ public class GeneralRepository implements GeneralRepositoryInterface {
         if (cv) assault_party2_thief_canvas[pos_grupo] = '1';
         else assault_party2_thief_canvas[pos_grupo] = '0';
 
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
 
     /**
      * Reset
-     *
-     * @param pos_grupo       thief position in group
+     *  @param pos_grupo       thief position in group
      * @param id              thief's id
      * @param vectorTimestamp clock
+     * @return clock
      */
     @Override
-    public synchronized void setAP2_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {
+    public synchronized VectorTimestamp setAP2_reset(int pos_grupo, int id, VectorTimestamp vectorTimestamp) {
+        local.update(vectorTimestamp);
         assault_party2_thief_pos[pos_grupo] = "-";
         assault_party2_thief_canvas[pos_grupo] = '-';
         assault_party2_thief_id[pos_grupo] = '-';
         thief_situation[id] = WAITING;
-        add_log(vectorTimestamp);
+        add_log(local.clone());
+        return local.clone();
     }
 
     @Override

@@ -451,7 +451,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     private void setThiefSituation(int id, int inParty) {
         try {
-            this.general.setThiefSituation(id, inParty, local.clone());
+            local.update(this.general.setThiefSituation(id, inParty, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -465,7 +465,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     private void setMasterThiefState(int stat) {
         try {
-            this.general.setMasterThiefState(stat, local.clone());
+            local.update(this.general.setMasterThiefState(stat, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
@@ -481,7 +481,7 @@ public class ConcentrationSite implements ConcentrationSiteInterface {
      */
     private void setThiefState(int ladraoID, int i) {
         try {
-            this.general.setThiefState(ladraoID, i, local.clone());
+            local.update(this.general.setThiefState(ladraoID, i, local.clone()));
         } catch (RemoteException e) {
             System.err.println("Excepção na invocação remota de método" + e.getMessage() + "!");
             e.printStackTrace();
