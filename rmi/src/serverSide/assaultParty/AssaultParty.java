@@ -165,7 +165,7 @@ public class AssaultParty {
 
         int indiceNoGrupo = this.getPosicao(ladraoID);
 
-        int getDistanciaSala = this.getRoomDistance(local.clone()).getSecond();
+        int getDistanciaSala = this.getRoomDistance(local.clone(), id).getSecond();
 
         if (this.atRoom != numberElements) {
 
@@ -277,7 +277,7 @@ public class AssaultParty {
         int indiceNoGrupo = this.getPosicao(ladraoID);
 
         // no clock
-        int getDistanciaSala = this.getRoomDistance(local.clone()).getSecond();
+        int getDistanciaSala = this.getRoomDistance(local.clone(), id).getSecond();
 
         if (atRoom == numberElements) {
             if (this.myTurn[indiceNoGrupo]) {
@@ -369,13 +369,14 @@ public class AssaultParty {
      * Get distance
      *
      * @param vectorTimestamp clock
+     * @param id
      * @return clock and distance
      */
-    public Tuple<VectorTimestamp, Integer> getRoomDistance(VectorTimestamp vectorTimestamp) {
+    public Tuple<VectorTimestamp, Integer> getRoomDistance(VectorTimestamp vectorTimestamp, int id) {
         local.update(vectorTimestamp);
 
         if (roomDistance == -1) {
-            roomDistance = getMuseumRoomDistance(roomNumber);
+            roomDistance = getMuseumRoomDistance(roomNumber, id);
         }
 
         return new Tuple<>(local.clone(), roomDistance);
@@ -386,12 +387,13 @@ public class AssaultParty {
      * Steals paiting
      *
      * @param vectorTimestamp clock
+     * @param id
      * @return clock and true if success
      */
-    public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp) {
+    public synchronized Tuple<VectorTimestamp, Boolean> rollACanvas(VectorTimestamp vectorTimestamp, int id) {
         local.update(vectorTimestamp);
 
-        return new Tuple<>(local.clone(), rollACanvas(roomNumber));
+        return new Tuple<>(local.clone(), rollACanvas(roomNumber ,id));
 
     }
 
@@ -438,12 +440,14 @@ public class AssaultParty {
     /**
      * Roll a canvas remote invocation
      * @param nrSala room ID
+     * @param id
      * @return success rolling or not
      */
-    private boolean rollACanvas(int nrSala) {
+    private boolean rollACanvas(int nrSala, int id) {
         boolean ret = false;
 
         try {
+            local.specificIncrement(id);
             Tuple<VectorTimestamp, Boolean> tuple =
                     this.museum.rollACanvas(nrSala, local.clone());
             ret = tuple.getSecond();
@@ -459,12 +463,14 @@ public class AssaultParty {
     /**
      * Function that get's the museum room distance
      * @param nrSala room ID
+     * @param id
      * @return room distance
      */
-    private int getMuseumRoomDistance(int nrSala) {
+    private int getMuseumRoomDistance(int nrSala, int id) {
         int ret = -1;
 
         try {
+            local.specificIncrement(id);
             Tuple<VectorTimestamp, Integer> tuple =
                     this.museum.getMuseumRoomDistance(nrSala, local.clone());
             ret = tuple.getSecond();

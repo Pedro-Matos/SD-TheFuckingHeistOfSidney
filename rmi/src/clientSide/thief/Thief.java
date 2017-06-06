@@ -433,9 +433,8 @@ public class Thief extends Thread {
         boolean ret = false;
         try {
             vt.increment();
-            vt.increment();
             Tuple<VectorTimestamp, Boolean> tuple =
-                    this.group.rollACanvas(meuGrupo, vt.clone());
+                    this.group.rollACanvas(meuGrupo, vt.clone(), this.id);
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
         } catch (RemoteException e) {
@@ -473,9 +472,8 @@ public class Thief extends Thread {
 
         try {
             vt.increment();
-            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple =
-                    this.group.getRoomDistance(meuGrupo, vt.clone());
+                    this.group.getRoomDistance(meuGrupo, vt.clone(), this.id);
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
         } catch (RemoteException e) {

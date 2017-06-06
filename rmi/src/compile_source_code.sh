@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 echo "compiling source code..."
 
 javac -cp \* support/*.java interfaces/*.java registry/*.java serverSide/generalRepository/*.java serverSide/museum/*.java serverSide/concentrationSite/*.java serverSide/assaultParty/*.java serverSide/collectionSite/*.java clientSide/thief/*.java clientSide/masterThief/*.java

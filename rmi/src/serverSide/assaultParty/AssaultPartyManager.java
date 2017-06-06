@@ -181,13 +181,14 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      *
      * @param idGrupo         group id
      * @param vectorTimestamp clock
+     * @param id
      * @return clock and respective room distance
      */
     @Override
-    public Tuple<VectorTimestamp, Integer> getRoomDistance(int idGrupo, VectorTimestamp vectorTimestamp) {
+    public Tuple<VectorTimestamp, Integer> getRoomDistance(int idGrupo, VectorTimestamp vectorTimestamp, int id) {
         local.update(vectorTimestamp);
 
-        return group[idGrupo].getRoomDistance(local.clone());
+        return group[idGrupo].getRoomDistance(local.clone(), id);
     }
 
     /**
@@ -195,13 +196,14 @@ public class AssaultPartyManager implements AssaultPartyManagerInterface {
      *
      * @param idGrupo         group id
      * @param vectorTimestamp clock
+     * @param id
      * @return clock and true if paiting was stolen
      */
     @Override
-    public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp) {
+    public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp, int id) {
         local.update(vectorTimestamp);
 
-        return group[idGrupo].rollACanvas(local.clone());
+        return group[idGrupo].rollACanvas(local.clone(), id);
     }
 
     /**

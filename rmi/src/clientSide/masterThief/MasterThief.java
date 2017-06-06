@@ -199,7 +199,6 @@ public class MasterThief extends Thread {
         int ret = -1;
         try {
             vt.increment();
-            vt.increment();
             Tuple<VectorTimestamp, Integer> tuple = collectionSiteInterface.joinAssaultParty(ladrao, numero_grupos, vt.clone());
             ret = tuple.getSecond();
             vt.update(tuple.getClock());
@@ -274,7 +273,6 @@ public class MasterThief extends Thread {
     private void takeARest() {
         try {
             vt.increment();
-            vt.increment();
             VectorTimestamp clock = collectionSiteInterface.takeARest(vt.clone());
             vt.update(clock);
         } catch (RemoteException e) {
@@ -305,7 +303,6 @@ public class MasterThief extends Thread {
      */
     private void prepareAssaultParty(int numero_grupos) {
         try {
-            vt.increment();
             vt.increment();
             VectorTimestamp clock = collectionSiteInterface.prepareAssaultParty(numero_grupos, vt.clone());
             vt.update(clock);

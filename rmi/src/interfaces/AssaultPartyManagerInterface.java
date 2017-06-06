@@ -89,20 +89,22 @@ public interface AssaultPartyManagerInterface extends Remote {
      *
      * @param idGrupo         group id
      * @param vectorTimestamp clock
+     * @param id
      * @return clock and respective room distance
      * @throws RemoteException may throw during a execution of a remote method call
      */
-    public Tuple<VectorTimestamp, Integer> getRoomDistance(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public Tuple<VectorTimestamp, Integer> getRoomDistance(int idGrupo, VectorTimestamp vectorTimestamp, int id) throws RemoteException;
 
     /**
      * Steal paiting
      *
      * @param idGrupo         group id
      * @param vectorTimestamp clock
+     * @param id
      * @return clock and true if paiting was stolen
      * @throws RemoteException may throw during a execution of a remote method call
      */
-    public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp) throws RemoteException;
+    public Tuple<VectorTimestamp, Boolean> rollACanvas(int idGrupo, VectorTimestamp vectorTimestamp, int id) throws RemoteException;
 
     /**
      * Thief is waiting for it's turn
