@@ -524,7 +524,7 @@ public class CollectionSite implements CollectionSiteInterface {
      */
     private void joinAssaultParty(int ladraoID, int grupo, int i) {
         try {
-            local.increment();
+            local.specificIncrement(0);
             VectorTimestamp clock = this.groupManager.joinAssaultParty(ladraoID, grupo, i, local.clone());
             local.update(clock);
         } catch (RemoteException e) {
@@ -572,7 +572,7 @@ public class CollectionSite implements CollectionSiteInterface {
         boolean ret = false;
 
         try {
-            local.increment();
+            local.specificIncrement(0);
             Tuple<VectorTimestamp, Boolean> tuple = this.groupManager.createAssaultParty(idGrupo, j, local.clone());
             ret = tuple.getSecond();
             local.update(tuple.getClock());
@@ -669,7 +669,7 @@ public class CollectionSite implements CollectionSiteInterface {
         int ret = -1;
 
         try {
-            local.increment();
+            local.specificIncrement(0);
             Tuple<VectorTimestamp, Integer> tuple =
                     this.concentrationSite.getNumberOfThieves(local.clone());
             ret = tuple.getSecond();

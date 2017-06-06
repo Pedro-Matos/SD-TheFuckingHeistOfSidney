@@ -128,5 +128,5 @@ sshpass -p $password  scp $username@$GeneralRepositoryHostName:~/Public/deploy/d
 sh clean_class_zip.sh
 echo " "
 
-subl Log.txt
+
 subl LogOrdenado.txt
